@@ -1,6 +1,7 @@
 #include "Manager.h"
 #include "DxSetting.h"
 #include "Drawer.h"
+#include "SceneManager.h"
 
 void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
@@ -11,7 +12,9 @@ void main( ) {
 	setting->setDrawScreenBack( );
 
 	DrawerPtr drawer( new Drawer( "Resources/image" ) );
+	SceneManagerPtr scene_manager( new SceneManager( ) );
 
 	//add
 	manager->add( Drawer::getTag( ), drawer );
+	manager->add( SceneManager::getTag( ), scene_manager );
 }
