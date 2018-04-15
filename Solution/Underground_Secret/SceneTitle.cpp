@@ -39,7 +39,7 @@ void SceneTitle::finalize( ) {
 }
 
 void SceneTitle::update( ) {
-	_drawer->drawString( 10, 10, "SceneTitle", _drawer->getColor( 255, 0, 0 ) );
+	_drawer->drawString( 10, 10, "SceneTitle", 0xff0000 );
 	changeNextScene( );
 	calcButtonAction( );
 
@@ -49,7 +49,7 @@ void SceneTitle::update( ) {
 }
 
 void SceneTitle::changeNextScene( ) {
-	if ( ( _startbutton_clicking ) && !isDrag( ) ) {
+	if ( ( _startbutton_clicking ) && _mouse->isClickUpLeft( ) ) {
 		int hit = getHitButton( );
 
 		switch ( hit ) {
@@ -70,7 +70,7 @@ void SceneTitle::calcButtonAction( ) {
 		return;
 	}
 
-	if ( !isDrag( ) ) {
+	if ( !_mouse->getClickingLeft( ) ) {
 		return;
 	}
 
@@ -94,12 +94,6 @@ SceneTitle::BUTTON SceneTitle::getHitButton( ) const {
 		return START_BUTTON;
 	}
 	return NONE_BUTTON;
-}
-bool SceneTitle::isDrag( ) const {
-	if ( _mouse->getClickingLeft( ) > 0 ) {
-		return true;
-	}
-	return false;
 }
 
 void SceneTitle::drawBackGround( ) const{

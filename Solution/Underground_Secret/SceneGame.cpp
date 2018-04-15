@@ -11,7 +11,7 @@ SceneGame::~SceneGame( ) {
 }
 
 void SceneGame::update( ) {
-	_drawer->drawString( 10, 10, "SceneGame", _drawer->getColor( 255, 0, 0 ) );
+	_drawer->drawString( 10, 10, "SceneGame", 0xff0000 );
 
 	if ( _keyboard->getKeyDown( "x" ) ) {
 		setNextScene( TITLE );

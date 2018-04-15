@@ -1,6 +1,6 @@
 #pragma once
 #include "Scene.h"
-#include "Vector.h"
+#include "Collider.h"
 #include "Image.h"
 #include "smart_ptr.h"
 #include <string>
@@ -18,6 +18,10 @@ private:
 		NONE_BUTTON,
 		START_BUTTON,
 		BUTTON_MAX,
+	}; 
+	struct BoxObject {
+		Image::ImageProperty image;
+		BoxCollider collider;
 	};
 public:
 	SceneTitle( );
@@ -32,7 +36,6 @@ private:
 	void changeNextScene( );
 	void calcButtonAction( );
 	BUTTON getHitButton( ) const;
-	bool isDrag( ) const;
 	
 private:
 	void drawBackGround( ) const;
@@ -40,10 +43,7 @@ private:
 	void drawStartButton( ) const;
 
 private:
-	struct BoxObject {
-	Image::ImageProperty image;
-	Vector::BoxCollider collider;
-};
+	
 	//ïœêî
 	bool _startbutton_clicking;
 	HCURSOR _cur_hand;
