@@ -2,6 +2,7 @@
 #include "Manager.h"
 #include "SceneTitle.h"
 #include "SceneGame.h"
+#include "SceneStageSelect.h"
 
 SceneManagerPtr SceneManager::getTask( ) {
 	return std::dynamic_pointer_cast< SceneManager >( Manager::getInstance( )->getTask( getTag( ) ) );
@@ -37,6 +38,7 @@ void SceneManager::changeScene( ) {
 
 	switch ( _scene->getNextScene( ) ) {
 	case TITLE: _scene = SceneTitlePtr( new SceneTitle( ) ); break;
-	case GAME : _scene = SceneGamePtr( new SceneGame( ) )  ; break;
+	case GAME: _scene = SceneGamePtr( new SceneGame( ) ); break;
+	case STAGESELECT: _scene = SceneStageSelectPtr( new SceneStageSelect( ) ); break;
 	}
 }

@@ -7,6 +7,7 @@ enum SCENE {
 	CONTINUE,//åªèÛà€éù
 	TITLE,
 	GAME,
+	STAGESELECT,
 	SCENE_MAX,
 };
 

@@ -2,6 +2,7 @@
 
 Scene::Scene( ) {
 	_next_scene = CONTINUE;
+	
 }
 
 Scene::~Scene( ) {

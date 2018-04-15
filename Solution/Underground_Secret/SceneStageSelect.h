@@ -2,16 +2,15 @@
 #include "Scene.h"
 #include "smart_ptr.h"
 
-PTR( SceneGame );
+PTR( SceneStageSelect );
 PTR( Keyboard );
 PTR( Drawer );
 
-
-class SceneGame : public Scene {
+class SceneStageSelect : public Scene {
 public:
-	SceneGame( );
-	virtual ~SceneGame( );
-	
+	SceneStageSelect( );
+	virtual ~SceneStageSelect( );
+
 public:
 	void update( );
 
@@ -19,4 +18,3 @@ private:
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;
 };
-
