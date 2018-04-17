@@ -158,12 +158,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="EditorManager.cpp" />
+    <ClCompile Include="FileAction.cpp" />
+    <ClCompile Include="ImageLoad.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Foundation\Foundation.vcxproj">
       <Project>{0ec5080b-97c6-4d13-ad7f-b571701c653d}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EditorManager.h" />
+    <ClInclude Include="FileAction.h" />
+    <ClInclude Include="ImageLoad.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

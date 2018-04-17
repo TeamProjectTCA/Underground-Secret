@@ -2,5 +2,13 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="EditorManager.cpp" />
+    <ClCompile Include="ImageLoad.cpp" />
+    <ClCompile Include="FileAction.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EditorManager.h" />
+    <ClInclude Include="ImageLoad.h" />
+    <ClInclude Include="FileAction.h" />
   </ItemGroup>
 </Project>
