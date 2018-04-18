@@ -46,7 +46,7 @@ private:
 	int _row;
 
 	//‚»‚Ì‘¼
-	int _idx;
+	long long int _idx;
 	int _handle;
 	int _size;
 

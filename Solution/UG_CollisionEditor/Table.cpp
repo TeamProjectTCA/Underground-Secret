@@ -12,6 +12,7 @@ Table::Table( std::string file_name ) {
 	_keyboard = Keyboard::getTask( );
 	
 	_handle = _drawer->getImage( file_name );
+	//縦横にそれぞれ1マス分バッファを持たせる
 	_col = _drawer->getImageWidth( file_name ) / BLOCK_SIZE + 1;
 	_row = _drawer->getImageHeight( file_name ) / BLOCK_SIZE + 1;
 	_command = COMMAND_DELETE;
@@ -122,14 +123,37 @@ void Table::setCollider( ) {
 
 	if ( _mouse->getClickingLeft( ) ) {
 		switch ( _command ) {
+
+		//判定取り消し
 		case COMMAND_DELETE:
+		{
+			long long int x = ( _idx - _size / 2 ) % _col;
+			long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
+			long long int idx = x + y * _col;
 			for ( int i = 0; i < _size; i++ ) {
 				for ( int j = 0; j < _size; j++ ) {
-					_data[ ( _idx - _col - _size / 2 ) + i * _col + j ] = 0;
+					long long int del = idx + i * _col + j;
+					_data[ del ] = 0;
 				}
 			}
-			break;
-		case COMMAND_PUT   : _data[ _idx ] = 1; break;
+		}
+		break;
+
+		//当たり判定付与
+		case COMMAND_PUT:
+		{
+			long long int x = ( _idx - _size / 2 ) % _col;
+			long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
+			long long int idx = x + y * _col;
+			for ( int i = 0; i < _size; i++ ) {
+				for ( int j = 0; j < _size; j++ ) {
+					long long int put = idx + i * _col + j;
+					_data[ put ] = 1;
+				}
+			}
+		}
+		break;
+
 		default:
 			break;
 		}
@@ -161,11 +185,13 @@ void Table::drawTableSelect( ) const {
 	if ( _idx < 0 ) {
 		return;
 	}
-	int x = _idx % _col;
-	int y = _idx / _col;
+	long long int x = _idx % _col;
+	long long int y = _idx / _col;
 
 	unsigned int color = ( _command == COMMAND_DELETE ? 0x0000ff : 0xff0000 );
-	_drawer->drawBox( ( float )( x + _x ) * BLOCK_SIZE, ( float )( y + _y ) * BLOCK_SIZE, ( float )( x + 1 + _x ) * BLOCK_SIZE, ( float )( y + 1 + _y ) * BLOCK_SIZE, color, true );
+	_drawer->drawBox( ( float )(     x + _x ) * BLOCK_SIZE, ( float )(     y + _y ) * BLOCK_SIZE,
+		              ( float )( x + 1 + _x ) * BLOCK_SIZE, ( float )( y + 1 + _y ) * BLOCK_SIZE,
+		              color, true );
 }
 
 void Table::drawActiveCollider( ) const {
@@ -179,7 +205,9 @@ void Table::drawActiveCollider( ) const {
 			int x = idx % _col;
 			int y = idx / _col;
 
-			_drawer->drawBox( ( float )( x + _x ) * BLOCK_SIZE, ( float )( y + _y ) * BLOCK_SIZE, ( float )( x + 1 + _x ) * BLOCK_SIZE, ( float )( y + 1 + _y ) * BLOCK_SIZE, 0xff0000, true );
+			_drawer->drawBox( ( float )(     x + _x ) * BLOCK_SIZE, ( float )(     y + _y ) * BLOCK_SIZE, 
+				              ( float )( x + 1 + _x ) * BLOCK_SIZE, ( float )( y + 1 + _y ) * BLOCK_SIZE,
+				              0xff0000, true );
 		}
 	}
 }
