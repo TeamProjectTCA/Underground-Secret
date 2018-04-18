@@ -11,9 +11,13 @@ public:
 
 public:
 	void actionEnter( );
-	std::string getImageName( ) const;
+	int getImageHandle( ) const;
+	int getImageWidth( ) const;
+	int getImageHeight( ) const;
 
 private:
 	int _handle;
+	int _width;
+	int _height;
 };
 

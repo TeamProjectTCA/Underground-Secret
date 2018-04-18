@@ -5,7 +5,7 @@
 
 PTR( EditorManager );
 PTR( Keyboard );
-PTR( ImageLoad );
+PTR( FileAction );
 PTR( Table );
 
 class EditorManager : public Base {
@@ -36,7 +36,7 @@ private:
 	COMMAND _command;
 
 	KeyboardPtr _keyboard;
-	ImageLoadPtr _image_load;
+	FileActionPtr _action;
 	TablePtr _table;
 };
 

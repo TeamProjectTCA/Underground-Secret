@@ -6,22 +6,17 @@
 
 const int SCROLL_NUM = 2;
 
-Table::Table( std::string file_name ) {
+Table::Table( const int handle, const int col, const int row ) :
+_handle( handle ),
+//縦横にそれぞれ1マス分バッファを持たせる
+_col( col / BLOCK_SIZE + 1 ),
+_row( row / BLOCK_SIZE + 1 ) {
 	_mouse = Mouse::getTask( );
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 	
-	_handle = _drawer->getImage( file_name );
-	//縦横にそれぞれ1マス分バッファを持たせる
-	_col = _drawer->getImageWidth( file_name ) / BLOCK_SIZE + 1;
-	_row = _drawer->getImageHeight( file_name ) / BLOCK_SIZE + 1;
 	_command = COMMAND_PUT;
 	_size = 1;
-	
-	if ( file_name == "" ) {
-		_col = 1;
-		_row = 1;
-	}
 
 	unsigned int length = _col * _row + 1;
 	_data = ( char* )malloc( sizeof( char ) * length );
@@ -62,6 +57,18 @@ void Table::update( ) {
 
 void Table::memoryFree( ) {
 	free( _data );
+}
+
+char* Table::getData( ) {
+	return _data;
+}
+
+int Table::getCol( ) const {
+	return _col;
+}
+
+int Table::getRow( ) const {
+	return _row;
 }
 
 void Table::scroll( ) {

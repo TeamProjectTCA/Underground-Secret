@@ -17,12 +17,17 @@ private:
 	};
 
 public:
-	Table( std::string file_name );
+	Table( const int handle, const int col, const int row );
 	virtual ~Table( );
 
 public:
 	void update( );
 	void memoryFree( );
+
+public:
+	char* getData( );
+	int getCol( ) const;
+	int getRow( ) const;
 
 private:
 	void scroll( );

@@ -8,7 +8,7 @@ PTR( Mouse );
 
 class FileAction {
 public:
-	FileAction( );
+	FileAction( std::string action_name );
 	virtual ~FileAction( );
 
 public:
@@ -22,6 +22,7 @@ protected:
 protected:
 	bool _fin;
 	std::string _input;
+	std::string _action_name;
 
 	KeyboardPtr _keyboard;
 	MousePtr _mouse;
