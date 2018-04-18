@@ -17,7 +17,7 @@ Table::Table( std::string file_name ) {
 	_row = _drawer->getImageHeight( file_name ) / BLOCK_SIZE + 1;
 	_command = COMMAND_PUT;
 	_size = 1;
-
+	
 	if ( file_name == "" ) {
 		_col = 1;
 		_row = 1;
@@ -86,15 +86,15 @@ void Table::scroll( ) {
 	if ( _x > 0 ) {
 		_x = 0;
 	}
-	if ( _x < WIDTH / BLOCK_SIZE - ( _col - 1 ) ) {
-		_x =  WIDTH / BLOCK_SIZE - ( _col - 1 );
+	if ( _x < WIDTH / BLOCK_SIZE - ( _col ) ) {
+		_x =  WIDTH / BLOCK_SIZE - ( _col );
 	}
 
 	if ( _y > 0 ) {
 		_y = 0;
 	}
-	if ( _y < HEIGHT / BLOCK_SIZE - ( _row - 1 ) ) {
-		_y =  HEIGHT / BLOCK_SIZE - ( _row - 1 );
+	if ( _y < HEIGHT / BLOCK_SIZE - ( _row ) ) {
+		_y =  HEIGHT / BLOCK_SIZE - ( _row );
 	}
 }
 
@@ -128,14 +128,30 @@ void Table::setCollider( ) {
 		case COMMAND_DELETE:
 		{
 			//左上にセット
-			long long int x = ( _idx - _size / 2 ) % _col;
+			int gap = 0;
+			if ( _idx % _col - _size / 2 < 0 ) {
+				//左に寄りすぎて超過した分を検出
+				gap = ( int )abs( _idx % _col - _size / 2 );
+			}
+
+			long long int x = ( _idx + gap - _size / 2 ) % _col;
 			long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
 			long long int idx = x + y * _col;
 
 			//右にsize分,下にsize分の四角をすべて0にする
 			for ( int i = 0; i < _size; i++ ) {
-				for ( int j = 0; j < _size; j++ ) {
+				for ( int j = 0; j < _size - gap; j++ ) {
+					//右端を過ぎたら
+					if ( ( idx + j + i * _col ) / _col > y + i ||
+						 ( idx + j + i * _col ) / _col < y + i ) {
+						continue;
+					}
 					long long int del = idx + i * _col + j;
+
+					//縦と横の超過を検出
+					if ( del < 0 || ( _col * _row ) - 1 < del ) {
+						continue;
+					}
 					_data[ del ] = 0;
 				}
 			}
@@ -146,14 +162,30 @@ void Table::setCollider( ) {
 		case COMMAND_PUT:
 		{
 			//左上にセット
-			long long int x = ( _idx - _size / 2 ) % _col;
+			int gap = 0;
+			if ( _idx % _col - _size / 2 < 0 ) {
+				//左に寄りすぎて超過した分を検出
+				gap = ( int )abs( _idx % _col - _size / 2 );
+			}
+
+			long long int x = ( _idx + gap - _size / 2 ) % _col;
 			long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
 			long long int idx = x + y * _col;
 
 			//右にsize分,下にsize分の四角をすべて0にする
 			for ( int i = 0; i < _size; i++ ) {
-				for ( int j = 0; j < _size; j++ ) {
+				for ( int j = 0; j < _size - gap; j++ ) {
+					//右端を過ぎたら
+					if ( ( idx + j + i * _col ) / _col > y + i ||
+						 ( idx + j + i * _col ) / _col < y + i ) {
+						continue;
+					}
 					long long int put = idx + i * _col + j;
+
+					//縦と横の超過を検出
+					if ( put < 0 || ( _col * _row ) - 1 < put ) {
+						continue;
+					}
 					_data[ put ] = 1;
 				}
 			}
@@ -191,15 +223,21 @@ void Table::drawTableSelect( ) const {
 	if ( _idx < 0 ) {
 		return;
 	}
-	long long int x = ( _idx - _size / 2 ) % _col;
+
+	//左上にセット
+	int gap = 0;
+	if ( _idx % _col - _size / 2 < 0 ) {
+		//左に寄りすぎて超過した分を検出
+		gap = ( int )abs( _idx % _col - _size / 2 );
+	}
+	long long int x = ( _idx + gap - _size / 2 ) % _col;
 	long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
 	long long int idx = x + y * _col;
 
 	unsigned int color = ( _command == COMMAND_DELETE ? 0x5555ff : 0xff5555 );
 
 	for ( int i = 0; i < _size; i++ ) {
-		for ( int j = 0; j < _size; j++ ) {
-
+		for ( int j = 0; j < _size - gap; j++ ) {
 
 			_drawer->drawBox( ( float )(     x + _x + j ) * BLOCK_SIZE, ( float )(     y + _y + i ) * BLOCK_SIZE,
 							  ( float )( x + 1 + _x + j ) * BLOCK_SIZE, ( float )( y + 1 + _y + i ) * BLOCK_SIZE,
