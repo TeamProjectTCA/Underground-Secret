@@ -15,7 +15,7 @@ Table::Table( std::string file_name ) {
 	//縦横にそれぞれ1マス分バッファを持たせる
 	_col = _drawer->getImageWidth( file_name ) / BLOCK_SIZE + 1;
 	_row = _drawer->getImageHeight( file_name ) / BLOCK_SIZE + 1;
-	_command = COMMAND_DELETE;
+	_command = COMMAND_PUT;
 	_size = 1;
 
 	if ( file_name == "" ) {
@@ -127,9 +127,12 @@ void Table::setCollider( ) {
 		//判定取り消し
 		case COMMAND_DELETE:
 		{
+			//左上にセット
 			long long int x = ( _idx - _size / 2 ) % _col;
 			long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
 			long long int idx = x + y * _col;
+
+			//右にsize分,下にsize分の四角をすべて0にする
 			for ( int i = 0; i < _size; i++ ) {
 				for ( int j = 0; j < _size; j++ ) {
 					long long int del = idx + i * _col + j;
@@ -142,9 +145,12 @@ void Table::setCollider( ) {
 		//当たり判定付与
 		case COMMAND_PUT:
 		{
+			//左上にセット
 			long long int x = ( _idx - _size / 2 ) % _col;
 			long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
 			long long int idx = x + y * _col;
+
+			//右にsize分,下にsize分の四角をすべて0にする
 			for ( int i = 0; i < _size; i++ ) {
 				for ( int j = 0; j < _size; j++ ) {
 					long long int put = idx + i * _col + j;
@@ -185,13 +191,21 @@ void Table::drawTableSelect( ) const {
 	if ( _idx < 0 ) {
 		return;
 	}
-	long long int x = _idx % _col;
-	long long int y = _idx / _col;
+	long long int x = ( _idx - _size / 2 ) % _col;
+	long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
+	long long int idx = x + y * _col;
 
-	unsigned int color = ( _command == COMMAND_DELETE ? 0x0000ff : 0xff0000 );
-	_drawer->drawBox( ( float )(     x + _x ) * BLOCK_SIZE, ( float )(     y + _y ) * BLOCK_SIZE,
-		              ( float )( x + 1 + _x ) * BLOCK_SIZE, ( float )( y + 1 + _y ) * BLOCK_SIZE,
-		              color, true );
+	unsigned int color = ( _command == COMMAND_DELETE ? 0x5555ff : 0xff5555 );
+
+	for ( int i = 0; i < _size; i++ ) {
+		for ( int j = 0; j < _size; j++ ) {
+
+
+			_drawer->drawBox( ( float )(     x + _x + j ) * BLOCK_SIZE, ( float )(     y + _y + i ) * BLOCK_SIZE,
+							  ( float )( x + 1 + _x + j ) * BLOCK_SIZE, ( float )( y + 1 + _y + i ) * BLOCK_SIZE,
+							  color, true );
+		}
+	}
 }
 
 void Table::drawActiveCollider( ) const {
