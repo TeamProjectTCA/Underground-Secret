@@ -20,7 +20,7 @@ private:
 		BUTTON_MAX,
 	}; 
 	struct BoxObject {
-		Image::ImageProperty image;
+		ImageProperty image;
 		BoxCollider collider;
 	};
 public:

@@ -5,12 +5,13 @@
     <ClCompile Include="EditorManager.cpp" />
     <ClCompile Include="ImageLoad.cpp" />
     <ClCompile Include="FileAction.cpp" />
-    <ClCompile Include="MassCollider.cpp" />
+    <ClCompile Include="Table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorManager.h" />
     <ClInclude Include="ImageLoad.h" />
     <ClInclude Include="FileAction.h" />
-    <ClInclude Include="MassCollider.h" />
+    <ClInclude Include="Table.h" />
+    <ClInclude Include="const.h" />
   </ItemGroup>
 </Project>

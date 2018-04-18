@@ -162,7 +162,7 @@
     <ClCompile Include="FileAction.cpp" />
     <ClCompile Include="ImageLoad.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="MassCollider.cpp" />
+    <ClCompile Include="Table.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Foundation\Foundation.vcxproj">
@@ -170,10 +170,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="const.h" />
     <ClInclude Include="EditorManager.h" />
     <ClInclude Include="FileAction.h" />
     <ClInclude Include="ImageLoad.h" />
-    <ClInclude Include="MassCollider.h" />
+    <ClInclude Include="Table.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

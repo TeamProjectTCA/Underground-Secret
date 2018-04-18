@@ -6,6 +6,7 @@
 PTR( EditorManager );
 PTR( Keyboard );
 PTR( ImageLoad );
+PTR( Table );
 
 class EditorManager : public Base {
 private:
@@ -36,5 +37,6 @@ private:
 
 	KeyboardPtr _keyboard;
 	ImageLoadPtr _image_load;
+	TablePtr _table;
 };
 

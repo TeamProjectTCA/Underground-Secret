@@ -2,6 +2,8 @@
 #include "Manager.h"
 #include "Keyboard.h"
 #include "ImageLoad.h"
+#include "Table.h"
+#include "const.h"
 #include <array>
 
 EditorManagerPtr EditorManager::getTask( ) {
@@ -22,18 +24,26 @@ EditorManager::~EditorManager( ) {
 void EditorManager::initialize( ) {
 	_keyboard = Keyboard::getTask( );
 	_image_load = ImageLoadPtr( new ImageLoad( ) );
+	_table = TablePtr( new Table( "" ) );
 }
 
 void EditorManager::finalize( ) {
 }
 
 void EditorManager::update( ) {
+	_table->update( );
+
 	switch ( _command ) {
 	case COMMAND_NONE:
 		break;
 
 	case COMMAND_IMAGE_LOAD:
 		_image_load->update( );
+		if ( _image_load->isFin( ) ) {
+			_table->memoryFree( );
+			_table = TablePtr( new Table( _image_load->getImageName( ) ) );
+			_command = COMMAND_NONE;
+		}
 		break;
 
 	default:

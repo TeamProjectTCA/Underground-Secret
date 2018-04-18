@@ -6,7 +6,7 @@
 
 void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
-	DrawerPtr drawer( new Drawer( "Editor/Inport" ) );
+	DrawerPtr drawer( new Drawer( "Import" ) );
 	KeyboardPtr keyboard( new Keyboard( ) );
 	MousePtr mouse( new Mouse( ) );
 	EditorManagerPtr editor( new EditorManager( ) );

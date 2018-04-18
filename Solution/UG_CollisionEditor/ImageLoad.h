@@ -1,5 +1,6 @@
 #pragma once
 #include "FileAction.h"
+#include <string>
 
 PTR( ImageLoad );
 
@@ -10,5 +11,9 @@ public:
 
 public:
 	void actionEnter( );
+	std::string getImageName( ) const;
+
+private:
+	int _handle;
 };
 
