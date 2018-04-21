@@ -6,6 +6,7 @@
     <ClCompile Include="ImageLoad.cpp" />
     <ClCompile Include="FileAction.cpp" />
     <ClCompile Include="Table.cpp" />
+    <ClCompile Include="FileExport.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorManager.h" />
@@ -13,5 +14,6 @@
     <ClInclude Include="FileAction.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="const.h" />
+    <ClInclude Include="FileExport.h" />
   </ItemGroup>
 </Project>

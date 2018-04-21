@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp" />
     <ClCompile Include="FileAction.cpp" />
+    <ClCompile Include="FileExport.cpp" />
     <ClCompile Include="ImageLoad.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Table.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="const.h" />
     <ClInclude Include="EditorManager.h" />
     <ClInclude Include="FileAction.h" />
+    <ClInclude Include="FileExport.h" />
     <ClInclude Include="ImageLoad.h" />
     <ClInclude Include="Table.h" />
   </ItemGroup>

@@ -5,7 +5,6 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 
-//test
 void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
 	DxSettingPtr setting = DxSetting::getInstance( );

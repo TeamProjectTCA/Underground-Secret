@@ -2,6 +2,7 @@
 #include "Manager.h"
 #include "Keyboard.h"
 #include "ImageLoad.h"
+#include "FileExport.h"
 #include "Table.h"
 #include "const.h"
 #include "Drawer.h"
@@ -71,6 +72,13 @@ void EditorManager::update( ) {
 				_action = ImageLoadPtr( new ImageLoad( ) );
 				break;
 
+			case COMMAND_DATA_EXPORT:
+				{
+					FileExportPtr file_export( new FileExport( _table->getData( ), _table->getCol( ), _table->getRow( ) ) );
+					_action = file_export;
+				}
+				break;
+
 			default:
 				break;
 			}
@@ -87,12 +95,16 @@ void EditorManager::update( ) {
 		break;
 
 	case COMMAND_IMAGE_LOAD:
-		if ( _action->isFin( ) ) {
+		{
 			ImageLoadPtr image_load = std::dynamic_pointer_cast< ImageLoad >( _action );
 			_table->memoryFree( );
 			_table = TablePtr( new Table( image_load->getImageHandle( ), image_load->getImageWidth( ), image_load->getImageHeight( ) ) );
 			_command = COMMAND_NONE;
 		}
+		break;
+
+	case COMMAND_DATA_EXPORT:
+		_command = COMMAND_NONE;
 		break;
 
 	default:

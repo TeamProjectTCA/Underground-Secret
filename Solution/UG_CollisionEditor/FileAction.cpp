@@ -11,14 +11,22 @@ _action_name( action_name ) {
 	_mouse = Mouse::getTask( );
 	_drawer = Drawer::getTask( );
 	_fin = false;
+	_enter = false;
 }
 
 FileAction::~FileAction( ) {
 }
 
 void FileAction::update( ) {
-	writeName( );
+	if ( _action_name != "FileExport" ) {
+		writeName( );
+	}
+
 	if ( _keyboard->isEnterKey( ) ) {
+		_enter = true;
+	}
+
+	if ( _enter ) {
 		actionEnter( );
 		std::string( ).swap( _input );
 	}

@@ -46,6 +46,7 @@ void SceneTitle::update( ) {
 	drawBackGround( );
 	drawTitle( );
 	drawStartButton( );
+	_drawer->flip( );
 }
 
 void SceneTitle::changeNextScene( ) {

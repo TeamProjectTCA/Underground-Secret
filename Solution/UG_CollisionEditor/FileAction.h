@@ -21,6 +21,7 @@ protected:
 
 protected:
 	bool _fin;
+	bool _enter;
 	std::string _input;
 	std::string _action_name;
 
