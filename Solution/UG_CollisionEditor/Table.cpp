@@ -23,6 +23,7 @@ _row( row + 1 ) {
 	for ( unsigned int i = 0; i < length; i++ ) {
 		_data[ i ] = '0';
 	}
+	_data[ length - 1 ] = '\0';
 }
 
 Table::~Table( ) {
@@ -86,6 +87,8 @@ void Table::loadCollider( std::string data, const int col, const int row ) {
 	for ( unsigned int i = 0; i < length; i++ ) {
 		_data[ i ] = data[ i ];
 	}
+
+	_data[ length - 1 ] = '\0';
 }
 
 void Table::scroll( ) {
