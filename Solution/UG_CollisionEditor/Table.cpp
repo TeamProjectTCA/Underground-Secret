@@ -9,8 +9,8 @@ const int SCROLL_NUM = 2;
 Table::Table( const int handle, const int col, const int row ) :
 _handle( handle ),
 //縦横にそれぞれ1マス分バッファを持たせる
-_col( col / BLOCK_SIZE + 1 ),
-_row( row / BLOCK_SIZE + 1 ) {
+_col( col + 1 ),
+_row( row + 1 ) {
 	_mouse = Mouse::getTask( );
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
@@ -26,6 +26,7 @@ _row( row / BLOCK_SIZE + 1 ) {
 }
 
 Table::~Table( ) {
+	memoryFree( );
 }
 
 void Table::update( ) {
@@ -58,7 +59,10 @@ void Table::update( ) {
 }
 
 void Table::memoryFree( ) {
-	free( _data );
+	if ( _data != NULL ) {
+		free( _data );
+		_data = NULL;
+	}
 }
 
 char* Table::getData( ) {
@@ -71,6 +75,17 @@ int Table::getCol( ) const {
 
 int Table::getRow( ) const {
 	return _row;
+}
+
+void Table::loadCollider( std::string data, const int col, const int row ) {
+	_col = col;
+	_row = row;
+
+	unsigned int length = _col * _row + 1;
+	_data = ( char* )malloc( sizeof( char ) * length );
+	for ( unsigned int i = 0; i < length; i++ ) {
+		_data[ i ] = data[ i ];
+	}
 }
 
 void Table::scroll( ) {

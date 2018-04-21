@@ -29,6 +29,7 @@ void FileAction::update( ) {
 	if ( _enter ) {
 		actionEnter( );
 		std::string( ).swap( _input );
+		_enter = false;
 	}
 }
 

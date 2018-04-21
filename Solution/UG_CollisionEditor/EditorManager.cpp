@@ -108,7 +108,16 @@ void EditorManager::update( ) {
 		{
 			FileImageLoadPtr image_load = std::dynamic_pointer_cast< FileImageLoad >( _action );
 			_table->memoryFree( );
-			_table = TablePtr( new Table( image_load->getImageHandle( ), image_load->getImageWidth( ), image_load->getImageHeight( ) ) );
+			_table = TablePtr( new Table( image_load->getImageHandle( ), image_load->getImageWidth( ) / BLOCK_SIZE, image_load->getImageHeight( ) / BLOCK_SIZE ) );
+			_command = COMMAND_NONE;
+		}
+		break;
+
+	case COMMAND_DATA_LOAD:
+		{
+			FileDataLoadPtr data_load = std::dynamic_pointer_cast< FileDataLoad >( _action );
+			_table->memoryFree( );
+			_table->loadCollider( data_load->getData( ), data_load->getCol( ), data_load->getRow( ) );
 			_command = COMMAND_NONE;
 		}
 		break;

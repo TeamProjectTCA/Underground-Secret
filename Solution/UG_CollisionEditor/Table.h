@@ -29,6 +29,9 @@ public:
 	int getCol( ) const;
 	int getRow( ) const;
 
+public:
+	void loadCollider( std::string data, const int col, const int row );
+
 private:
 	void scroll( );
 	void setCommand( );
