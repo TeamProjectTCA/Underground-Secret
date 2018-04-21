@@ -12,6 +12,7 @@ _action_name( action_name ) {
 	_drawer = Drawer::getTask( );
 	_fin = false;
 	_enter = false;
+	_gauge_up = false;
 }
 
 FileAction::~FileAction( ) {
@@ -20,6 +21,10 @@ FileAction::~FileAction( ) {
 void FileAction::update( ) {
 	if ( _action_name != "FileExport" ) {
 		writeName( );
+	}
+
+	if ( _gauge_up ) {
+		upGauge( );
 	}
 
 	if ( _keyboard->isEnterKey( ) ) {
@@ -31,6 +36,11 @@ void FileAction::update( ) {
 		std::string( ).swap( _input );
 		_enter = false;
 	}
+	_drawer->flip( );
+}
+
+void FileAction::setGauge( ) {
+	_gauge_up = true;
 }
 
 void FileAction::writeName( ) {
@@ -52,7 +62,12 @@ void FileAction::writeName( ) {
 	}
 
 	_drawer->drawFormatString( 20, 100, 0xff5555, _input.c_str( ) );
-	_drawer->flip( );
+
+	// F8Ç≈ñﬂÇÈ
+	_drawer->drawString( 20, 300, "F8ÉLÅ[Ç≈ñﬂÇËÇ‹Ç∑", 0xffff00 );
+}
+
+void FileAction::upGauge( ) {
 }
 
 bool FileAction::isFin( ) const {

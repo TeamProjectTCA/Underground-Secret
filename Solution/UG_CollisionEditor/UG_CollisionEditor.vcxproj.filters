@@ -3,21 +3,46 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="EditorManager.cpp" />
-    <ClCompile Include="FileAction.cpp" />
     <ClCompile Include="Table.cpp" />
-    <ClCompile Include="FileExport.cpp" />
-    <ClCompile Include="FileDataLoad.cpp" />
-    <ClCompile Include="FileImageLoad.cpp" />
-    <ClCompile Include="FileDataSave.cpp" />
+    <ClCompile Include="FileAction.cpp">
+      <Filter>FileAction</Filter>
+    </ClCompile>
+    <ClCompile Include="FileDataLoad.cpp">
+      <Filter>FileAction</Filter>
+    </ClCompile>
+    <ClCompile Include="FileDataSave.cpp">
+      <Filter>FileAction</Filter>
+    </ClCompile>
+    <ClCompile Include="FileExport.cpp">
+      <Filter>FileAction</Filter>
+    </ClCompile>
+    <ClCompile Include="FileImageLoad.cpp">
+      <Filter>FileAction</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorManager.h" />
-    <ClInclude Include="FileAction.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="const.h" />
-    <ClInclude Include="FileExport.h" />
-    <ClInclude Include="FileDataLoad.h" />
-    <ClInclude Include="FileImageLoad.h" />
-    <ClInclude Include="FileDataSave.h" />
+    <ClInclude Include="FileAction.h">
+      <Filter>FileAction</Filter>
+    </ClInclude>
+    <ClInclude Include="FileDataLoad.h">
+      <Filter>FileAction</Filter>
+    </ClInclude>
+    <ClInclude Include="FileDataSave.h">
+      <Filter>FileAction</Filter>
+    </ClInclude>
+    <ClInclude Include="FileExport.h">
+      <Filter>FileAction</Filter>
+    </ClInclude>
+    <ClInclude Include="FileImageLoad.h">
+      <Filter>FileAction</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="FileAction">
+      <UniqueIdentifier>{52bdf695-7c89-4adf-867c-79023cd1e3f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

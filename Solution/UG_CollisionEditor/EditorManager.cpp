@@ -79,14 +79,11 @@ void EditorManager::update( ) {
 				break;
 
 			case COMMAND_DATA_EXPORT:
-				{
-					FileExportPtr file_export( new FileExport( _table->getData( ), _table->getCol( ), _table->getRow( ) ) );
-					_action = file_export;
-				}
+				_action = FileExportPtr( new FileExport( _table->getData( ), _table->getCol( ), _table->getRow( ) ) );
 				break;
 
 			case COMMAND_DATA_SAVE:
-				_action = FileDataSavePtr( new FileDataSave( ) );
+				_action = FileDataSavePtr( new FileDataSave( _table->getData( ), _table->getCol( ), _table->getRow( ) ) );
 				break;
 
 			default:
@@ -123,6 +120,10 @@ void EditorManager::update( ) {
 		break;
 
 	case COMMAND_DATA_EXPORT:
+		_command = COMMAND_NONE;
+		break;
+
+	case COMMAND_DATA_SAVE:
 		_command = COMMAND_NONE;
 		break;
 

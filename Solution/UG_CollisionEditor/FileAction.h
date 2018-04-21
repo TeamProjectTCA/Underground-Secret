@@ -13,15 +13,18 @@ public:
 
 public:
 	void update( );
+	void setGauge( );
 	bool isFin( ) const;
 
 protected:
 	void writeName( );
 	virtual void actionEnter( ) = 0;
+	virtual void upGauge( );
 
 protected:
 	bool _fin;
 	bool _enter;
+	bool _gauge_up;
 	std::string _input;
 	std::string _action_name;
 
