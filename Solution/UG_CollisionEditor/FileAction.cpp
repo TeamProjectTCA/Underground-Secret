@@ -27,7 +27,7 @@ void FileAction::update( ) {
 		upGauge( );
 	}
 
-	if ( _keyboard->isEnterKey( ) ) {
+	if ( _keyboard->getKeyDown( "ENTER" ) ) {
 		_enter = true;
 	}
 
