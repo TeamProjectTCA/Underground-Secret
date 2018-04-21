@@ -160,8 +160,10 @@
   <ItemGroup>
     <ClCompile Include="EditorManager.cpp" />
     <ClCompile Include="FileAction.cpp" />
+    <ClCompile Include="FileDataLoad.cpp" />
+    <ClCompile Include="FileDataSave.cpp" />
     <ClCompile Include="FileExport.cpp" />
-    <ClCompile Include="ImageLoad.cpp" />
+    <ClCompile Include="FileImageLoad.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Table.cpp" />
   </ItemGroup>
@@ -174,8 +176,10 @@
     <ClInclude Include="const.h" />
     <ClInclude Include="EditorManager.h" />
     <ClInclude Include="FileAction.h" />
+    <ClInclude Include="FileDataLoad.h" />
+    <ClInclude Include="FileDataSave.h" />
     <ClInclude Include="FileExport.h" />
-    <ClInclude Include="ImageLoad.h" />
+    <ClInclude Include="FileImageLoad.h" />
     <ClInclude Include="Table.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

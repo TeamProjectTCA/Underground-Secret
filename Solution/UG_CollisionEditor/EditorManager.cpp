@@ -1,8 +1,10 @@
 #include "EditorManager.h"
 #include "Manager.h"
 #include "Keyboard.h"
-#include "ImageLoad.h"
+#include "FileImageLoad.h"
+#include "FileDataLoad.h"
 #include "FileExport.h"
+#include "FileDataSave.h"
 #include "Table.h"
 #include "const.h"
 #include "Drawer.h"
@@ -31,7 +33,7 @@ EditorManager::~EditorManager( ) {
 
 void EditorManager::initialize( ) {
 	_keyboard = Keyboard::getTask( );
-	_action = ImageLoadPtr( new ImageLoad( ) );
+	_action = FileImageLoadPtr( new FileImageLoad( ) );
 	_table = TablePtr( new Table( -1, 1, 1 ) );
 }
 
@@ -69,7 +71,11 @@ void EditorManager::update( ) {
 				break;
 
 			case COMMAND_IMAGE_LOAD:
-				_action = ImageLoadPtr( new ImageLoad( ) );
+				_action = FileImageLoadPtr( new FileImageLoad( ) );
+				break;
+
+			case COMMAND_DATA_LOAD:
+				_action = FileDataLoadPtr( new FileDataLoad( ) );
 				break;
 
 			case COMMAND_DATA_EXPORT:
@@ -77,6 +83,10 @@ void EditorManager::update( ) {
 					FileExportPtr file_export( new FileExport( _table->getData( ), _table->getCol( ), _table->getRow( ) ) );
 					_action = file_export;
 				}
+				break;
+
+			case COMMAND_DATA_SAVE:
+				_action = FileDataSavePtr( new FileDataSave( ) );
 				break;
 
 			default:
@@ -96,7 +106,7 @@ void EditorManager::update( ) {
 
 	case COMMAND_IMAGE_LOAD:
 		{
-			ImageLoadPtr image_load = std::dynamic_pointer_cast< ImageLoad >( _action );
+			FileImageLoadPtr image_load = std::dynamic_pointer_cast< FileImageLoad >( _action );
 			_table->memoryFree( );
 			_table = TablePtr( new Table( image_load->getImageHandle( ), image_load->getImageWidth( ), image_load->getImageHeight( ) ) );
 			_command = COMMAND_NONE;

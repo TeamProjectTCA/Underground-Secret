@@ -2,12 +2,12 @@
 #include "FileAction.h"
 #include <string>
 
-PTR( ImageLoad );
+PTR( FileImageLoad );
 
-class ImageLoad : public FileAction {
+class FileImageLoad : public FileAction {
 public:
-	ImageLoad( );
-	virtual ~ImageLoad( );
+	FileImageLoad( );
+	virtual ~FileImageLoad( );
 
 public:
 	void actionEnter( );

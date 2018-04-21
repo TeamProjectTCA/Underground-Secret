@@ -3,17 +3,21 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="EditorManager.cpp" />
-    <ClCompile Include="ImageLoad.cpp" />
     <ClCompile Include="FileAction.cpp" />
     <ClCompile Include="Table.cpp" />
     <ClCompile Include="FileExport.cpp" />
+    <ClCompile Include="FileDataLoad.cpp" />
+    <ClCompile Include="FileImageLoad.cpp" />
+    <ClCompile Include="FileDataSave.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EditorManager.h" />
-    <ClInclude Include="ImageLoad.h" />
     <ClInclude Include="FileAction.h" />
     <ClInclude Include="Table.h" />
     <ClInclude Include="const.h" />
     <ClInclude Include="FileExport.h" />
+    <ClInclude Include="FileDataLoad.h" />
+    <ClInclude Include="FileImageLoad.h" />
+    <ClInclude Include="FileDataSave.h" />
   </ItemGroup>
 </Project>

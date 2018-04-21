@@ -1,20 +1,20 @@
-#include "ImageLoad.h"
+#include "FileImageLoad.h"
 #include "Keyboard.h"
 #include "Drawer.h"
 #include <string>
 #include <array>
 
-ImageLoad::ImageLoad( ) :
+FileImageLoad::FileImageLoad( ) :
 FileAction( "IMAGE_LOAD" ) {
 	_handle = -1;
 	_width = 0;
 	_height = 0;
 }
 
-ImageLoad::~ImageLoad( ) {
+FileImageLoad::~FileImageLoad( ) {
 }
 
-void ImageLoad::actionEnter( ) {
+void FileImageLoad::actionEnter( ) {
 	_handle = _drawer->getImage( _input );
 	if( _handle == -1 ){
 		return;
@@ -25,14 +25,14 @@ void ImageLoad::actionEnter( ) {
 	_fin = true;
 }
 
-int ImageLoad::getImageHandle( ) const {
+int FileImageLoad::getImageHandle( ) const {
 	return _handle;
 }
 
-int ImageLoad::getImageWidth( ) const {
+int FileImageLoad::getImageWidth( ) const {
 	return _width;
 }
 
-int ImageLoad::getImageHeight( ) const {
+int FileImageLoad::getImageHeight( ) const {
 	return _height;
 }
