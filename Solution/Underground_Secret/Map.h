@@ -1,7 +1,9 @@
 #pragma once
-#include "Game.h"
+#include "smart_ptr.h"
 
-class Map :	public Game {
+PTR( Map );
+
+class Map {
 public:
 	Map( );
 	virtual ~Map( );

@@ -5,6 +5,7 @@
 PTR( SceneGame );
 PTR( Keyboard );
 PTR( Drawer );
+PTR( Map );
 
 
 class SceneGame : public Scene {
@@ -18,5 +19,6 @@ public:
 private:
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;
+	MapPtr _map;
 };
 
