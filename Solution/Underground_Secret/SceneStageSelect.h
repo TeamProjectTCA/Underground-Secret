@@ -13,8 +13,11 @@ public:
 
 public:
 	void update( );
+	int getStage( ) const;
 
 private:
+	int _stage;
+
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;
 };

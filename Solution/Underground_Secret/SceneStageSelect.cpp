@@ -3,6 +3,7 @@
 #include "Drawer.h"
 
 SceneStageSelect::SceneStageSelect( ) {
+	_stage = 1;
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 }
@@ -16,4 +17,10 @@ void SceneStageSelect::update( ) {
 	if ( _keyboard->getKeyDown( "z" ) ) {
 		setNextScene( GAME );
 	}
+
+	_drawer->flip( );
+}
+
+int SceneStageSelect::getStage( ) const {
+	return _stage;
 }

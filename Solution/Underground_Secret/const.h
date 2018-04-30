@@ -10,6 +10,7 @@ const float WIDTH_F = ( float )WIDTH;
 const float HEIGHT_F = ( float )HEIGHT;
 
 const double PI = 3.14; 
+const int BLOCK_SIZE = 16;
 
 enum BUTTON_STATE {
 	NORMAL,

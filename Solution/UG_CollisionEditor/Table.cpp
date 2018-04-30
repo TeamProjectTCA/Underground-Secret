@@ -93,19 +93,19 @@ void Table::loadCollider( std::string data, const int col, const int row ) {
 
 void Table::scroll( ) {
 	//¶
-	if ( _keyboard->getKeyDown( "RIGHT_ARROW" ) || _keyboard->getState( "RIGHT_ARROW" ) > 30 ) {
+	if ( _keyboard->getKeyDown( "d" ) || _keyboard->getState( "d" ) > 30 ) {
 		_x -= SCROLL_NUM;
 	}
 	//‰E
-	if ( _keyboard->getKeyDown( "LEFT_ARROW" ) || _keyboard->getState( "LEFT_ARROW" ) > 30 ) {
+	if ( _keyboard->getKeyDown( "a" ) || _keyboard->getState( "a" ) > 30 ) {
 		_x += SCROLL_NUM;
 	}
 	//ã
-	if ( _keyboard->getKeyDown( "DOWN_ARROW" ) || _keyboard->getState( "DOWN_ARROW" ) > 30 ) {
+	if ( _keyboard->getKeyDown( "s" ) || _keyboard->getState( "s" ) > 30 ) {
 		_y -= SCROLL_NUM;
 	}
 	//‰º
-	if ( _keyboard->getKeyDown( "UP_ARROW" ) || _keyboard->getState( "UP_ARROW" ) > 30 ) {
+	if ( _keyboard->getKeyDown( "w" ) || _keyboard->getState( "w" ) > 30 ) {
 		_y += SCROLL_NUM;
 	}
 

@@ -1,14 +1,9 @@
 #pragma once
-#include "Base.h"
-#include <string>
+#include "smart_ptr.h"
 
 PTR( CharacterManager );
 
-class CharacterManager : public Base {
-public:
-	static CharacterManagerPtr getTask( );
-	static std::string getTag( );
-
+class CharacterManager {
 public:
 	CharacterManager( );
 	virtual ~CharacterManager( );

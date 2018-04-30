@@ -9,7 +9,7 @@ void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
 	DxSettingPtr setting = DxSetting::getInstance( );
 	setting->changeWindowMode( true );
-	setting->setGraphMode( 1280, 720, 32 );
+	setting->setGraphMode( 1280, 720, 60 );
 	setting->setWindowSize( 1280, 720 );
 	setting->setDrawScreenBack( );
 
