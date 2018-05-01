@@ -2,6 +2,7 @@
 #include "smart_ptr.h"
 #include <vector>
 #include <string>
+#include <array>
 
 PTR( Table );
 PTR( Mouse );
@@ -11,8 +12,24 @@ PTR( Keyboard );
 class Table {
 private:
 	enum COMMAND {
-		COMMAND_DELETE,
-		COMMAND_PUT,
+		SET,
+		DEL,
+		A,
+		B,
+		C,
+		D,
+		E,
+		F,
+		G,
+		H,
+		I,
+		J,
+		K,
+		L,
+		M,
+		N,
+		O,
+		P,
 		COMMAND_MAX
 	};
 
@@ -37,12 +54,17 @@ private:
 	void setCommand( );
 	void setCollider( );
 	void setRange( );
+	void selectCommand( );
+	void changePage( );
+	void changeCommand( );
+	std::string convCommandToStr( COMMAND command );
 
 private:
 	void drawLoadedImage( ) const;
 	void drawTable( ) const;
 	void drawTableSelect( ) const; 
 	void drawActiveCollider( ) const;
+	void drawCommandMenu( ) const;
 
 private:
 	//左上の配列番号
@@ -53,16 +75,23 @@ private:
 	int _col;
 	int _row;
 
-	//その他
-	long long int _idx;
-	int _handle;
-	int _size;
-
 	//コライダーデータ
 	char *_data;
 
-
+	//その他
+	long long int _idx;
+	int _menu_x;
+	int _menu_y;
+	int _menu_width;
+	int _menu_height;
+	int _menu_handle;
+	int _map_handle;
+	int _size;
+	int _page_change_handle;
+	int _menu_page;
+	bool _command_select;
 	COMMAND _command;
+	std::array< int, COMMAND_MAX > _command_handle;
 
 	MousePtr _mouse;
 	DrawerPtr _drawer;
