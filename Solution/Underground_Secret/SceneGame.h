@@ -17,9 +17,12 @@ public:
 	
 public:
 	void update( );
+
+private:
 	void updatePhaseStart( );
 	void updatePhasePlay( );
 	void updatePhaseEnd( );
+	void changePhase( );
 
 private:
 	PHASE _phase;

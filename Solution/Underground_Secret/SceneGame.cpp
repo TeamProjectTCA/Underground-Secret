@@ -4,6 +4,8 @@
 #include "Map.h"
 #include "CharacterManager.h"
 #include "PhaseStart.h"
+#include "PhasePlay.h"
+#include "PhaseEnd.h"
 
 SceneGame::SceneGame( int stage ) :
 _stage( stage ) {
@@ -21,6 +23,7 @@ void SceneGame::update( ) {
 	_map->update( );
 	_run_phase->update( );
 
+	// phase ‚É‚æ‚Á‚Ä•Ï‚í‚éˆ—( ŠO•”ƒNƒ‰ƒX )
 	switch ( _phase ) {
 	case PHASE_START:
 		updatePhaseStart( );
@@ -41,6 +44,7 @@ void SceneGame::update( ) {
 	PHASE next = _run_phase->getPhase( );
 	if ( _phase != next ) {
 		_phase = next;
+		changePhase( );
 	}
 
 	_drawer->flip( );
@@ -55,4 +59,23 @@ void SceneGame::updatePhasePlay( ) {
 
 void SceneGame::updatePhaseEnd( ) {
 
+}
+
+void SceneGame::changePhase( ) {
+	switch ( _phase ) {
+	case PHASE_START:
+		_run_phase = PhaseStartPtr( new PhaseStart( ) );
+		break;
+
+	case PHASE_PLAY:
+		_run_phase = PhasePlayPtr( new PhasePlay( ) );
+		break;
+
+	case PHASE_END:
+		_run_phase = PhaseEndPtr( new PhaseEnd( ) );
+		break;
+
+	default:
+		break;
+	}
 }
