@@ -14,6 +14,7 @@ private:
 	enum COMMAND {
 		SET,
 		DEL,
+		SHUTTER,
 		A,
 		B,
 		C,
@@ -57,7 +58,7 @@ private:
 	void selectCommand( );
 	void changePage( );
 	void changeCommand( );
-	std::string convCommandToStr( COMMAND command );
+	std::string convCommandToExportStr( COMMAND command );
 
 private:
 	void drawLoadedImage( ) const;

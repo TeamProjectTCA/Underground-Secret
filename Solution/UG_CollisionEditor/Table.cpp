@@ -11,6 +11,7 @@ const int COMMAND_ICON_START_X = 30;
 const int COMMAND_ICON_PITCH = 15;
 const int PAGE_CHANGE_ICON_SIZE = 30;
 const int PAGE_CHANGE_ICON_PITCH = 30;
+const int NOT_DOOR_COMMAND_NUM = 3;
 
 Table::Table( const int handle, const int col, const int row ) :
 _map_handle( handle ),
@@ -48,6 +49,7 @@ _row( row + 1 ) {
 	_command_handle[ P ] = _drawer->getImage( "command_door_p" );
 	_command_handle[ SET ] = _drawer->getImage( "command_set" );
 	_command_handle[ DEL ] = _drawer->getImage( "command_del" );
+	_command_handle[ SHUTTER ] = _drawer->getImage( "command_shutter" );
 
 	unsigned int length = _col * _row + 1;
 	_data = ( char* )malloc( sizeof( char ) * length );
@@ -199,40 +201,8 @@ void Table::setCollider( ) {
 	switch ( _command ) {
 	// 判定取り消し
 	case DEL:
-	{
-		//左上にセット
-		int gap = 0;
-		if ( _idx % _col - _size / 2 < 0 ) {
-			//左に寄りすぎて超過した分を検出
-			gap = ( int )abs( _idx % _col - _size / 2 );
-		}
-
-		long long int x = ( _idx + gap - _size / 2 ) % _col;
-		long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
-		long long int idx = x + y * _col;
-
-		//右にsize分,下にsize分の四角をすべて0にする
-		for ( int i = 0; i < _size; i++ ) {
-			for ( int j = 0; j < _size - gap; j++ ) {
-				//右端を過ぎたら
-				if ( ( idx + j + i * _col ) / _col > y + i ||
-						( idx + j + i * _col ) / _col < y + i ) {
-					continue;
-				}
-				long long int put = idx + i * _col + j;
-
-				//縦と横の超過を検出
-				if ( put < 0 || ( _col * _row ) - 1 < put ) {
-					continue;
-				}
-				_data[ put ] = '0';
-			}
-		}
-	}
-	break;
-
-	// 当たり判定付与
 	case SET:
+	case SHUTTER:
 	{
 		//左上にセット
 		int gap = 0;
@@ -259,7 +229,8 @@ void Table::setCollider( ) {
 				if ( put < 0 || ( _col * _row ) - 1 < put ) {
 					continue;
 				}
-				_data[ put ] = '1';
+
+				_data[ put ] = convCommandToExportStr( _command ).front( );
 			}
 		}
 	}
@@ -309,7 +280,7 @@ void Table::setCollider( ) {
 					continue;
 				}
 
-				_data[ put ] = convCommandToStr( _command ).front( );
+				_data[ put ] = convCommandToExportStr( _command ).front( );
 			}
 		}
 	}
@@ -348,7 +319,7 @@ void Table::changePage( ) {
 	int page_next_x = _menu_x + _menu_width - ( int )( PAGE_CHANGE_ICON_PITCH * 1.5 );
 	int page_change_y = _menu_y + _menu_height - ( int )( PAGE_CHANGE_ICON_PITCH * 1.5 );
 
-	const int PAGE_MAX = ( ( int )_command_handle.size( ) + 2 ) / COMMAND_ICON_NUM;
+	const int PAGE_MAX = ( int )_command_handle.size( ) / COMMAND_ICON_NUM + 1;
 	int next = 0;
 
 	// 戻る
@@ -391,27 +362,30 @@ void Table::changeCommand( ) {
 	}
 }
 
-std::string Table::convCommandToStr( COMMAND command ) {
+std::string Table::convCommandToExportStr( COMMAND command ) {
 	std::string str = "";
 
 	switch ( command ) {
-		case A  : str = "a"; break;
-		case B  : str = "b"; break;
-		case C  : str = "c"; break;
-		case D  : str = "d"; break;
-		case E  : str = "e"; break;
-		case F  : str = "f"; break;
-		case G  : str = "g"; break;
-		case H  : str = "h"; break;
-		case I  : str = "i"; break;
-		case J  : str = "j"; break;
-		case K  : str = "k"; break;
-		case L  : str = "l"; break;
-		case M  : str = "m"; break;
-		case N  : str = "n"; break;
-		case O  : str = "o"; break;
-		case P  : str = "p"; break;
-		default : break;
+	case SET     : str = "1"; break;
+	case DEL     : str = "0"; break;
+	case SHUTTER : str = "2"; break;
+	case A       : str = "a"; break;
+	case B       : str = "b"; break;
+	case C       : str = "c"; break;
+	case D       : str = "d"; break;
+	case E       : str = "e"; break;
+	case F       : str = "f"; break;
+	case G       : str = "g"; break;
+	case H       : str = "h"; break;
+	case I       : str = "i"; break;
+	case J       : str = "j"; break;
+	case K       : str = "k"; break;
+	case L       : str = "l"; break;
+	case M       : str = "m"; break;
+	case N       : str = "n"; break;
+	case O       : str = "o"; break;
+	case P       : str = "p"; break;
+	default : break;
 	}
 
 	return str;
@@ -475,11 +449,17 @@ void Table::drawActiveCollider( ) const {
 						          0xff0000, true );
 			}
 
+			// シャッター
+			if ( _data[ idx ] == '2' ) {
+					_drawer->drawRotaGraph( ( float )( x + _x ) * BLOCK_SIZE + BLOCK_SIZE / 2, ( float )( y + _y ) * BLOCK_SIZE + BLOCK_SIZE / 2,
+						                0.25, 0, _command_handle[ SHUTTER ], true );
+			}
+
 			// エレベーター
-			const int DOOR_MAX = COMMAND_MAX - 2; // 2はSETとDELの分
+			const int DOOR_MAX = COMMAND_MAX - NOT_DOOR_COMMAND_NUM;
 			if ( _data[ idx ] >= 'a' && _data[ idx ] <= 'a' + DOOR_MAX ) {
 				_drawer->drawRotaGraph( ( float )( x + _x ) * BLOCK_SIZE + BLOCK_SIZE / 2, ( float )( y + _y ) * BLOCK_SIZE + BLOCK_SIZE / 2,
-						                0.25, 0, _command_handle[ _data[ idx ] - 'a' + 2 ], true );
+						                0.25, 0, _command_handle[ _data[ idx ] - 'a' + NOT_DOOR_COMMAND_NUM ], true );
 			}
 		}
 	}
