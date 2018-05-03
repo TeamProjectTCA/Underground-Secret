@@ -22,7 +22,6 @@ SceneGame::~SceneGame( ) {
 void SceneGame::update( ) {
 	_map->update( );
 	_run_phase->update( );
-
 	// phase ‚É‚æ‚Á‚Ä•Ï‚í‚éˆ—( ŠO•”ƒNƒ‰ƒX )
 	switch ( _phase ) {
 	case PHASE_START:
@@ -40,14 +39,18 @@ void SceneGame::update( ) {
 	default:
 		break;
 	}
+	_drawer->flip( );
 
 	PHASE next = _run_phase->getPhase( );
+	if ( next == PHASE_CONTINUE ) {
+		return;
+	}
+
 	if ( _phase != next ) {
 		_phase = next;
 		changePhase( );
 	}
 
-	_drawer->flip( );
 }
 
 void SceneGame::updatePhaseStart( ) {

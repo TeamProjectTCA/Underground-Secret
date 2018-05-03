@@ -4,7 +4,6 @@
 
 PTR( PhasePlay );
 PTR( Drawer );
-PTR( CharaA );
 
 class PhasePlay : public Phase {
 public:
@@ -27,6 +26,5 @@ private:
 	int _chara_handle;
 
 	DrawerPtr _drawer;
-	CharaAPtr _chanaA;
 };
 
