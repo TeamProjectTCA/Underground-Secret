@@ -3,6 +3,8 @@
 #include "smart_ptr.h"
 
 PTR( PhasePlay );
+PTR( Drawer );
+PTR( CharaA );
 
 class PhasePlay : public Phase {
 public:
@@ -11,5 +13,20 @@ public:
 
 public:
 	void update( );
+
+private:
+	void countClear( );
+
+private:
+	void drawTime( );
+
+private:
+	const int FINISH_TIME = 60;
+
+	int _time_count;
+	int _chara_handle;
+
+	DrawerPtr _drawer;
+	CharaAPtr _chanaA;
 };
 

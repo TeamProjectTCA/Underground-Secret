@@ -7,5 +7,5 @@ PhaseStart::~PhaseStart( ) {
 }
 
 void PhaseStart::update( ) {
-
+	setPhase( PHASE_PLAY );
 }

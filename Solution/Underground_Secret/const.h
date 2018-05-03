@@ -9,6 +9,8 @@ const int HEIGHT = 720;
 const float WIDTH_F = ( float )WIDTH;
 const float HEIGHT_F = ( float )HEIGHT;
 
+const int FRAME = 60;
+
 const double PI = 3.14; 
 const int BLOCK_SIZE = 16;
 
