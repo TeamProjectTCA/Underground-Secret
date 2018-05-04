@@ -64,6 +64,7 @@ private:
 	int _anim_change_time;
 	int _max_cnt;
 	int _cnt;
+	int _sx;
 	ANIM_TYPE _anim_type;
 
 	DrawerPtr _drawer;

@@ -13,6 +13,7 @@ Character::Character( std::string walk_anim_filename, int walk_anim_frame_num ) 
 	_anim_change_time = DEFAULT_ANIM_TIME;
 
 	_cnt = 0;
+	_sx = 0;
 	_pos = Vector( );
 }
 
@@ -48,15 +49,14 @@ void Character::setAnimTime( int change_time ) {
 void Character::draw( ) {
 	_cnt = ( _cnt + 1 ) % _max_cnt;
 
-	int sx = 0;
 	if ( _cnt % _anim_change_time == 0 ) {
 		// ‰æ‘œ‚ðØ‚è‘Ö‚¦‚é( ¶’[‚ð‚¸‚ç‚· )
-		sx = ( ( _cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
+		_sx = ( ( _cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
 	}
 
 	_drawer->drawRectGraph( 
 		( float )_pos.x, ( float )_pos.y,
-		sx, 0,
+		_sx, 0,
 		_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
 		_anim[ _anim_type ].handle,
 		true, false );
