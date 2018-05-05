@@ -1,6 +1,7 @@
 #include "Map.h"
 #include "Drawer.h"
 #include "Keyboard.h"
+#include "CharaA.h"
 #include "const.h"
 #include <errno.h>
 #include <assert.h>
@@ -17,6 +18,7 @@ _stage( stage ) {
 
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
+	_charaA = CharaAPtr( new CharaA( ) );
 	_handle = _drawer->getImage( ( "stage" + std::to_string( _stage ) ).c_str( ) );
 }
 
@@ -28,11 +30,14 @@ void Map::update( ) {
 
 	if ( _debug ) {
 		drawCollider( );
+		drawTable( );
 	}
 
 	if ( _keyboard->getKeyDown( "SPACE" ) ) {
 		_debug = !_debug;
 	}
+	ColliderSet( );
+	_charaA->update( );
 }
 
 void Map::loadMap( ) {
@@ -62,7 +67,7 @@ void Map::loadMap( ) {
 	_row = row;
 }
 
-void Map::drawCollider( ) {
+void Map::drawCollider( ) const {
 	for ( int i = 0; i < _row; i++ ) {
 		for ( int j = 0; j < _col; j++ ) {
 			int idx = i * _col + j;
@@ -75,7 +80,55 @@ void Map::drawCollider( ) {
 
 			_drawer->drawBox( ( float )(     x ) * BLOCK_SIZE, ( float )(     y ) * BLOCK_SIZE, 
 				              ( float )( x + 1 ) * BLOCK_SIZE, ( float )( y + 1 ) * BLOCK_SIZE,
-				              0xff0000, true );
+				              0x00ff00, true );
 		}
+	}
+}
+
+void Map::drawTable( ) const {
+	for ( int i = 1; i < HEIGHT / BLOCK_SIZE; i++ ) {
+		_drawer->drawLine( ( float )0, ( float )i * BLOCK_SIZE, ( float )WIDTH, ( float )i * BLOCK_SIZE, 0x3b3b3b );
+	}
+	for ( int i = 1; i < WIDTH / BLOCK_SIZE; i++ ) {
+		_drawer->drawLine( ( float )i * BLOCK_SIZE, ( float )0, ( float )i * BLOCK_SIZE, ( float )HEIGHT, 0x3b3b3b );
+	}
+}
+
+void Map::ColliderSet( ) {
+	int _check_x_down       = ( _charaA->getPosX( ) + _charaA->getWidth( )  / 2 ) / BLOCK_SIZE;
+	int _check_y_down       = ( _charaA->getPosY( ) + _charaA->getHeight( ) + 1 ) / BLOCK_SIZE;
+	int _check_x_left       = ( _charaA->getPosX( ) - 1 ) / BLOCK_SIZE;
+	int _check_x_right      = ( _charaA->getPosX( ) + _charaA->getWidth( )  + 1 ) / BLOCK_SIZE;
+	int _check_y_left_right = ( _charaA->getPosY( ) + _charaA->getHeight( ) - 1 ) / BLOCK_SIZE;
+	
+	
+	if ( _data[ _check_y_down * _col + _check_x_down ] != '0' ) {
+		_charaA->setFall( false );
+		if ( _charaA->getDir( ) == DIR_LEFT ) {
+			if ( _data[ _check_y_left_right * _col + _check_x_left ] != '0' ) {
+				if ( _data[ ( _check_y_left_right - 1 ) * _col + _check_x_left ] != '0' ) {
+					_charaA->setMove( false );
+				} else {
+					_charaA->setMove( true );
+					_charaA->setMoveUp( true );
+				}
+			} else {
+				_charaA->setMove( true );
+			}
+		}
+		if ( _charaA->getDir( ) == DIR_RIGHT ) {
+			if ( _data[ _check_y_left_right * _col + _check_x_right ] != '0' ) {
+				if ( _data[ ( _check_y_left_right - 1 ) * _col + _check_x_right ] != '0' ) {
+					_charaA->setMove( false );
+				} else {
+					_charaA->setMove( true );
+					_charaA->setMoveUp( true );
+				}
+			} else {
+				_charaA->setMove( true );
+			}
+		}
+	} else {
+		_charaA->setFall( true );
 	}
 }

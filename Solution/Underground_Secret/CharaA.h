@@ -5,6 +5,7 @@
 
 PTR( CharaA );
 PTR( Drawer );
+PTR( Keyboard );
 
 class CharaA {
 public:
@@ -15,21 +16,35 @@ public:
 
 private:
 	void fall( );
-	void colliderSet( );
-	void drawCharacter( );
+	void move( );
+
+	void drawCharacter( ) const;
+
+public:
+	void setFall( bool fall );
+	void setMove( bool move );
+	void setMoveUp( bool moveup );
+
+	int getPosX( ) const;
+	int getPosY( ) const;
+	int getWidth( ) const;
+	int getHeight( ) const;
+	DIR getDir( ) const;
 
 private:
-	const int FALL_SPEED = 5;
+	const int FALL_SPEED = 2;
 
+	bool _enable_fall;
+	bool _enable_move;
+	bool _enable_move_up;
 	int _stage;
 	int _chara_handle;
 	int _chara_x;
 	int _chara_y;
 	int _vec_x;
 	int _vec_y;
-	int _check_x;
-	int _check_y;
 	DIR _dir;
 
 	DrawerPtr _drawer;
+	KeyboardPtr _keyboard;
 };
