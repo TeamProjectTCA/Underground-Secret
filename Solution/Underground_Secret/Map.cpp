@@ -101,7 +101,6 @@ void Map::ColliderSet( ) {
 	int _check_x_right      = ( _charaA->getPosX( ) + _charaA->getWidth( )  + 1 ) / BLOCK_SIZE;
 	int _check_y_left_right = ( _charaA->getPosY( ) + _charaA->getHeight( ) - 1 ) / BLOCK_SIZE;
 	
-	
 	if ( _data[ _check_y_down * _col + _check_x_down ] != '0' ) {
 		_charaA->setFall( false );
 		if ( _charaA->getDir( ) == DIR_LEFT ) {

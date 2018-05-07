@@ -5,12 +5,12 @@
 const int START_CHARA_POS_X = 320;
 const int START_CHARA_POS_Y = 320;
 
-CharaA::CharaA( ) {
+CharaA::CharaA( ) :
+Character( "charaA", 1 ){
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 	_chara_handle = _drawer->getImage( "charaA" );
-	_chara_x = START_CHARA_POS_X;
-	_chara_y = START_CHARA_POS_Y;
+	_pos = Vector( START_CHARA_POS_X, START_CHARA_POS_Y );
 	_vec_x = 0;
 	_vec_y = 0;
 	_enable_fall = true;
@@ -35,7 +35,7 @@ void CharaA::fall( ) {
 	} else {
 		_vec_y = FALL_SPEED;
 	}
-	_chara_y += _vec_y;
+	_pos.y += _vec_y;
 }
 
 void CharaA::move( ) {
@@ -56,7 +56,7 @@ void CharaA::move( ) {
 		}
 		_dir = DIR_LEFT;
 	}
-	_chara_x += _vec_x;
+	_pos.x += _vec_x;
 }
 
 void CharaA::setFall( bool fall ) {
@@ -72,15 +72,15 @@ void CharaA::setMoveUp( bool moveup ) {
 }
 
 void CharaA::drawCharacter( ) const {
-	_drawer->drawGraph( _chara_x, _chara_y, _chara_handle, true );
+	_drawer->drawGraph(_pos.x, _pos.y, _chara_handle, true );
 }
 
 int CharaA::getPosX( ) const {
-	return _chara_x;
+	return _pos.x;
 }
 
 int CharaA::getPosY( ) const {
-	return _chara_y;
+	return _pos.y;
 }
 
 int CharaA::getWidth( ) const {

@@ -7,10 +7,10 @@ PTR( CharaA );
 PTR( Drawer );
 PTR( Keyboard );
 
-class CharaA {
+class CharaA : public Character {
 public:
 	CharaA( );
-	~CharaA( );
+	virtual ~CharaA( );
 public:
 	void update( );
 
@@ -39,8 +39,6 @@ private:
 	bool _enable_move_up;
 	int _stage;
 	int _chara_handle;
-	int _chara_x;
-	int _chara_y;
 	int _vec_x;
 	int _vec_y;
 	DIR _dir;
