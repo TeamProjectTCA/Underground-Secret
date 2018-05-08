@@ -11,7 +11,7 @@ const int COMMAND_ICON_START_X = 30;
 const int COMMAND_ICON_PITCH = 15;
 const int PAGE_CHANGE_ICON_SIZE = 30;
 const int PAGE_CHANGE_ICON_PITCH = 30;
-const int NOT_DOOR_COMMAND_NUM = 3;
+const int NOT_DOOR_COMMAND_NUM = 6;
 
 Table::Table( const int handle, const int col, const int row ) :
 _map_handle( handle ),
@@ -50,6 +50,9 @@ _row( row + 1 ) {
 	_command_handle[ SET ] = _drawer->getImage( "command_set" );
 	_command_handle[ DEL ] = _drawer->getImage( "command_del" );
 	_command_handle[ SHUTTER ] = _drawer->getImage( "command_shutter" );
+	_command_handle[ FP_1 ] = _drawer->getImage( "command_fp1" );
+	_command_handle[ FP_2 ] = _drawer->getImage( "command_fp2" );
+	_command_handle[ FP_3 ] = _drawer->getImage( "command_fp3" );
 
 	unsigned int length = _col * _row + 1;
 	_data = ( char* )malloc( sizeof( char ) * length );
@@ -76,12 +79,12 @@ void Table::update( ) {
 		scroll( );
 
 		// 設置
-		setCollider( );
+		setCommand( );
 	} else {
 		selectCommand( );
 	}
 	// コマンド選択
-	setCommand( );
+	showCommandMenu( );
 
 	// 描画
 	drawLoadedImage( );
@@ -90,10 +93,10 @@ void Table::update( ) {
 	drawTable( );
 	drawCommandMenu( );
 
-	_drawer->drawFormatString( 20, 20, 0xffffff, "      x : %d,   y : %d", _x, _y );
-	_drawer->drawFormatString( 20, 40, 0xffffff, "    col : %d, row : %d", _col, _row );
-	_drawer->drawFormatString( 20, 60, 0xffffff, "    idx : %d"          , _idx );
-	_drawer->drawFormatString( 20, 80, 0xffffff, "command : %d"          , _command );
+	_drawer->drawFormatString( 20, 20, RED, "x : %d, y : %d", _x, _y );
+	_drawer->drawFormatString( 20, 40, RED, "col : %d, row : %d", _col, _row );
+	_drawer->drawFormatString( 20, 60, RED, "idx : %d", _idx );
+	_drawer->drawFormatString( 20, 80, RED, "command : %d", _command );
 
 	_drawer->flip( );
 }
@@ -164,7 +167,7 @@ void Table::scroll( ) {
 	}
 }
 
-void Table::setCommand( ) {
+void Table::showCommandMenu( ) {
 	if ( !_mouse->isClickRight( ) ) {
 		return;
 	}
@@ -179,7 +182,7 @@ void Table::setCommand( ) {
 	}
 }
 
-void Table::setCollider( ) {
+void Table::setCommand( ) {
 	int mouse_x = _mouse->getPointX( );
 	int mouse_y = _mouse->getPointY( );
 
@@ -198,96 +201,38 @@ void Table::setCollider( ) {
 		return;
 	}
 
-	switch ( _command ) {
-	// 判定取り消し
-	case DEL:
-	case SET:
-	case SHUTTER:
-	{
-		//左上にセット
-		int gap = 0;
-		if ( _idx % _col - _size / 2 < 0 ) {
-			//左に寄りすぎて超過した分を検出
-			gap = ( int )abs( _idx % _col - _size / 2 );
-		}
-
-		long long int x = ( _idx + gap - _size / 2 ) % _col;
-		long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
-		long long int idx = x + y * _col;
-
-		//右にsize分,下にsize分の四角をすべて0にする
-		for ( int i = 0; i < _size; i++ ) {
-			for ( int j = 0; j < _size - gap; j++ ) {
-				//右端を過ぎたら
-				if ( ( idx + j + i * _col ) / _col > y + i ||
-						( idx + j + i * _col ) / _col < y + i ) {
-					continue;
-				}
-				long long int put = idx + i * _col + j;
-
-				//縦と横の超過を検出
-				if ( put < 0 || ( _col * _row ) - 1 < put ) {
-					continue;
-				}
-
-				_data[ put ] = convCommandToExportStr( _command ).front( );
-			}
-		}
+	if ( _command >= COMMAND_MAX ) {
+		return;	
 	}
-	break;
 
-	// エレベーター
-	case A:
-	case B:
-	case C:
-	case D:
-	case E:
-	case F:
-	case G:
-	case H:
-	case I:
-	case J:
-	case K:
-	case L:
-	case M:
-	case N:
-	case O:
-	case P:
-	{
-		// 左上にセット
-		int gap = 0;
-		if ( _idx % _col - _size / 2 < 0 ) {
-			// 左に寄りすぎて超過した分を検出
-			gap = ( int )abs( _idx % _col - _size / 2 );
-		}
-
-		long long int x = ( _idx + gap - _size / 2 ) % _col;
-		long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
-		long long int idx = x + y * _col;
-
-		// 右にsize分,下にsize分の四角をすべて0にする
-		for ( int i = 0; i < _size; i++ ) {
-			for ( int j = 0; j < _size - gap; j++ ) {
-				// 右端を過ぎたら
-				if ( ( idx + j + i * _col ) / _col > y + i ||
-						( idx + j + i * _col ) / _col < y + i ) {
-					continue;
-				}
-				long long int put = idx + i * _col + j;
-
-				// 縦と横の超過を検出
-				if ( put < 0 || ( _col * _row ) - 1 < put ) {
-					continue;
-				}
-
-				_data[ put ] = convCommandToExportStr( _command ).front( );
-			}
-		}
+	//左上にセット
+	int gap = 0;
+	if ( _idx % _col - _size / 2 < 0 ) {
+		//左に寄りすぎて超過した分を検出
+		gap = ( int )abs( _idx % _col - _size / 2 );
 	}
-	break;
 
-	default:
-		break;
+	long long int x = ( _idx + gap - _size / 2 ) % _col;
+	long long int y = ( _idx - ( _size / 2 ) * _col ) / _col;
+	long long int idx = x + y * _col;
+
+	//右にsize分,下にsize分の四角をすべて0にする
+	for ( int i = 0; i < _size; i++ ) {
+		for ( int j = 0; j < _size - gap; j++ ) {
+			//右端を過ぎたら
+			if ( ( idx + j + i * _col ) / _col > y + i ||
+					( idx + j + i * _col ) / _col < y + i ) {
+				continue;
+			}
+			long long int put = idx + i * _col + j;
+
+			//縦と横の超過を検出
+			if ( put < 0 || ( _col * _row ) - 1 < put ) {
+				continue;
+			}
+
+			_data[ put ] = convCommandToExportStr( _command ).front( );
+		}
 	}
 }
 
@@ -369,6 +314,9 @@ std::string Table::convCommandToExportStr( COMMAND command ) {
 	case SET     : str = "1"; break;
 	case DEL     : str = "0"; break;
 	case SHUTTER : str = "2"; break;
+	case FP_1    : str = "3"; break;
+	case FP_2    : str = "4"; break;
+	case FP_3    : str = "5"; break;
 	case A       : str = "a"; break;
 	case B       : str = "b"; break;
 	case C       : str = "c"; break;
@@ -454,6 +402,14 @@ void Table::drawActiveCollider( ) const {
 					_drawer->drawRotaGraph( ( float )( x + _x ) * BLOCK_SIZE + BLOCK_SIZE / 2, ( float )( y + _y ) * BLOCK_SIZE + BLOCK_SIZE / 2,
 						                0.25, 0, _command_handle[ SHUTTER ], true );
 			}
+
+			// Fixedpoint(定点)
+			if ( _data[ idx ] == '3' || _data[ idx ] == '4' || _data[ idx ] == '5' ) {
+				int handle_idx = _data[ idx ] - '0';
+				_drawer->drawRotaGraph( ( float )( x + _x ) * BLOCK_SIZE + BLOCK_SIZE / 2, ( float )( y + _y ) * BLOCK_SIZE + BLOCK_SIZE / 2,
+						                0.25, 0, _command_handle[ handle_idx ], true );
+			}
+
 
 			// エレベーター
 			const int DOOR_MAX = COMMAND_MAX - NOT_DOOR_COMMAND_NUM;

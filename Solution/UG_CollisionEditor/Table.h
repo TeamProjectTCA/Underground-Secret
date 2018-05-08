@@ -15,6 +15,9 @@ private:
 		SET,
 		DEL,
 		SHUTTER,
+		FP_1,
+		FP_2,
+		FP_3,
 		A,
 		B,
 		C,
@@ -52,8 +55,8 @@ public:
 
 private:
 	void scroll( );
+	void showCommandMenu( );
 	void setCommand( );
-	void setCollider( );
 	void setRange( );
 	void selectCommand( );
 	void changePage( );

@@ -4,3 +4,5 @@ const int HEIGHT = 720;
 
 const int BLOCK_SIZE = 16;
 const float PI = 3.14f;
+
+const unsigned int RED = 0xff0000;
