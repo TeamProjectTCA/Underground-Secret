@@ -18,7 +18,6 @@ _stage( stage ) {
 
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
-	_charaA = CharaAPtr( new CharaA( ) );
 	_handle = _drawer->getImage( ( "stage" + std::to_string( _stage ) ).c_str( ) );
 }
 
@@ -36,8 +35,6 @@ void Map::update( ) {
 	if ( _keyboard->getKeyDown( "SPACE" ) ) {
 		_debug = !_debug;
 	}
-	ColliderSet( );
-	_charaA->update( );
 }
 
 void Map::loadMap( ) {
@@ -94,40 +91,40 @@ void Map::drawTable( ) const {
 	}
 }
 
-void Map::ColliderSet( ) {
-	int _check_x_down       = ( _charaA->getPosX( ) + _charaA->getWidth( )  / 2 ) / BLOCK_SIZE;
-	int _check_y_down       = ( _charaA->getPosY( ) + _charaA->getHeight( ) + 1 ) / BLOCK_SIZE;
-	int _check_x_left       = ( _charaA->getPosX( ) - 1 ) / BLOCK_SIZE;
-	int _check_x_right      = ( _charaA->getPosX( ) + _charaA->getWidth( )  + 1 ) / BLOCK_SIZE;
-	int _check_y_left_right = ( _charaA->getPosY( ) + _charaA->getHeight( ) - 1 ) / BLOCK_SIZE;
-	
-	if ( _data[ _check_y_down * _col + _check_x_down ] != '0' ) {
-		_charaA->setFall( false );
-		if ( _charaA->getDir( ) == DIR_LEFT ) {
-			if ( _data[ _check_y_left_right * _col + _check_x_left ] != '0' ) {
-				if ( _data[ ( _check_y_left_right - 1 ) * _col + _check_x_left ] != '0' ) {
-					_charaA->setMove( false );
-				} else {
-					_charaA->setMove( true );
-					_charaA->setMoveUp( true );
-				}
-			} else {
-				_charaA->setMove( true );
-			}
-		}
-		if ( _charaA->getDir( ) == DIR_RIGHT ) {
-			if ( _data[ _check_y_left_right * _col + _check_x_right ] != '0' ) {
-				if ( _data[ ( _check_y_left_right - 1 ) * _col + _check_x_right ] != '0' ) {
-					_charaA->setMove( false );
-				} else {
-					_charaA->setMove( true );
-					_charaA->setMoveUp( true );
-				}
-			} else {
-				_charaA->setMove( true );
-			}
-		}
-	} else {
-		_charaA->setFall( true );
-	}
-}
+//void Map::ColliderSet( ) {
+//	int _check_x_down       = ( _charaA->getPosX( ) + _charaA->getWidth( )  / 2 ) / BLOCK_SIZE;
+//	int _check_y_down       = ( _charaA->getPosY( ) + _charaA->getHeight( ) + 1 ) / BLOCK_SIZE;
+//	int _check_x_left       = ( _charaA->getPosX( ) - 1 ) / BLOCK_SIZE;
+//	int _check_x_right      = ( _charaA->getPosX( ) + _charaA->getWidth( )  + 1 ) / BLOCK_SIZE;
+//	int _check_y_left_right = ( _charaA->getPosY( ) + _charaA->getHeight( ) - 1 ) / BLOCK_SIZE;
+//	
+//	if ( _data[ _check_y_down * _col + _check_x_down ] != '0' ) {
+//		_charaA->setFall( false );
+//		if ( _charaA->getDir( ) == DIR_LEFT ) {
+//			if ( _data[ _check_y_left_right * _col + _check_x_left ] != '0' ) {
+//				if ( _data[ ( _check_y_left_right - 1 ) * _col + _check_x_left ] != '0' ) {
+//					_charaA->setMove( false );
+//				} else {
+//					_charaA->setMove( true );
+//					_charaA->setMoveUp( true );
+//				}
+//			} else {
+//				_charaA->setMove( true );
+//			}
+//		}
+//		if ( _charaA->getDir( ) == DIR_RIGHT ) {
+//			if ( _data[ _check_y_left_right * _col + _check_x_right ] != '0' ) {
+//				if ( _data[ ( _check_y_left_right - 1 ) * _col + _check_x_right ] != '0' ) {
+//					_charaA->setMove( false );
+//				} else {
+//					_charaA->setMove( true );
+//					_charaA->setMoveUp( true );
+//				}
+//			} else {
+//				_charaA->setMove( true );
+//			}
+//		}
+//	} else {
+//		_charaA->setFall( true );
+//	}
+//}

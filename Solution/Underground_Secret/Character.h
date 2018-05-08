@@ -7,6 +7,7 @@
 
 PTR( Character );
 PTR( Drawer );
+PTR( Map );
 
 enum CHARACTER {
 	CHARA_A,
@@ -42,7 +43,7 @@ private:
 	};
 
 public:
-	Character( std::string walk_anim_filename, int walk_anim_frame_num );
+	Character( MapPtr map );
 	virtual ~Character( );
 
 public:
@@ -53,11 +54,15 @@ public:
 	void setAnimTime( int change_time );
 
 public:
+	Vector getPos( ) const;
+
+public:
 	void draw( );
 	virtual void update( ) = 0;
 
 protected:
 	Vector _pos;
+	MapPtr _map;
 
 private:
 	std::map< ANIM_TYPE, Animation > _anim;

@@ -5,7 +5,6 @@
 PTR( Map );
 PTR( Drawer );
 PTR( Keyboard );
-PTR( CharaA );
 
 class Map {
 public:
@@ -17,7 +16,6 @@ public:
 
 private:
 	void loadMap( );
-	void ColliderSet( );
 
 	void drawCollider( ) const;
 	void drawTable( ) const;
@@ -32,6 +30,5 @@ private:
 
 	DrawerPtr _drawer;
 	KeyboardPtr _keyboard;
-	CharaAPtr _charaA;
 };
 

@@ -1,22 +1,26 @@
 #pragma once
 #include "smart_ptr.h"
+#include <list>
 
-PTR(CharacterManager);
-PTR(Character);
+PTR( CharacterManager );
+PTR( Character );
+PTR( CharaA );
+PTR( Map );
 
 class CharacterManager {
-
-
 public:
-	CharacterManager( );
+	CharacterManager( MapPtr map );
 	virtual ~CharacterManager( );
 
 public:
-	void initialize( );
-	void finalize( );
 	void update( );
+	void addChara( CharacterPtr ptr );
+	std::list< CharacterPtr > getChara( );
 	
 private:
-	CharacterPtr _character;
+	std::list< CharacterPtr > _chara;
+
+	MapPtr _map;
+	CharaAPtr _chara_a;
 };
 

@@ -34,7 +34,7 @@ void PhasePlay::countClear( ) {
 }
 
 void PhasePlay::drawTime( ) {
-	_drawer->drawBox( TIME_BOX_X, TIME_BOX_Y, TIME_BOX_X + TIME_BOX_WIDTH, TIME_BOX_Y + TIME_BOX_HEIGHT, 0x0000ff, false );
-	_drawer->drawString( TIME_STRING_X1, TIME_STRING_Y1, "ƒNƒŠƒA‚Ü‚Å‚ ‚Æ", 0xff0000 );
-	_drawer->drawString( TIME_STRING_X2, TIME_STRING_Y2, std::to_string( _time_count / FRAME ) + "•b", 0xff0000 );
+	_drawer->drawBox( TIME_BOX_X, TIME_BOX_Y, TIME_BOX_X + TIME_BOX_WIDTH, TIME_BOX_Y + TIME_BOX_HEIGHT, BLUE, true );
+	_drawer->drawString( TIME_STRING_X1, TIME_STRING_Y1, "ƒNƒŠƒA‚Ü‚Å‚ ‚Æ", RED );
+	_drawer->drawString( TIME_STRING_X2, TIME_STRING_Y2, std::to_string( _time_count / FRAME ) + "•b", RED );
 }

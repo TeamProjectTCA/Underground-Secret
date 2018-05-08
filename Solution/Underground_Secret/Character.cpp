@@ -4,16 +4,18 @@
 #include <errno.h>
 
 const int DEFAULT_ANIM_TIME = 30;
+const int DEFAULT_MAX_COUNT = 0xffffff;
 
-Character::Character( std::string walk_anim_filename, int walk_anim_frame_num ) {
+Character::Character( MapPtr map ) :
+_map( map ) {
 	_drawer = Drawer::getTask( );
-	addAnim( WALK, walk_anim_filename, walk_anim_frame_num );
 
 	_anim_type = WALK;
 	_anim_change_time = DEFAULT_ANIM_TIME;
 
 	_cnt = 0;
 	_sx = 0;
+	_max_cnt = DEFAULT_MAX_COUNT;
 	_pos = Vector( );
 }
 
@@ -46,7 +48,15 @@ void Character::setAnimTime( int change_time ) {
 	_max_cnt = _anim[ _anim_type ].frame * _anim_change_time;
 }
 
+Vector Character::getPos( ) const {
+	return _pos;
+}
+
 void Character::draw( ) {
+	if ( _anim.find( _anim_type ) == _anim.end( ) ) {
+		return;
+	}
+
 	_cnt = ( _cnt + 1 ) % _max_cnt;
 
 	if ( _cnt % _anim_change_time == 0 ) {

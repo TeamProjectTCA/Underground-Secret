@@ -5,11 +5,13 @@
 const int START_CHARA_POS_X = 320;
 const int START_CHARA_POS_Y = 320;
 
-CharaA::CharaA( ) :
-Character( "charaA", 1 ){
+CharaA::CharaA( MapPtr map ) :
+Character( map ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
-	_chara_handle = _drawer->getImage( "charaA" );
+
+	addAnim( Character::WALK, "charaA", 1 );
+
 	_pos = Vector( START_CHARA_POS_X, START_CHARA_POS_Y );
 	_vec_x = 0;
 	_vec_y = 0;
@@ -23,10 +25,10 @@ CharaA::~CharaA( ) {
 }
 
 void CharaA::update( ) {
-	fall( );
-	drawCharacter( );
-	//デバッグ用
-	move( );
+	_pos.x++;
+	//fall( );
+	////デバッグ用
+	//move( );
 }
 
 void CharaA::fall( ) {
@@ -69,18 +71,6 @@ void CharaA::setMove( bool move ) {
 
 void CharaA::setMoveUp( bool moveup ) {
 	_enable_move_up = moveup;
-}
-
-void CharaA::drawCharacter( ) const {
-	_drawer->drawGraph(_pos.x, _pos.y, _chara_handle, true );
-}
-
-int CharaA::getPosX( ) const {
-	return _pos.x;
-}
-
-int CharaA::getPosY( ) const {
-	return _pos.y;
 }
 
 int CharaA::getWidth( ) const {

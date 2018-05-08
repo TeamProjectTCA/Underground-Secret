@@ -1,19 +1,31 @@
 #include "CharacterManager.h"
-#include "Manager.h"
+#include "Map.h"
 #include "CharaA.h"
 
-CharacterManager::CharacterManager( ) {
+CharacterManager::CharacterManager( MapPtr map ) :
+_map( map ) {
+	_chara_a = CharaAPtr( new CharaA( _map ) );
+
+	// debug
+	addChara( _chara_a );
 }
 
 CharacterManager::~CharacterManager( ) {
 }
 
-void CharacterManager::initialize( ) {
-}
-
-void CharacterManager::finalize( ) {
-}
-
 void CharacterManager::update( ) {
-	
+	std::list< CharacterPtr >::iterator ite;
+	ite = _chara.begin( );
+	for ( ite; ite != _chara.end( ); ite++ ) {
+		( *ite )->update( );
+		( *ite )->draw( );
+	}
+}
+
+void CharacterManager::addChara( CharacterPtr ptr ) {
+	_chara.push_back( ptr );
+}
+
+std::list< CharacterPtr > CharacterManager::getChara( ) {
+	return _chara;
 }

@@ -12,8 +12,10 @@ _stage( stage ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 	_map = MapPtr( new Map( _stage ) );
-	_char_manager = CharacterManagerPtr( new CharacterManager( ) );
-	_run_phase = PhaseStartPtr( new PhaseStart( ) );
+	_char_manager = CharacterManagerPtr( new CharacterManager( _map ) );
+
+	_phase = PHASE_START;
+	changePhase( );
 }
 
 SceneGame::~SceneGame( ) {
@@ -67,7 +69,7 @@ void SceneGame::updatePhaseEnd( ) {
 void SceneGame::changePhase( ) {
 	switch ( _phase ) {
 	case PHASE_START:
-		_run_phase = PhaseStartPtr( new PhaseStart( ) );
+		_run_phase = PhaseStartPtr( new PhaseStart( _char_manager->getChara( ) ) );
 		break;
 
 	case PHASE_PLAY:
