@@ -14,7 +14,12 @@ _stage( stage ) {
 	_row = 0;
 	_data = "";
 	_debug = false;
+	_fixed_point_start = Vector( );
+	_fixed_point_play  = Vector( );
+	_fixed_point_end   = Vector( );
+
 	loadMap( );
+	setFixedpoint( );
 
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
@@ -35,6 +40,19 @@ void Map::update( ) {
 	if ( _keyboard->getKeyDown( "SPACE" ) ) {
 		_debug = !_debug;
 	}
+}
+
+Vector Map::getFixedpoint( PHASE phase ) const {
+	Vector point;
+
+	switch ( phase ) {
+	case PHASE_START: point = _fixed_point_start; break;
+	case PHASE_PLAY : point = _fixed_point_play ; break;
+	case PHASE_END  : point = _fixed_point_end  ; break;
+	default: break;
+	}
+
+	return point;
 }
 
 void Map::loadMap( ) {
@@ -62,6 +80,32 @@ void Map::loadMap( ) {
 	fclose( fp );
 	_col = col;
 	_row = row;
+}
+
+void Map::setFixedpoint( ) {
+	int length = ( int )_data.length( );
+	Vector *vec = NULL;
+	for ( int i = 0; i < length; i++ ) {
+		bool detection = false;
+		if ( _data[ i ] == IDENTIFICATION_FIXEDPOINT_START ) {
+			vec = &_fixed_point_start;
+			detection = true;
+		}
+		if ( _data[ i ] == IDENTIFICATION_FIXEDPOINT_START ) {
+			vec = &_fixed_point_start;
+			detection = true;
+		}
+		if ( _data[ i ] == IDENTIFICATION_FIXEDPOINT_START ) {
+			vec = &_fixed_point_start;
+			detection = true;
+		}
+		if ( !detection ) {
+			continue;
+		}
+
+		vec->x = ( i % _col ) * BLOCK_SIZE;
+		vec->y = ( i / _col ) * BLOCK_SIZE;
+	}
 }
 
 void Map::drawCollider( ) const {

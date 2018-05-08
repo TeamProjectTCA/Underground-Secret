@@ -1,13 +1,15 @@
 #include "CharacterManager.h"
 #include "Map.h"
 #include "CharaA.h"
+#include "CharaDummy.h"
 
 CharacterManager::CharacterManager( MapPtr map ) :
 _map( map ) {
 	_chara_a = CharaAPtr( new CharaA( _map ) );
 
 	// debug
-	addChara( _chara_a );
+	_chara_dummy = CharaDummyPtr( new CharaDummy( _map ) );
+	addChara( _chara_dummy );
 }
 
 CharacterManager::~CharacterManager( ) {

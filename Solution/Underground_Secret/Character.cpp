@@ -1,5 +1,6 @@
 #include "Character.h"
 #include "Drawer.h"
+#include "Map.h"
 #include <assert.h>
 #include <errno.h>
 
@@ -46,6 +47,10 @@ void Character::setAnim( ANIM_TYPE type ) {
 void Character::setAnimTime( int change_time ) {
 	_anim_change_time = change_time;
 	_max_cnt = _anim[ _anim_type ].frame * _anim_change_time;
+}
+
+void Character::setFixedpoint( PHASE phase ) {
+	_pos = _map->getFixedpoint( phase );
 }
 
 Vector Character::getPos( ) const {

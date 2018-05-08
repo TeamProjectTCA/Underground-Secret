@@ -10,7 +10,8 @@ Character( map ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 
-	addAnim( Character::WALK, "charaA", 1 );
+	addAnim( Character::WALK, "CharaA_Walk", 1 );
+	setAnim( Character::WALK );
 
 	_pos = Vector( START_CHARA_POS_X, START_CHARA_POS_Y );
 	_vec_x = 0;

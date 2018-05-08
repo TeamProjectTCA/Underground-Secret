@@ -1,6 +1,7 @@
 #pragma once
 #include "smart_ptr.h"
 #include "Vector.h"
+#include "Phase.h"
 #include <string>
 #include <map>
 #include <vector>
@@ -9,15 +10,12 @@ PTR( Character );
 PTR( Drawer );
 PTR( Map );
 
-enum CHARACTER {
-	CHARA_A,
-	CHARA_MAX,
-};
-
 class Character {
 public:
 	enum ANIM_TYPE {
 		WALK,
+		OPEN,
+		ANIM_TYPE_MAX,
 	};
 
 private:
@@ -52,6 +50,7 @@ public:
 	// アニメーションを切り替える
 	void setAnim( ANIM_TYPE type );
 	void setAnimTime( int change_time );
+	void setFixedpoint( PHASE phase );
 
 public:
 	Vector getPos( ) const;

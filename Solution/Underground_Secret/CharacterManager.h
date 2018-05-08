@@ -4,8 +4,9 @@
 
 PTR( CharacterManager );
 PTR( Character );
-PTR( CharaA );
 PTR( Map );
+PTR( CharaA );
+PTR( CharaDummy );
 
 class CharacterManager {
 public:
@@ -22,5 +23,6 @@ private:
 
 	MapPtr _map;
 	CharaAPtr _chara_a;
+	CharaDummyPtr _chara_dummy;
 };
 
