@@ -87,16 +87,17 @@ void Map::setFixedpoint( ) {
 	Vector *vec = NULL;
 	for ( int i = 0; i < length; i++ ) {
 		bool detection = false;
-		if ( _data[ i ] == IDENTIFICATION_FIXEDPOINT_START ) {
+		int value = _data[ i ] - '0';
+		if ( value == IDENTIFICATION_FIXEDPOINT_START ) {
 			vec = &_fixed_point_start;
 			detection = true;
 		}
-		if ( _data[ i ] == IDENTIFICATION_FIXEDPOINT_START ) {
-			vec = &_fixed_point_start;
+		if ( value == IDENTIFICATION_FIXEDPOINT_PLAY ) {
+			vec = &_fixed_point_play;
 			detection = true;
 		}
-		if ( _data[ i ] == IDENTIFICATION_FIXEDPOINT_START ) {
-			vec = &_fixed_point_start;
+		if ( value == IDENTIFICATION_FIXEDPOINT_END ) {
+			vec = &_fixed_point_end;
 			detection = true;
 		}
 		if ( !detection ) {
