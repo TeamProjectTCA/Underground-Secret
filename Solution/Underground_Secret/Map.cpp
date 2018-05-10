@@ -6,6 +6,8 @@
 #include <errno.h>
 #include <assert.h>
 
+const int SCROLL_SIZE = 2;
+
 std::string path = "Resources/map/stage";
 
 Map::Map( int stage ) :
@@ -20,6 +22,7 @@ _stage( stage ) {
 	_fixedpoint_beta_start = Vector( );
 	_fixedpoint_beta_play  = Vector( );
 	_fixedpoint_beta_end   = Vector( );
+	_scroll = Vector( 0, 0 );
 
 	loadMap( );
 	setFixedpoint( );
@@ -33,8 +36,8 @@ Map::~Map( ) {
 }
 
 void Map::update( ) {
-	_drawer->drawGraph( 0, 0, _handle, true );
-
+	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _handle, true );
+	scroll( );
 	if ( _debug ) {
 		drawCollider( );
 		drawTable( );
@@ -69,6 +72,11 @@ Vector Map::getFixedpointBeta( PHASE phase ) const {
 	}
 
 	return point;
+}
+
+
+Vector Map::getScrollData( ) const {
+	return Vector( _scroll.x, _scroll.y );
 }
 
 void Map::loadMap( ) {
@@ -145,6 +153,40 @@ void Map::setFixedpoint( ) {
 	}
 }
 
+void Map::scroll( ) {
+	//¶
+	if ( _keyboard->getKeyDown( "d" ) || _keyboard->getState( "d" ) > 30 ) {
+		_scroll.x -= SCROLL_SIZE;
+	}
+	//‰E
+	if ( _keyboard->getKeyDown( "a" ) || _keyboard->getState( "a" ) > 30 ) {
+		_scroll.x += SCROLL_SIZE;
+	}
+	//ã
+	if ( _keyboard->getKeyDown( "s" ) || _keyboard->getState( "s" ) > 30 ) {
+		_scroll.y -= SCROLL_SIZE;
+	}
+	//‰º
+	if ( _keyboard->getKeyDown( "w" ) || _keyboard->getState( "w" ) > 30 ) {
+		_scroll.y += SCROLL_SIZE;
+	}
+
+
+	if ( _scroll.x > 0 ) {
+		_scroll.x = 0;
+	}
+	if ( _scroll.x < WIDTH / BLOCK_SIZE - ( _col ) ) {
+		_scroll.x = WIDTH / BLOCK_SIZE - ( _col );
+	}
+
+	if ( _scroll.y > 0 ) {
+		_scroll.y = 0;
+	}
+	if ( _scroll.y < HEIGHT / BLOCK_SIZE - ( _row ) ) {
+		_scroll.y = HEIGHT / BLOCK_SIZE - ( _row );
+	}
+}
+
 void Map::drawCollider( ) const {
 	for ( int i = 0; i < _row; i++ ) {
 		for ( int j = 0; j < _col; j++ ) {
@@ -156,8 +198,8 @@ void Map::drawCollider( ) const {
 			int x = idx % _col;
 			int y = idx / _col;
 
-			_drawer->drawBox( ( float )(     x ) * BLOCK_SIZE, ( float )(     y ) * BLOCK_SIZE, 
-				              ( float )( x + 1 ) * BLOCK_SIZE, ( float )( y + 1 ) * BLOCK_SIZE,
+			_drawer->drawBox( ( float )(     x + _scroll.x ) * BLOCK_SIZE, ( float )(     y + _scroll.y ) * BLOCK_SIZE,
+				              ( float )( x + 1 + _scroll.x ) * BLOCK_SIZE, ( float )( y + 1 + _scroll.y ) * BLOCK_SIZE,
 				              0x00ff00, true );
 		}
 	}
