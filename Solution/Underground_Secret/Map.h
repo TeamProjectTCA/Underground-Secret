@@ -17,6 +17,9 @@ public:
 	void update( );
 
 public:
+	void setPhase( PHASE phase );
+
+public:
 	Vector getFixedpointAlpha( PHASE phase ) const;
 	Vector getFixedpointBeta( PHASE phase ) const;
 	Vector getScrollData( ) const;
@@ -35,6 +38,7 @@ private:
 	int _stage;
 	int _row;
 	int _col;
+	PHASE _phase;
 	Vector _scroll;
 	bool _debug;
 	std::string _data;

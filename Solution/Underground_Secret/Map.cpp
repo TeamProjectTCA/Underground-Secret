@@ -23,6 +23,7 @@ _stage( stage ) {
 	_fixedpoint_beta_play  = Vector( );
 	_fixedpoint_beta_end   = Vector( );
 	_scroll = Vector( 0, 0 );
+	_phase = PHASE_START;
 
 	loadMap( );
 	setFixedpoint( );
@@ -46,6 +47,10 @@ void Map::update( ) {
 	if ( _keyboard->getKeyDown( "SPACE" ) ) {
 		_debug = !_debug;
 	}
+}
+
+void Map::setPhase( PHASE phase ) {
+	_phase = phase;
 }
 
 Vector Map::getFixedpointAlpha( PHASE phase ) const {
@@ -154,6 +159,10 @@ void Map::setFixedpoint( ) {
 }
 
 void Map::scroll( ) {
+	if ( _phase != PHASE_PLAY ) {
+		return;
+	}
+
 	//¶
 	if ( _keyboard->getKeyDown( "d" ) || _keyboard->getState( "d" ) > 30 ) {
 		_scroll.x -= SCROLL_SIZE;
