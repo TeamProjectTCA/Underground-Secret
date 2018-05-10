@@ -14,9 +14,12 @@ _stage( stage ) {
 	_row = 0;
 	_data = "";
 	_debug = false;
-	_fixed_point_start = Vector( );
-	_fixed_point_play  = Vector( );
-	_fixed_point_end   = Vector( );
+	_fixedpoint_alpha_start = Vector( );
+	_fixedpoint_alpha_play  = Vector( );
+	_fixedpoint_alpha_end   = Vector( );
+	_fixedpoint_beta_start = Vector( );
+	_fixedpoint_beta_play  = Vector( );
+	_fixedpoint_beta_end   = Vector( );
 
 	loadMap( );
 	setFixedpoint( );
@@ -42,13 +45,26 @@ void Map::update( ) {
 	}
 }
 
-Vector Map::getFixedpoint( PHASE phase ) const {
+Vector Map::getFixedpointAlpha( PHASE phase ) const {
 	Vector point;
 
 	switch ( phase ) {
-	case PHASE_START: point = _fixed_point_start; break;
-	case PHASE_PLAY : point = _fixed_point_play ; break;
-	case PHASE_END  : point = _fixed_point_end  ; break;
+	case PHASE_START: point = _fixedpoint_alpha_start; break;
+	case PHASE_PLAY : point = _fixedpoint_alpha_play ; break;
+	case PHASE_END  : point = _fixedpoint_alpha_end  ; break;
+	default: break;
+	}
+
+	return point;
+}
+
+Vector Map::getFixedpointBeta( PHASE phase ) const {
+	Vector point;
+
+	switch ( phase ) {
+	case PHASE_START: point = _fixedpoint_beta_start; break;
+	case PHASE_PLAY : point = _fixedpoint_beta_play ; break;
+	case PHASE_END  : point = _fixedpoint_beta_end  ; break;
 	default: break;
 	}
 
@@ -85,19 +101,39 @@ void Map::loadMap( ) {
 void Map::setFixedpoint( ) {
 	int length = ( int )_data.length( );
 	Vector *vec = NULL;
+	bool alphapos_input_start = false;
+	bool alphapos_input_play  = false;
+	bool alphapos_input_end   = false;
+
 	for ( int i = 0; i < length; i++ ) {
 		bool detection = false;
 		int value = _data[ i ] - '0';
 		if ( value == IDENTIFICATION_FIXEDPOINT_START ) {
-			vec = &_fixed_point_start;
+			// ’è“_alpha‚Ì“ü—Í‚Å‚ ‚ê‚Î
+			if ( !alphapos_input_start ) {
+				vec = &_fixedpoint_alpha_start;
+				alphapos_input_start = true;
+			} else {
+				vec = &_fixedpoint_beta_start;
+			}
 			detection = true;
 		}
 		if ( value == IDENTIFICATION_FIXEDPOINT_PLAY ) {
-			vec = &_fixed_point_play;
+			if ( !alphapos_input_play ) {
+				vec = &_fixedpoint_alpha_play;
+				alphapos_input_play = true;
+			} else {
+				vec = &_fixedpoint_beta_play;
+			}
 			detection = true;
 		}
 		if ( value == IDENTIFICATION_FIXEDPOINT_END ) {
-			vec = &_fixed_point_end;
+			if ( !alphapos_input_end ) {
+				vec = &_fixedpoint_alpha_end;
+				alphapos_input_end = true;
+			} else {
+				vec = &_fixedpoint_beta_end;
+			}
 			detection = true;
 		}
 		if ( !detection ) {

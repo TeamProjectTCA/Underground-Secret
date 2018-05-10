@@ -53,6 +53,10 @@ public:
 	void setFixedpoint( PHASE phase );
 
 public:
+	// ˆÚ“®ˆ—
+	void moveX( double distance );
+
+public:
 	Vector getPos( ) const;
 
 public:

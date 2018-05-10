@@ -50,7 +50,11 @@ void Character::setAnimTime( int change_time ) {
 }
 
 void Character::setFixedpoint( PHASE phase ) {
-	_pos = _map->getFixedpoint( phase );
+	_pos = _map->getFixedpointAlpha( phase );
+}
+
+void Character::moveX( double distance ) {
+	_pos.x += distance;
 }
 
 Vector Character::getPos( ) const {

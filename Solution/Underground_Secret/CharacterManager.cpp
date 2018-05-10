@@ -8,8 +8,12 @@ _map( map ) {
 	_chara_a = CharaAPtr( new CharaA( _map ) );
 
 	// debug
-	_chara_dummy = CharaDummyPtr( new CharaDummy( _map ) );
-	addChara( _chara_dummy );
+	_chara_dummy1 = CharaDummyPtr( new CharaDummy( _map ) );
+	_chara_dummy2 = CharaDummyPtr( new CharaDummy( _map ) );
+	_chara_dummy3 = CharaDummyPtr( new CharaDummy( _map ) );
+	addChara( _chara_dummy1 );
+	addChara( _chara_dummy2 );
+	addChara( _chara_dummy3 );
 }
 
 CharacterManager::~CharacterManager( ) {

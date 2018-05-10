@@ -69,7 +69,7 @@ void SceneGame::updatePhaseEnd( ) {
 void SceneGame::changePhase( ) {
 	switch ( _phase ) {
 	case PHASE_START:
-		_run_phase = PhaseStartPtr( new PhaseStart( _char_manager->getChara( ) ) );
+		_run_phase = PhaseStartPtr( new PhaseStart( _char_manager->getChara( ), _map ) );
 		break;
 
 	case PHASE_PLAY:

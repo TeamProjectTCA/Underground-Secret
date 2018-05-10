@@ -17,7 +17,8 @@ public:
 	void update( );
 
 public:
-	Vector getFixedpoint( PHASE phase ) const;
+	Vector getFixedpointAlpha( PHASE phase ) const;
+	Vector getFixedpointBeta( PHASE phase ) const;
 
 private:
 	void loadMap( );
@@ -34,9 +35,12 @@ private:
 	int _col;
 	bool _debug;
 	std::string _data;
-	Vector _fixed_point_start;
-	Vector _fixed_point_play;
-	Vector _fixed_point_end;
+	Vector _fixedpoint_alpha_start;
+	Vector _fixedpoint_alpha_play;
+	Vector _fixedpoint_alpha_end;
+	Vector _fixedpoint_beta_start;
+	Vector _fixedpoint_beta_play;
+	Vector _fixedpoint_beta_end;
 
 	DrawerPtr _drawer;
 	KeyboardPtr _keyboard;

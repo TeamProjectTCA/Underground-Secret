@@ -16,7 +16,7 @@ const unsigned int GREEN = 0x00ff00;
 const unsigned int BLUE = 0x0000ff;
 
 // ƒtƒŒ[ƒ€”
-const int FRAME = 60;
+const int ONE_SECOND_FRAME = 60;
 
 // ‰~ü—¦
 const double PI = 3.14; 

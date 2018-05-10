@@ -23,6 +23,8 @@ private:
 
 	MapPtr _map;
 	CharaAPtr _chara_a;
-	CharaDummyPtr _chara_dummy;
+	CharaDummyPtr _chara_dummy1;
+	CharaDummyPtr _chara_dummy2;
+	CharaDummyPtr _chara_dummy3;
 };
 

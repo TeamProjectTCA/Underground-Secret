@@ -14,7 +14,7 @@ const float TIME_STRING_Y2 = 50;
 
 PhasePlay::PhasePlay( ) {
 	_drawer = Drawer::getTask( );
-	_time_count = FINISH_TIME * FRAME;
+	_time_count = FINISH_TIME * ONE_SECOND_FRAME;
 }
 
 PhasePlay::~PhasePlay( ) {
@@ -36,5 +36,5 @@ void PhasePlay::countClear( ) {
 void PhasePlay::drawTime( ) {
 	_drawer->drawBox( TIME_BOX_X, TIME_BOX_Y, TIME_BOX_X + TIME_BOX_WIDTH, TIME_BOX_Y + TIME_BOX_HEIGHT, BLUE, true );
 	_drawer->drawString( TIME_STRING_X1, TIME_STRING_Y1, "ƒNƒŠƒA‚Ü‚Å‚ ‚Æ", RED );
-	_drawer->drawString( TIME_STRING_X2, TIME_STRING_Y2, std::to_string( _time_count / FRAME ) + "•b", RED );
+	_drawer->drawString( TIME_STRING_X2, TIME_STRING_Y2, std::to_string( _time_count / ONE_SECOND_FRAME ) + "•b", RED );
 }
