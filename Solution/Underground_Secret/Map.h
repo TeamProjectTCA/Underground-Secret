@@ -18,10 +18,12 @@ public:
 
 public:
 	Vector getFixedpoint( PHASE phase ) const;
+	Vector getScrollData( ) const;
 
 private:
 	void loadMap( );
 	void setFixedpoint( );
+	void scroll( );
 
 private:
 	void drawCollider( ) const;
@@ -32,6 +34,7 @@ private:
 	int _stage;
 	int _row;
 	int _col;
+	Vector _scroll;
 	bool _debug;
 	std::string _data;
 	Vector _fixed_point_start;

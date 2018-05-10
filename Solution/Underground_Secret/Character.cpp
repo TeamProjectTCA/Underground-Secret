@@ -1,6 +1,7 @@
 #include "Character.h"
 #include "Drawer.h"
 #include "Map.h"
+#include "const.h"
 #include <assert.h>
 #include <errno.h>
 
@@ -18,6 +19,7 @@ _map( map ) {
 	_sx = 0;
 	_max_cnt = DEFAULT_MAX_COUNT;
 	_pos = Vector( );
+	_scroll = Vector( );
 }
 
 Character::~Character( ) {
@@ -61,7 +63,8 @@ void Character::draw( ) {
 	if ( _anim.find( _anim_type ) == _anim.end( ) ) {
 		return;
 	}
-
+	
+	_scroll = _map->getScrollData( );
 	_cnt = ( _cnt + 1 ) % _max_cnt;
 
 	if ( _cnt % _anim_change_time == 0 ) {
@@ -70,7 +73,7 @@ void Character::draw( ) {
 	}
 
 	_drawer->drawRectGraph( 
-		( float )_pos.x, ( float )_pos.y,
+		( float )( _pos.x + _scroll.x * BLOCK_SIZE ), ( float )( _pos.y + _scroll.y * BLOCK_SIZE ),
 		_sx, 0,
 		_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
 		_anim[ _anim_type ].handle,

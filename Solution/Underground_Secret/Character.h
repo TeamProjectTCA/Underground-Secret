@@ -69,6 +69,7 @@ private:
 	int _max_cnt;
 	int _cnt;
 	int _sx;
+	Vector _scroll;
 	ANIM_TYPE _anim_type;
 
 	DrawerPtr _drawer;
