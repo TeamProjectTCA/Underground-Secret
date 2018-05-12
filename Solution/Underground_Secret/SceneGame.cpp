@@ -51,6 +51,7 @@ void SceneGame::update( ) {
 	if ( _phase != next ) {
 		_phase = next;
 		changePhase( );
+		_map->setPhase( _phase );
 	}
 
 }

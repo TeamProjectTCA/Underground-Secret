@@ -27,6 +27,7 @@ void CharaDummy::walk( ) {
 		return;
 	}
 
+	setDistance( );
 	bool move_ok = true;
 
 	int data = getMapData( getPos( ) + _distance );
@@ -44,6 +45,7 @@ void CharaDummy::walk( ) {
 			{
 				data = getMapData( getPos( ) + _distance + Vector( 0, -BLOCK_SIZE ) );
 				if ( data != IDENTIFICATION_COLLIDER ) {
+					_distance += Vector( 0, -BLOCK_SIZE );
 					break;
 				}
 				move_ok = false;
@@ -65,7 +67,7 @@ void CharaDummy::walk( ) {
 		return;
 	}
 
-	// ˆÚ“®‚³‚¹‚é
+	// ˆÚ“®‚³‚¹‚é	
 	move( _distance );
 }
 

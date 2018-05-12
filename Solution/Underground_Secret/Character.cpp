@@ -65,11 +65,12 @@ Vector Character::getPos( ) const {
 
 int Character::getMapData( Vector pos ) const {
 	int data = -1;
+
 	Vector position = pos;
 	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
-	position.y += ( int )_anim.find( _anim_type )->second.height - 1;
+	position.y += ( int )_anim.find( _anim_type )->second.height - 5;
 
-	int idx = ( int )( ( position.x / BLOCK_SIZE ) + ( position.y / BLOCK_SIZE ) * _map->getCol( ) );
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 
 	data = _map->getMapData( idx );
 
@@ -79,6 +80,21 @@ int Character::getMapData( Vector pos ) const {
 	if ( '0' <= data && data <= '9' ) {
 		data -= '0';
 	}
+
+	// debug
+	_drawer->drawBox( 
+		( float )( _pos.x + _scroll.x * BLOCK_SIZE ), 
+		( float )( _pos.y + _scroll.y * BLOCK_SIZE ), 
+		( float )( position.x + _scroll.x * BLOCK_SIZE ), 
+		( float )( position.y + _scroll.y * BLOCK_SIZE ), 
+		RED, false );
+
+	_drawer->drawBox( 
+		( float )( idx % _map->getCol( ) + _scroll.x ) * BLOCK_SIZE, 
+		( float )( idx / _map->getCol( ) + _scroll.y ) * BLOCK_SIZE,
+		( float )( idx % _map->getCol( ) + _scroll.x + 1 ) * BLOCK_SIZE, 
+		( float )( idx / _map->getCol( ) + _scroll.y + 1 ) * BLOCK_SIZE,
+		BLUE, true );
 
 	return data;
 }
