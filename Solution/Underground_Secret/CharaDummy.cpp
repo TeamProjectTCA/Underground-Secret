@@ -18,6 +18,7 @@ CharaDummy::~CharaDummy( ) {
 }
 
 void CharaDummy::update( ) {
+	_dir = MOVE_RIGHT;
 	walk( );
 	fall( );
 }
@@ -72,11 +73,18 @@ void CharaDummy::walk( ) {
 }
 
 void CharaDummy::fall( ) {
-	if ( _dir != MOVE_DOWN ) {
+	_dir = MOVE_DOWN;
+
+	setDistance( );
+	bool move_ok = true;
+	
+	int data = getMapData( getPos( ) + _distance );
+	if ( data < 0 ) {
 		return;
 	}
-
-	bool move_ok = false;
+	if ( data != IDENTIFICATION_NONE ) {
+		move_ok = false;
+	}
 
 	if ( !move_ok ) {
 		return;
