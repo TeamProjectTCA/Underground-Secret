@@ -31,22 +31,22 @@ _row( row + 1 ) {
 	_menu_handle = _drawer->getImage( "menu" );
 	_menu_width  = _drawer->getImageWidth( "menu" );
 	_menu_height = _drawer->getImageHeight( "menu" );
-	_command_handle[ A ] = _drawer->getImage( "command_door_a" );
-	_command_handle[ B ] = _drawer->getImage( "command_door_b" );
-	_command_handle[ C ] = _drawer->getImage( "command_door_c" );
-	_command_handle[ D ] = _drawer->getImage( "command_door_d" );
-	_command_handle[ E ] = _drawer->getImage( "command_door_e" );
-	_command_handle[ F ] = _drawer->getImage( "command_door_f" );
-	_command_handle[ G ] = _drawer->getImage( "command_door_g" );
-	_command_handle[ H ] = _drawer->getImage( "command_door_h" );
-	_command_handle[ I ] = _drawer->getImage( "command_door_i" );
-	_command_handle[ J ] = _drawer->getImage( "command_door_j" );
-	_command_handle[ K ] = _drawer->getImage( "command_door_k" );
-	_command_handle[ L ] = _drawer->getImage( "command_door_l" );
-	_command_handle[ M ] = _drawer->getImage( "command_door_m" );
-	_command_handle[ N ] = _drawer->getImage( "command_door_n" );
-	_command_handle[ O ] = _drawer->getImage( "command_door_o" );
-	_command_handle[ P ] = _drawer->getImage( "command_door_p" );
+	_command_handle[ a ] = _drawer->getImage( "command_door_a" );
+	_command_handle[ A ] = _drawer->getImage( "command_door_b" );
+	_command_handle[ b ] = _drawer->getImage( "command_door_c" );
+	_command_handle[ B ] = _drawer->getImage( "command_door_d" );
+	_command_handle[ c ] = _drawer->getImage( "command_door_e" );
+	_command_handle[ C ] = _drawer->getImage( "command_door_f" );
+	_command_handle[ d ] = _drawer->getImage( "command_door_g" );
+	_command_handle[ D ] = _drawer->getImage( "command_door_h" );
+	_command_handle[ e ] = _drawer->getImage( "command_door_i" );
+	_command_handle[ E ] = _drawer->getImage( "command_door_j" );
+	_command_handle[ f ] = _drawer->getImage( "command_door_k" );
+	_command_handle[ F ] = _drawer->getImage( "command_door_l" );
+	_command_handle[ g ] = _drawer->getImage( "command_door_m" );
+	_command_handle[ G ] = _drawer->getImage( "command_door_n" );
+	_command_handle[ h ] = _drawer->getImage( "command_door_o" );
+	_command_handle[ H ] = _drawer->getImage( "command_door_p" );
 	_command_handle[ SET ] = _drawer->getImage( "command_set" );
 	_command_handle[ DEL ] = _drawer->getImage( "command_del" );
 	_command_handle[ SHUTTER ] = _drawer->getImage( "command_shutter" );
@@ -317,22 +317,22 @@ std::string Table::convCommandToExportStr( COMMAND command ) {
 	case FP_1    : str = "3"; break;
 	case FP_2    : str = "4"; break;
 	case FP_3    : str = "5"; break;
-	case A       : str = "a"; break;
-	case B       : str = "b"; break;
-	case C       : str = "c"; break;
-	case D       : str = "d"; break;
-	case E       : str = "e"; break;
-	case F       : str = "f"; break;
-	case G       : str = "g"; break;
-	case H       : str = "h"; break;
-	case I       : str = "i"; break;
-	case J       : str = "j"; break;
-	case K       : str = "k"; break;
-	case L       : str = "l"; break;
-	case M       : str = "m"; break;
-	case N       : str = "n"; break;
-	case O       : str = "o"; break;
-	case P       : str = "p"; break;
+	case a       : str = "a"; break;
+	case A       : str = "A"; break;
+	case b       : str = "b"; break;
+	case B       : str = "B"; break;
+	case c       : str = "c"; break;
+	case C       : str = "C"; break;
+	case d       : str = "d"; break;
+	case D       : str = "D"; break;
+	case e       : str = "e"; break;
+	case E       : str = "E"; break;
+	case f       : str = "f"; break;
+	case F       : str = "F"; break;
+	case g       : str = "g"; break;
+	case G       : str = "G"; break;
+	case h       : str = "h"; break;
+	case H       : str = "H"; break;
 	default : break;
 	}
 
@@ -411,11 +411,18 @@ void Table::drawActiveCollider( ) const {
 			}
 
 
-			// エレベーター
+			// エレベーター(小文字)
 			const int DOOR_MAX = COMMAND_MAX - NOT_DOOR_COMMAND_NUM;
-			if ( _data[ idx ] >= 'a' && _data[ idx ] <= 'a' + DOOR_MAX ) {
+
+			if ( 'a' <= _data[ idx ] && _data[ idx ] <= 'a' + DOOR_MAX / 2 ) {
 				_drawer->drawRotaGraph( ( float )( x + _x ) * BLOCK_SIZE + BLOCK_SIZE / 2, ( float )( y + _y ) * BLOCK_SIZE + BLOCK_SIZE / 2,
-						                0.25, 0, _command_handle[ _data[ idx ] - 'a' + NOT_DOOR_COMMAND_NUM ], true );
+						                0.25, 0, _command_handle[ ( _data[ idx ] - 'a' ) * 2 + NOT_DOOR_COMMAND_NUM ], true );
+			}
+
+			// エレベーター(大文字)
+			if ( 'A' <= _data[ idx ] && _data[ idx ] <= 'A' + DOOR_MAX / 2 ) {
+				_drawer->drawRotaGraph( ( float )( x + _x ) * BLOCK_SIZE + BLOCK_SIZE / 2, ( float )( y + _y ) * BLOCK_SIZE + BLOCK_SIZE / 2,
+						                0.25, 0, _command_handle[ ( _data[ idx ] - 'A' ) * 2 + 1 + NOT_DOOR_COMMAND_NUM ], true );
 			}
 		}
 	}
