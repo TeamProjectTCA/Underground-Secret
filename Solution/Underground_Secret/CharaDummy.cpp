@@ -75,8 +75,8 @@ void CharaDummy::fall( ) {
 
 void CharaDummy::setDistance( ) {
 	switch ( _dir ) {
-	case MOVE_RIGHT: _dir = Vector(  MOVE_RATE_X, 0 );
-	case MOVE_LEFT : _dir = Vector( -MOVE_RATE_X, 0 );
-	case MOVE_DOWN : _dir = Vector(  0, MOVE_RATE_Y );
+	case MOVE_RIGHT: _distance = Vector(  MOVE_RATE_X, 0 );
+	case MOVE_LEFT : _distance = Vector( -MOVE_RATE_X, 0 );
+	case MOVE_DOWN : _distance = Vector(  0, MOVE_RATE_Y );
 	}
 }
