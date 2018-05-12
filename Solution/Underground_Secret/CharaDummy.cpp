@@ -11,7 +11,7 @@ Character( map ) {
 	setAnim( Character::WALK );
 
 	_dir = MOVE_RIGHT;
-	_distance = Vector( );
+	setDistance( );
 }
 
 CharaDummy::~CharaDummy( ) {
@@ -31,18 +31,29 @@ void CharaDummy::walk( ) {
 
 	int data = getMapData( getPos( ) + _distance );
 
+	// 変なところをみていたら
+	if ( data < 0 ) {
+		return;
+	}
+
 	// 当たり判定が何かしらあれば
 	if ( data != IDENTIFICATION_NONE ) {
-		switch ( _dir ) {
-		case MOVE_RIGHT:
+		switch ( data ) {
+		// 当たり判定
+		case IDENTIFICATION_COLLIDER:
 			{
-				if ( data == IDENTIFICATION_COLLIDER ) {
-
+				data = getMapData( getPos( ) + _distance + Vector( 0, -BLOCK_SIZE ) );
+				if ( data != IDENTIFICATION_COLLIDER ) {
+					break;
 				}
+				move_ok = false;
 			}
 			break;
 
-		case MOVE_LEFT:
+		// シャッター
+		case IDENTIFICATION_SHUTTER:
+
+			move_ok = false;
 			break;
 
 		default:
@@ -75,8 +86,8 @@ void CharaDummy::fall( ) {
 
 void CharaDummy::setDistance( ) {
 	switch ( _dir ) {
-	case MOVE_RIGHT: _dir = Vector(  MOVE_RATE_X, 0 );
-	case MOVE_LEFT : _dir = Vector( -MOVE_RATE_X, 0 );
-	case MOVE_DOWN : _dir = Vector(  0, MOVE_RATE_Y );
+	case MOVE_RIGHT: _distance = Vector(  MOVE_RATE_X, 0 ); break;
+	case MOVE_LEFT : _distance = Vector( -MOVE_RATE_X, 0 ); break;
+	case MOVE_DOWN : _distance = Vector(  0, MOVE_RATE_Y ); break;
 	}
 }

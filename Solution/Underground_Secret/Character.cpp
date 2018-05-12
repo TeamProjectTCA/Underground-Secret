@@ -65,9 +65,20 @@ Vector Character::getPos( ) const {
 
 int Character::getMapData( Vector pos ) const {
 	int data = -1;
-	int idx = ( int )( ( pos.x / BLOCK_SIZE ) + ( pos.y / BLOCK_SIZE ) * _map->getCol( ) );
+	Vector position = pos;
+	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
+	position.y += ( int )_anim.find( _anim_type )->second.height - 1;
+
+	int idx = ( int )( ( position.x / BLOCK_SIZE ) + ( position.y / BLOCK_SIZE ) * _map->getCol( ) );
 
 	data = _map->getMapData( idx );
+
+	if ( 'a' <= data && data <= 'z' ) {
+		data -= 'a';
+	}
+	if ( '0' <= data && data <= '9' ) {
+		data -= '0';
+	}
 
 	return data;
 }
