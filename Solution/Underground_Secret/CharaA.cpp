@@ -13,7 +13,7 @@ Character( map ) {
 	addAnim( Character::WALK, "CharaA_Walk", 1 );
 	setAnim( Character::WALK );
 
-	_pos = Vector( START_CHARA_POS_X, START_CHARA_POS_Y );
+	//_pos = Vector( START_CHARA_POS_X, START_CHARA_POS_Y );
 	_vec_x = 0;
 	_vec_y = 0;
 	_enable_fall = true;
@@ -26,7 +26,7 @@ CharaA::~CharaA( ) {
 }
 
 void CharaA::update( ) {
-	_pos.x++;
+	//_pos.x++;
 	//fall( );
 	////デバッグ用
 	//move( );
@@ -38,7 +38,7 @@ void CharaA::fall( ) {
 	} else {
 		_vec_y = FALL_SPEED;
 	}
-	_pos.y += _vec_y;
+	//_pos.y += _vec_y;
 }
 
 void CharaA::move( ) {
@@ -59,7 +59,7 @@ void CharaA::move( ) {
 		}
 		_dir = DIR_LEFT;
 	}
-	_pos.x += _vec_x;
+	//_pos.x += _vec_x;
 }
 
 void CharaA::setFall( bool fall ) {

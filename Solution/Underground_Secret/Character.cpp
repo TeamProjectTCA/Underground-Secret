@@ -55,12 +55,21 @@ void Character::setFixedpoint( PHASE phase ) {
 	_pos = _map->getFixedpointAlpha( phase );
 }
 
-void Character::moveX( double distance ) {
-	_pos.x += distance;
+void Character::move( Vector move ) {
+	_pos += move;
 }
 
 Vector Character::getPos( ) const {
 	return _pos;
+}
+
+int Character::getMapData( Vector pos ) const {
+	int data = -1;
+	int idx = ( int )( ( pos.x / BLOCK_SIZE ) + ( pos.y / BLOCK_SIZE ) * _map->getCol( ) );
+
+	data = _map->getMapData( idx );
+
+	return data;
 }
 
 void Character::draw( ) {
@@ -82,4 +91,8 @@ void Character::draw( ) {
 		_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
 		_anim[ _anim_type ].handle,
 		true, false );
+}
+
+void Character::setPos( Vector pos ) {
+	_pos = pos;
 }

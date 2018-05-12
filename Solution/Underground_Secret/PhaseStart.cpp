@@ -33,7 +33,7 @@ void PhaseStart::update( ) {
 	if ( _run_idx < ( int )_chara.size( ) ) {
 		// betaポイントよりxが小さければ移動
 		if ( _run_chara->getPos( ).x < _map->getFixedpointBeta( PHASE_START ).x ) {
-			_run_chara->moveX( MOVE );
+			_run_chara->move( Vector( MOVE, 0 ) );
 		} else {
 		// betaポイントに到達したらopenアニメーション
 			if ( !_open_animation ) {
@@ -47,6 +47,7 @@ void PhaseStart::update( ) {
 				_open_animation_count = 0;
 				_open_animation = false;
 				_run_idx++;
+				_run_chara->setFixedpoint( PHASE_PLAY );
 				changeRunCharacter( );
 				return;
 			}

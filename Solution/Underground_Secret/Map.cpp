@@ -84,6 +84,18 @@ Vector Map::getScrollData( ) const {
 	return Vector( _scroll.x, _scroll.y );
 }
 
+int Map::getCol( ) const {
+	return _col;
+}
+
+int Map::getMapData( int idx ) const {
+	if ( idx >= ( int )_data.length( ) ) {
+		return -1;
+	}
+
+	return _data[ idx ];
+}
+
 void Map::loadMap( ) {
 	FILE *fp;
 	errno_t file_open = fopen_s( &fp, ( path + std::to_string( _stage ) + "/collision_data.col" ).c_str( ), "r" );

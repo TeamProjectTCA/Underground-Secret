@@ -23,6 +23,8 @@ public:
 	Vector getFixedpointAlpha( PHASE phase ) const;
 	Vector getFixedpointBeta( PHASE phase ) const;
 	Vector getScrollData( ) const;
+	int getCol( ) const;
+	int getMapData( int idx ) const;
 
 private:
 	void loadMap( );

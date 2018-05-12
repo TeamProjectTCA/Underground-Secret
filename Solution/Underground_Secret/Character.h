@@ -10,6 +10,13 @@ PTR( Character );
 PTR( Drawer );
 PTR( Map );
 
+enum MOVE_DIRECTION {
+	MOVE_RIGHT,
+	MOVE_LEFT,
+	MOVE_DOWN,
+	MOVE_DIRECTION_MAX
+};
+
 class Character {
 public:
 	enum ANIM_TYPE {
@@ -54,20 +61,24 @@ public:
 
 public:
 	// à⁄ìÆèàóù
-	void moveX( double distance );
+	void move( Vector move );
 
 public:
 	Vector getPos( ) const;
+	int getMapData( Vector pos ) const;
 
 public:
 	void draw( );
 	virtual void update( ) = 0;
 
 protected:
-	Vector _pos;
+	void setPos( Vector pos );
+
+protected:
 	MapPtr _map;
 
 private:
+	Vector _pos;
 	std::map< ANIM_TYPE, Animation > _anim;
 	int _anim_change_time;
 	int _max_cnt;
