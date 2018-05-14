@@ -23,7 +23,5 @@ private:
 	int _looking_time;
 	MOVE_DIRECTION _dir;
 	Vector _distance;
-
-	DrawerPtr _drawer;
 };
 

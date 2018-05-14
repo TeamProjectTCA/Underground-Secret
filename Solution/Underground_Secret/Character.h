@@ -78,6 +78,7 @@ protected:
 
 protected:
 	MapPtr _map;
+	DrawerPtr _drawer;
 
 private:
 	Vector _pos;
@@ -88,6 +89,4 @@ private:
 	int _sx;
 	Vector _scroll;
 	ANIM_TYPE _anim_type;
-
-	DrawerPtr _drawer;
 };

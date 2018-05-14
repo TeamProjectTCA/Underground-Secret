@@ -7,8 +7,6 @@ const int MOVE_RATE_Y = BLOCK_SIZE / 2;
 
 CharaDummy::CharaDummy( MapPtr map ) :
 Character( map ) {
-	_drawer = Drawer::getTask();
-
 	addAnim( Character::WALK, "CharaDummy_Walk", 2 );
 	addAnim( Character::OPEN, "CharaDummy_Open", 2 );
 	setAnim( Character::WALK );
@@ -27,7 +25,7 @@ void CharaDummy::update( ) {
 	countLooking( );
 
 	//debug
-	_drawer->drawString(10, 100, "ŠÄŽ‹ŽžŠÔ" + std::to_string(_looking_time / ONE_SECOND_FRAME) + "•b", 0xff0000);
+	_drawer->drawString( 10, 100, "ŠÄŽ‹ŽžŠÔ" + std::to_string( _looking_time / ONE_SECOND_FRAME ) + "•b", RED );
 }
 
 void CharaDummy::walk( ) {
