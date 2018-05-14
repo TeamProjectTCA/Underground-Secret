@@ -62,10 +62,12 @@ public:
 public:
 	// ˆÚ“®ˆ—
 	void move( Vector move );
+	//ŠÄ‹”»’è
 
 public:
 	Vector getPos( ) const;
 	int getMapData( Vector pos ) const;
+	bool isLooking( Vector pos ) const;
 
 public:
 	void draw( );

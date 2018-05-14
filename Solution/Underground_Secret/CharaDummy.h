@@ -17,9 +17,13 @@ private:
 	void walk( );
 	void fall( );
 	void setDistance( );
+	void countLooking( );
 
 private:
+	int _looking_time;
 	MOVE_DIRECTION _dir;
 	Vector _distance;
+
+	DrawerPtr _drawer;
 };
 

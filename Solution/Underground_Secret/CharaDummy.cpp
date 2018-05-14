@@ -1,4 +1,5 @@
 #include "CharaDummy.h"
+#include "Drawer.h"
 #include "const.h"
 
 const int MOVE_RATE_X = 3;
@@ -6,6 +7,8 @@ const int MOVE_RATE_Y = BLOCK_SIZE / 2;
 
 CharaDummy::CharaDummy( MapPtr map ) :
 Character( map ) {
+	_drawer = Drawer::getTask();
+
 	addAnim( Character::WALK, "CharaDummy_Walk", 2 );
 	addAnim( Character::OPEN, "CharaDummy_Open", 2 );
 	setAnim( Character::WALK );
@@ -21,6 +24,10 @@ void CharaDummy::update( ) {
 	_dir = MOVE_RIGHT;
 	walk( );
 	fall( );
+	countLooking( );
+
+	//debug
+	_drawer->drawString(10, 100, "ŠÄŽ‹ŽžŠÔ" + std::to_string(_looking_time / ONE_SECOND_FRAME) + "•b", 0xff0000);
 }
 
 void CharaDummy::walk( ) {
@@ -99,5 +106,12 @@ void CharaDummy::setDistance( ) {
 	case MOVE_RIGHT: _distance = Vector(  MOVE_RATE_X, 0 ); break;
 	case MOVE_LEFT : _distance = Vector( -MOVE_RATE_X, 0 ); break;
 	case MOVE_DOWN : _distance = Vector(  0, MOVE_RATE_Y ); break;
+	}
+}
+
+
+void CharaDummy::countLooking( ) {
+	if ( isLooking( getPos( ) ) ) {
+		_looking_time++;
 	}
 }

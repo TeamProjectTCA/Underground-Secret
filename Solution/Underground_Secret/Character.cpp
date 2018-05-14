@@ -59,6 +59,21 @@ void Character::move( Vector move ) {
 	_pos += move;
 }
 
+bool Character::isLooking( Vector pos ) const {
+	Vector    central = pos + _scroll + Vector( ( int )_anim.find( _anim_type )->second.width / 2, ( int )_anim.find( _anim_type )->second.height / 2 );
+	Vector    left_up = central + Vector( ( int )-_anim.find( _anim_type )->second.width / 2, ( int )-_anim.find( _anim_type )->second.height / 2 ); 
+	Vector   right_up = central + Vector( ( int ) _anim.find( _anim_type )->second.width / 2, ( int )-_anim.find( _anim_type )->second.height / 2 );
+	Vector  left_down = central + Vector( ( int )-_anim.find( _anim_type )->second.width / 2, ( int ) _anim.find( _anim_type )->second.height / 2 );
+	Vector right_down = central + Vector( ( int ) _anim.find( _anim_type )->second.width / 2, ( int ) _anim.find( _anim_type )->second.height / 2 );
+	if ( ( 0 <=    left_up.x &&    left_up.x <= WIDTH && 0 <=    left_up.y &&    left_up.y <= HEIGHT) ||
+		 ( 0 <=  left_down.x &&  left_down.x <= WIDTH && 0 <=  left_down.y &&  left_down.y <= HEIGHT) ||
+		 ( 0 <=   right_up.x &&   right_up.x <= WIDTH && 0 <=   right_up.y &&   right_up.y <= HEIGHT) ||
+		 ( 0 <= right_down.x && right_down.x <= WIDTH && 0 <= right_down.y && right_down.y <= HEIGHT) ) {
+		return true;
+	}
+	return false;
+}
+
 Vector Character::getPos( ) const {
 	return _pos;
 }
