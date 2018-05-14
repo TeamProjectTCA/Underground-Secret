@@ -5,6 +5,7 @@
 #include <string>
 
 PTR( Map );
+PTR( Debug );
 PTR( Drawer );
 PTR( Keyboard );
 
@@ -23,6 +24,7 @@ public:
 	Vector getFixedpointAlpha( PHASE phase ) const;
 	Vector getFixedpointBeta( PHASE phase ) const;
 	Vector getScrollData( ) const;
+	Vector getElevatorPos( int ascii ) const;
 	int getCol( ) const;
 	int getMapData( int idx ) const;
 
@@ -42,7 +44,7 @@ private:
 	int _col;
 	PHASE _phase;
 	Vector _scroll;
-	bool _debug;
+	bool _debug_mode;
 	std::string _data;
 	Vector _fixedpoint_alpha_start;
 	Vector _fixedpoint_alpha_play;
@@ -51,6 +53,7 @@ private:
 	Vector _fixedpoint_beta_play;
 	Vector _fixedpoint_beta_end;
 
+	DebugPtr _debug;
 	DrawerPtr _drawer;
 	KeyboardPtr _keyboard;
 };

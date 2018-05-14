@@ -7,8 +7,11 @@
 
 const int DEFAULT_ANIM_TIME = 30;
 const int DEFAULT_MAX_COUNT = 0xffffff;
-const int COLLIDER_ASCIICODE = '0';
-const int ELEVATOR_ASCIICODE = 'a';
+const int COLLIDER_ASCIICODE_MIN = '0';
+const int ELEVATOR_ASCIICODE_MIN = 'A';
+const int COLLIDER_ASCIICODE_MAX = '9';
+const int ELEVATOR_ASCIICODE_MAX = 'z';
+const int CHANGE_ASCIICODE = 'a' - 'A';
 
 Character::Character( MapPtr map ) :
 _map( map ) {
@@ -22,6 +25,7 @@ _map( map ) {
 	_max_cnt = DEFAULT_MAX_COUNT;
 	_pos = Vector( );
 	_scroll = Vector( );
+	_debug = false;
 }
 
 Character::~Character( ) {
@@ -57,6 +61,10 @@ void Character::setFixedpoint( PHASE phase ) {
 	_pos = _map->getFixedpointAlpha( phase );
 }
 
+void Character::changeDebugMode( ) {
+	_debug = !_debug;
+}
+
 void Character::move( Vector move ) {
 	_pos += move;
 }
@@ -87,27 +95,35 @@ int Character::getMapDataCollider( Vector pos ) const {
 
 	Vector position = pos;
 	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
-	position.y += ( int )_anim.find( _anim_type )->second.height - 5;
+	position.y += ( int )_anim.find( _anim_type )->second.height - 1; //ぴったりになってしまうのを防ぐ
 
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 
 	data = _map->getMapData( idx );
-	data -= COLLIDER_ASCIICODE;
+	
+	// エレベーターであったら進行可能
+	if ( ELEVATOR_ASCIICODE_MIN <= data && data <= ELEVATOR_ASCIICODE_MAX ) {
+		return IDENTIFICATION_NONE;
+	}
 
-	// debug
-	_drawer->drawBox( 
-		( float )( _pos.x + _scroll.x * BLOCK_SIZE ), 
-		( float )( _pos.y + _scroll.y * BLOCK_SIZE ), 
-		( float )( position.x + _scroll.x * BLOCK_SIZE ), 
-		( float )( position.y + _scroll.y * BLOCK_SIZE ), 
-		RED, false );
+	data -= COLLIDER_ASCIICODE_MIN;
 
-	_drawer->drawBox( 
-		( float )( idx % _map->getCol( ) + _scroll.x ) * BLOCK_SIZE, 
-		( float )( idx / _map->getCol( ) + _scroll.y ) * BLOCK_SIZE,
-		( float )( idx % _map->getCol( ) + _scroll.x + 1 ) * BLOCK_SIZE, 
-		( float )( idx / _map->getCol( ) + _scroll.y + 1 ) * BLOCK_SIZE,
-		BLUE, true );
+	 if ( _debug ) {
+		 _drawer->drawBox(
+			( float )( pos.x + ( _scroll.x * BLOCK_SIZE ) ), 
+			( float )( pos.y + ( _scroll.y * BLOCK_SIZE ) ),
+			( float )( position.x + ( _scroll.x * BLOCK_SIZE ) ), 
+			( float )( position.y + ( _scroll.y * BLOCK_SIZE ) ),
+			 RED, false
+		 );
+
+		_drawer->drawBox( // 当たり判定を見ている部分
+			( float )( idx % _map->getCol( ) + _scroll.x ) * BLOCK_SIZE, 
+			( float )( idx / _map->getCol( ) + _scroll.y ) * BLOCK_SIZE,
+			( float )( idx % _map->getCol( ) + _scroll.x + 1 ) * BLOCK_SIZE, 
+			( float )( idx / _map->getCol( ) + _scroll.y + 1 ) * BLOCK_SIZE,
+			BLUE, true );
+	 }
 
 	return data;
 }
@@ -117,27 +133,16 @@ int Character::getMapDataElevator( Vector pos ) const {
 
 	Vector position = pos;
 	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
-	position.y += ( int )_anim.find( _anim_type )->second.height - 5;
+	position.y += ( int )_anim.find( _anim_type )->second.height - 1; //ぴったりになってしまうのを防ぐ
 
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 
 	data = _map->getMapData( idx );
-	data -= ELEVATOR_ASCIICODE;
 
-	// debug
-	_drawer->drawBox( 
-		( float )( _pos.x + _scroll.x * BLOCK_SIZE ), 
-		( float )( _pos.y + _scroll.y * BLOCK_SIZE ), 
-		( float )( position.x + _scroll.x * BLOCK_SIZE ), 
-		( float )( position.y + _scroll.y * BLOCK_SIZE ), 
-		RED, false );
-
-	_drawer->drawBox( 
-		( float )( idx % _map->getCol( ) + _scroll.x ) * BLOCK_SIZE, 
-		( float )( idx / _map->getCol( ) + _scroll.y ) * BLOCK_SIZE,
-		( float )( idx % _map->getCol( ) + _scroll.x + 1 ) * BLOCK_SIZE, 
-		( float )( idx / _map->getCol( ) + _scroll.y + 1 ) * BLOCK_SIZE,
-		BLUE, true );
+	// エレベーター以外であったら
+	if ( COLLIDER_ASCIICODE_MIN <= data && data <= COLLIDER_ASCIICODE_MAX ) {
+		return -1;
+	}
 
 	return data;
 }
@@ -164,6 +169,52 @@ void Character::draw( ) {
 		true, false );
 }
 
+void Character::setFallPos( Vector now_position ) {
+	Vector position = now_position;
+
+	position.y += ( int )_anim.find( _anim_type )->second.height;
+	int idx = ( int )( position.y / BLOCK_SIZE );
+	position.y = ( idx * BLOCK_SIZE ) - _anim[ _anim_type ].height;
+
+	_pos.y = position.y;
+}
+
 void Character::setPos( Vector pos ) {
 	_pos = pos;
+}
+
+void Character::setElevatorPos( int ascii ) {
+	if ( 'a' <= ascii && ascii <= 'z' ) {
+		ascii += -CHANGE_ASCIICODE;
+	} else {
+		ascii +=  CHANGE_ASCIICODE;
+	}
+	Vector pos = _map->getElevatorPos( ascii );
+	if ( pos.x < 0 ) {
+		return;
+	}
+
+	_pos = pos;
+}
+
+void Character::checkCaughtCollider( ) {
+	Vector position = _pos;
+	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
+	position.y += ( int )_anim.find( _anim_type )->second.height - 1;
+
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+
+	int data = -1;
+	data = _map->getMapData( idx );
+	data -= COLLIDER_ASCIICODE_MIN;
+
+	if ( data != IDENTIFICATION_COLLIDER ) {
+		return;
+	}
+
+	_pos = Vector( _pos.x, ( idx / _map->getCol( ) ) * BLOCK_SIZE  - _anim[ _anim_type ].height );
+
+
+	// 再起
+	checkCaughtCollider( );
 }

@@ -4,6 +4,7 @@
 #include "SceneManager.h"
 #include "Keyboard.h"
 #include "Mouse.h"
+#include "Debug.h"
 
 void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
@@ -17,10 +18,12 @@ void main( ) {
 	SceneManagerPtr scene_manager( new SceneManager( ) );
 	KeyboardPtr keyboard( new Keyboard( ) );
 	MousePtr mouse( new Mouse( ) );
+	DebugPtr debug( new Debug( ) );
 
 	//add
 	manager->add( Drawer::getTag( ), drawer );
 	manager->add( SceneManager::getTag( ), scene_manager );
 	manager->add( Keyboard::getTag( ), keyboard );
 	manager->add( Mouse::getTag( ), mouse );
+	manager->add( Debug::getTag( ), debug );
 }

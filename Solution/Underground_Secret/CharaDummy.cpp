@@ -1,17 +1,21 @@
 #include "CharaDummy.h"
 #include "Drawer.h"
 #include "const.h"
+#include "Debug.h"
 
 const int MOVE_RATE_X = 3;
-const int MOVE_RATE_Y = BLOCK_SIZE / 2;
+const int MOVE_RATE_Y = BLOCK_SIZE;
 
 CharaDummy::CharaDummy( MapPtr map ) :
 Character( map ) {
+	_debug = Debug::getTask( );
+
 	addAnim( Character::WALK, "CharaDummy_Walk", 2 );
 	addAnim( Character::OPEN, "CharaDummy_Open", 2 );
 	setAnim( Character::WALK );
 
 	_dir = MOVE_RIGHT;
+	_ride_elevator = false;
 	setDistance( );
 }
 
@@ -23,22 +27,68 @@ void CharaDummy::update( ) {
 	walk( );
 	fall( );
 	countLooking( );
+	checkCaughtCollider( );
 
-	//debug
-	_drawer->drawString( 10, 100, "監視時間" + std::to_string( _looking_time / ONE_SECOND_FRAME ) + "秒", RED );
+	if ( _debug->isDebug( ) ) {
+		_drawer->drawString( 10, 100, "監視時間" + std::to_string( _looking_time / ONE_SECOND_FRAME ) + "秒", RED );
+	}
 }
 
 void CharaDummy::walk( ) {
 	if ( _dir == MOVE_DOWN ) {
 		return;
 	}
+	// 進行方向に予測座標をセット
+	setDistance( );
 
+	checkCollider( );
+	checkElevator( );
+}
+
+void CharaDummy::fall( ) {
+	_dir = MOVE_DOWN;
+
+	// 進行方向に予測座標をセット
 	setDistance( );
 	bool move_ok = true;
+	
+	int data = getMapDataCollider( getPos( ) + _distance );
+	if ( data < 0 ) {
+		return;
+	}
+	if ( data != IDENTIFICATION_NONE ) {
+		move_ok = false;
+	}
 
+	if ( !move_ok ) {
+		return;
+	}
+
+	// 移動させる
+	setFallPos( getPos( ) + _distance );
+}
+
+void CharaDummy::setDistance( ) {
+	switch ( _dir ) {
+	case MOVE_RIGHT: _distance = Vector(  MOVE_RATE_X, 0 ); break;
+	case MOVE_LEFT : _distance = Vector( -MOVE_RATE_X, 0 ); break;
+	case MOVE_DOWN : _distance = Vector(  0, MOVE_RATE_Y ); break;
+	}
+}
+
+void CharaDummy::countLooking( ) {
+	if ( isLooking( getPos( ) ) ) {
+		_looking_time++;
+	}
+}
+
+void CharaDummy::checkCollider( ) {
+	bool move_ok = true;
+
+	// アスキーコードを取得
 	int data = getMapDataCollider( getPos( ) + _distance );
 
-	// 変なところをみていたら
+	// エレベーターだったら
 	if ( data < 0 ) {
 		return;
 	}
@@ -60,7 +110,6 @@ void CharaDummy::walk( ) {
 
 		// シャッター
 		case IDENTIFICATION_SHUTTER:
-
 			move_ok = false;
 			break;
 
@@ -77,39 +126,21 @@ void CharaDummy::walk( ) {
 	move( _distance );
 }
 
-void CharaDummy::fall( ) {
-	_dir = MOVE_DOWN;
+void CharaDummy::checkElevator( ) {
+	// アスキーコードを取得
+	int data = getMapDataElevator( getPos( ) );
 
-	setDistance( );
-	bool move_ok = true;
-	
-	int data = getMapDataCollider( getPos( ) + _distance );
+	// エレベーター以外だったら
 	if ( data < 0 ) {
-		return;
-	}
-	if ( data != IDENTIFICATION_NONE ) {
-		move_ok = false;
-	}
-
-	if ( !move_ok ) {
+		_ride_elevator = false;
 		return;
 	}
 
-	// 移動させる
-	move( _distance );
-}
-
-void CharaDummy::setDistance( ) {
-	switch ( _dir ) {
-	case MOVE_RIGHT: _distance = Vector(  MOVE_RATE_X, 0 ); break;
-	case MOVE_LEFT : _distance = Vector( -MOVE_RATE_X, 0 ); break;
-	case MOVE_DOWN : _distance = Vector(  0, MOVE_RATE_Y ); break;
+	// 連続で乗るのを防ぐ
+	if ( _ride_elevator ) {
+		return;
 	}
-}
 
-
-void CharaDummy::countLooking( ) {
-	if ( isLooking( getPos( ) ) ) {
-		_looking_time++;
-	}
+	setElevatorPos( data );
+	_ride_elevator = true;
 }

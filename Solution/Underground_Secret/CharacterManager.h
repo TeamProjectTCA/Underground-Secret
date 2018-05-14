@@ -4,6 +4,7 @@
 
 PTR( CharacterManager );
 PTR( Character );
+PTR( Debug );
 PTR( Map );
 PTR( CharaA );
 PTR( CharaDummy );
@@ -20,8 +21,10 @@ public:
 	
 private:
 	std::list< CharacterPtr > _chara;
+	bool _debug_mode;
 
 	MapPtr _map;
+	DebugPtr _debug;
 	CharaAPtr _chara_a;
 	CharaDummyPtr _chara_dummy1;
 	CharaDummyPtr _chara_dummy2;

@@ -4,6 +4,7 @@
 
 PTR( CharaDummy );
 PTR( Map );
+PTR( Debug );
 
 class CharaDummy : public Character {
 public:
@@ -18,10 +19,15 @@ private:
 	void fall( );
 	void setDistance( );
 	void countLooking( );
+	void checkCollider( );
+	void checkElevator( );
 
 private:
 	int _looking_time;
 	MOVE_DIRECTION _dir;
 	Vector _distance;
+	bool _ride_elevator;
+
+	DebugPtr _debug;
 };
 

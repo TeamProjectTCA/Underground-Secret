@@ -55,9 +55,8 @@ void PhaseStart::update( ) {
 
 		_run_chara->draw( );
 	} else {
-		if ( _keyboard->getKeyDown( "ENTER" ) ) {
-			setPhase( PHASE_PLAY );
-		}
+		// フェイズを変える
+		setPhase( PHASE_PLAY );
 	}
 }
 

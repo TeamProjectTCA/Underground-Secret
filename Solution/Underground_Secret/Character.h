@@ -58,11 +58,11 @@ public:
 	void setAnim( ANIM_TYPE type );
 	void setAnimTime( int change_time );
 	void setFixedpoint( PHASE phase );
+	void changeDebugMode( );
 
 public:
 	// 移動処理
 	void move( Vector move );
-	//監視判定
 
 public:
 	Vector getPos( ) const;
@@ -75,13 +75,18 @@ public:
 	virtual void update( ) = 0;
 
 protected:
+	void setFallPos( Vector now_position );
 	void setPos( Vector pos );
+	void setElevatorPos( int ascii );
+	// コライダーに埋まってしまっているときの処理
+	void checkCaughtCollider( );
 
 protected:
 	MapPtr _map;
 	DrawerPtr _drawer;
 
 private:
+	bool _debug;
 	Vector _pos;
 	std::map< ANIM_TYPE, Animation > _anim;
 	int _anim_change_time;
