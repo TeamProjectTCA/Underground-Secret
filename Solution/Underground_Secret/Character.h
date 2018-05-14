@@ -66,7 +66,8 @@ public:
 
 public:
 	Vector getPos( ) const;
-	int getMapData( Vector pos ) const;
+	int getMapDataCollider( Vector pos ) const;
+	int getMapDataElevator( Vector pos ) const;
 	bool isLooking( Vector pos ) const;
 
 public:
