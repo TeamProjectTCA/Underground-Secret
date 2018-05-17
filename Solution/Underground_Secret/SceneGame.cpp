@@ -74,7 +74,7 @@ void SceneGame::changePhase( ) {
 		break;
 
 	case PHASE_PLAY:
-		_run_phase = PhasePlayPtr( new PhasePlay( ) );
+		_run_phase = PhasePlayPtr( new PhasePlay( _char_manager->getChara( ) ) );
 		break;
 
 	case PHASE_END:

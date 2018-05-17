@@ -11,6 +11,7 @@ const int COLLIDER_ASCIICODE_MIN = '0';
 const int ELEVATOR_ASCIICODE_MIN = 'A';
 const int COLLIDER_ASCIICODE_MAX = '9';
 const int ELEVATOR_ASCIICODE_MAX = 'z';
+const int ENDPOINT_ASCIICODE = '6';
 const int CHANGE_ASCIICODE = 'a' - 'A';
 
 Character::Character( MapPtr map ) :
@@ -87,16 +88,14 @@ bool Character::isLooking( Vector pos ) const {
 }
 
 
-bool Character::isArriveBottom( Vector pos ) const {
-	int data = -1;
+bool Character::isEndpoint( Vector pos ) const {
 	int width = _anim.find(_anim_type)->second.width / 2;
 	int height = _anim.find(_anim_type)->second.height / 2;
-
 	Vector central = pos + Vector( width, height );
-
 	int idx = ( int )( central.x / BLOCK_SIZE ) + ( int )( central.y / BLOCK_SIZE ) * _map->getCol();
-	data = _map->getMapData( idx );
-	if ( data == IDENTIFICATION_TARGET ) {
+	int data = _map->getMapData( idx );
+
+	if ( data == ENDPOINT_ASCIICODE ) {
 		return true;
 	}
 	return false;
@@ -117,8 +116,8 @@ int Character::getMapDataCollider( Vector pos ) const {
 
 	data = _map->getMapData( idx );
 	
-	// エレベーターであったら進行可能
-	if ( ELEVATOR_ASCIICODE_MIN <= data && data <= ELEVATOR_ASCIICODE_MAX ) {
+	// エレベーター若しくは終点であったら進行可能
+	if ( ( ELEVATOR_ASCIICODE_MIN <= data && data <= ELEVATOR_ASCIICODE_MAX ) || data == ENDPOINT_ASCIICODE ) {
 		return IDENTIFICATION_NONE;
 	}
 

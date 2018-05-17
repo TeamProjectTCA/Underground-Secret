@@ -53,7 +53,7 @@ _row( row + 1 ) {
 	_command_handle[ FP_1 ] = _drawer->getImage( "command_fp1" );
 	_command_handle[ FP_2 ] = _drawer->getImage( "command_fp2" );
 	_command_handle[ FP_3 ] = _drawer->getImage( "command_fp3" );
-	_command_handle[TARGET_ROOM] = _drawer->getImage("command_target");
+	_command_handle[ ENDPOINT ] = _drawer->getImage("command_endpoint");
 
 	unsigned int length = _col * _row + 1;
 	_data = ( char* )malloc( sizeof( char ) * length );
@@ -312,29 +312,29 @@ std::string Table::convCommandToExportStr( COMMAND command ) {
 	std::string str = "";
 
 	switch ( command ) {
-	case SET		 : str = "1"; break;
-	case DEL		 : str = "0"; break;
-	case SHUTTER	 : str = "2"; break;
-	case FP_1		 : str = "3"; break;
-	case FP_2		 : str = "4"; break;
-	case FP_3		 : str = "5"; break;
-	case TARGET_ROOM : str = "6"; break;
-	case a			 : str = "a"; break;
-	case A			 : str = "A"; break;
-	case b			 : str = "b"; break;
-	case B			 : str = "B"; break;
-	case c			 : str = "c"; break;
-	case C			 : str = "C"; break;
-	case d			 : str = "d"; break;
-	case D			 : str = "D"; break;
-	case e			 : str = "e"; break;
-	case E			 : str = "E"; break;
-	case f			 : str = "f"; break;
-	case F			 : str = "F"; break;
-	case g			 : str = "g"; break;
-	case G			 : str = "G"; break;
-	case h			 : str = "h"; break;
-	case H			 : str = "H"; break;
+	case SET		: str = "1"; break;
+	case DEL		: str = "0"; break;
+	case SHUTTER	: str = "2"; break;
+	case FP_1		: str = "3"; break;
+	case FP_2		: str = "4"; break;
+	case FP_3		: str = "5"; break;
+	case ENDPOINT   : str = "6"; break;
+	case a			: str = "a"; break;
+	case A			: str = "A"; break;
+	case b			: str = "b"; break;
+	case B			: str = "B"; break;
+	case c			: str = "c"; break;
+	case C			: str = "C"; break;
+	case d			: str = "d"; break;
+	case D			: str = "D"; break;
+	case e			: str = "e"; break;
+	case E			: str = "E"; break;
+	case f			: str = "f"; break;
+	case F			: str = "F"; break;
+	case g			: str = "g"; break;
+	case G			: str = "G"; break;
+	case h			: str = "h"; break;
+	case H			: str = "H"; break;
 	default : break;
 	}
 
@@ -415,7 +415,7 @@ void Table::drawActiveCollider( ) const {
 			//最下層
 			if (_data[ idx ] == '6') {
 				_drawer->drawRotaGraph( ( float )( x + _x ) * BLOCK_SIZE + BLOCK_SIZE / 2, ( float )( y + _y ) * BLOCK_SIZE + BLOCK_SIZE / 2,
-										0.25, 0, _command_handle[ TARGET_ROOM ], true);
+										0.25, 0, _command_handle[ ENDPOINT ], true);
 			}
 
 			// エレベーター(小文字)

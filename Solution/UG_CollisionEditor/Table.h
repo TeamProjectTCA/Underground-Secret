@@ -34,7 +34,7 @@ private:
 		G,
 		h,
 		H,
-		TARGET_ROOM,
+		ENDPOINT,
 		COMMAND_MAX
 	};
 

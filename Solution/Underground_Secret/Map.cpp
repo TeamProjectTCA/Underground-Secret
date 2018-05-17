@@ -11,7 +11,9 @@ const int SCROLL_SIZE = 2;
 const int COLLIDER_ASCIICODE_MIN = '0';
 const int ELEVATOR_ASCIICODE_MIN = 'A';
 const int ELEVATOR_ASCIICODE_MAX = 'z';
+const int ENDPOINT_ASCIICODE = '6';
 const unsigned int COLLIDER_COLOR = GREEN;
+const unsigned int ENDPOINT_COLOR = 0xff00ff;
 const unsigned int ELEVATOR_COLOR = 0xffff00;
 
 std::string path = "Resources/map/stage";
@@ -246,6 +248,9 @@ void Map::drawCollider( ) const {
 			// êF
 			if ( ELEVATOR_ASCIICODE_MIN <= ascii && ascii <= ELEVATOR_ASCIICODE_MAX ) {
 				color = ELEVATOR_COLOR;
+			}
+			if ( ascii == ENDPOINT_ASCIICODE ) {
+				color = ENDPOINT_COLOR;
 			}
 
 			_drawer->drawBox( ( float )(     x + _scroll.x ) * BLOCK_SIZE, ( float )(     y + _scroll.y ) * BLOCK_SIZE,
