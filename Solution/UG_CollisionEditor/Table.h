@@ -34,6 +34,7 @@ private:
 		G,
 		h,
 		H,
+		TARGET_ROOM,
 		COMMAND_MAX
 	};
 

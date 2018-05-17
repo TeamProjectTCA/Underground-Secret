@@ -69,6 +69,7 @@ public:
 	int getMapDataCollider( Vector pos ) const;
 	int getMapDataElevator( Vector pos ) const;
 	bool isLooking( Vector pos ) const;
+	bool isArriveBottom( Vector pos ) const;
 
 public:
 	void draw( );

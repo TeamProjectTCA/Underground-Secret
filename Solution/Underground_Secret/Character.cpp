@@ -86,6 +86,22 @@ bool Character::isLooking( Vector pos ) const {
 	return false;
 }
 
+
+bool Character::isArriveBottom( Vector pos ) const {
+	int data = -1;
+	int width = _anim.find(_anim_type)->second.width / 2;
+	int height = _anim.find(_anim_type)->second.height / 2;
+
+	Vector central = pos + Vector( width, height );
+
+	int idx = ( int )( central.x / BLOCK_SIZE ) + ( int )( central.y / BLOCK_SIZE ) * _map->getCol();
+	data = _map->getMapData( idx );
+	if ( data == IDENTIFICATION_TARGET ) {
+		return true;
+	}
+	return false;
+}
+
 Vector Character::getPos( ) const {
 	return _pos;
 }
