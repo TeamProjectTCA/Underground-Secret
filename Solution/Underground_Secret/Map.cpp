@@ -12,14 +12,22 @@ const int COLLIDER_ASCIICODE_MIN = '0';
 const int ELEVATOR_ASCIICODE_MIN = 'A';
 const int ELEVATOR_ASCIICODE_MAX = 'z';
 const int ENDPOINT_ASCIICODE = '6';
+const int SHUTTER_ASCIICODE = '2';
 const unsigned int COLLIDER_COLOR = GREEN;
-const unsigned int ENDPOINT_COLOR = 0xff00ff;
-const unsigned int ELEVATOR_COLOR = 0xffff00;
+const unsigned int ENDPOINT_COLOR = MAGENTA;
+const unsigned int ELEVATOR_COLOR = YELLOW;
+const unsigned int SHUTTER_COLOR  = WATER;
+const int SHUTTER_MOVECOUNT_MAX = ONE_SECOND_FRAME;
 
 std::string path = "Resources/map/stage";
 
 Map::Map( int stage ) :
 _stage( stage ) {
+	_debug = Debug::getTask( );
+	_drawer = Drawer::getTask( );
+	_keyboard = Keyboard::getTask( );
+	_map_handle = _drawer->getImage( ( "stage" + std::to_string( _stage ) ).c_str( ) );
+
 	_col = 0;
 	_row = 0;
 	_data = "";
@@ -32,22 +40,22 @@ _stage( stage ) {
 	_fixedpoint_beta_end   = Vector( );
 	_scroll = Vector( 0, 0 );
 	_phase = PHASE_START;
+	_shutter_height = _drawer->getImageHeight( "shutter" );
+	_shutter_handle = _drawer->getImage( "shutter" );
+	_shutter_cnt = 0;
 
+	// .colファイルから読み込み
 	loadMap( );
 	setFixedpoint( );
-
-	_debug = Debug::getTask( );
-	_drawer = Drawer::getTask( );
-	_keyboard = Keyboard::getTask( );
-	_handle = _drawer->getImage( ( "stage" + std::to_string( _stage ) ).c_str( ) );
+	setShutter( );
 }
 
 Map::~Map( ) {
 }
 
 void Map::update( ) {
-	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _handle, true );
 	scroll( );
+	draw( );
 
 	bool debug = _debug->isDebug( );
 	if ( _debug_mode != debug ) {
@@ -116,6 +124,34 @@ int Map::getMapData( int idx ) const {
 	}
 
 	return _data[ idx ];
+}
+
+void Map::draw( ) {
+	// マップを描画
+	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _map_handle, true );
+
+	// シャッターを描画
+	const int SHUTTER_DOWN_LENGTH = _shutter_height;
+	const double MAGNIFICATION = SHUTTER_DOWN_LENGTH / SHUTTER_MOVECOUNT_MAX;
+
+	// シャッターの状態を見る
+	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
+		// 初期値( シャッターが上がっている状態 )
+		float x = ( float )( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
+		float y = ( float )( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE - _shutter_height;
+
+		// 状態を反映する
+		if ( _shutter_state[ i ] != NON_ACTIVE ) {
+			y = ( float )( y + MAGNIFICATION * _shutter_cnt );
+		}
+
+		// スクロール分
+		x += ( float )_scroll.x * BLOCK_SIZE;
+		y += ( float )_scroll.y * BLOCK_SIZE;
+
+		// 描画
+		_drawer->drawGraph( x, y, _shutter_handle, true );
+	}
 }
 
 void Map::loadMap( ) {
@@ -192,6 +228,37 @@ void Map::setFixedpoint( ) {
 	}
 }
 
+void Map::setShutter( ) {
+	int length = ( int )_data.length( );
+	int shutter_num = 0;
+	for ( int i = 0; i < length; i++ ) {
+		if ( _data[ i ] != SHUTTER_ASCIICODE ) {
+			continue;
+		}
+
+		// シャッターを登録
+		_shutter[ shutter_num ].push_back( i );
+		_shutter_state.push_back( NON_ACTIVE );
+		
+		// 直下を判定し、当たり判定が見つかるまでをシャッターとする
+		inputShutter( _shutter[ shutter_num ], i );
+	}
+}
+
+void Map::inputShutter( std::vector< int > &shutter, int idx ) {
+	int point = idx + _col;
+
+	if ( point != IDENTIFICATION_NONE ) {
+		return;
+	}
+
+	// 1つしたが何もなければシャッターの判定を付ける
+	shutter.push_back( point );
+
+	// 再起してもう1つ下を見る
+	inputShutter( shutter, point );
+}
+
 void Map::scroll( ) {
 	if ( _phase != PHASE_PLAY ) {
 		return;
@@ -251,6 +318,9 @@ void Map::drawCollider( ) const {
 			}
 			if ( ascii == ENDPOINT_ASCIICODE ) {
 				color = ENDPOINT_COLOR;
+			}
+			if ( ascii == SHUTTER_ASCIICODE ) {
+				color = SHUTTER_COLOR;
 			}
 
 			_drawer->drawBox( ( float )(     x + _scroll.x ) * BLOCK_SIZE, ( float )(     y + _scroll.y ) * BLOCK_SIZE,

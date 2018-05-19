@@ -15,6 +15,8 @@ const unsigned int RED = 0xff0000;
 const unsigned int GREEN = 0x00ff00;
 const unsigned int BLUE = 0x0000ff;
 const unsigned int YELLOW = 0xffff00;
+const unsigned int MAGENTA = 0xff00ff;
+const unsigned int WATER = 0x00ffff;
 
 // フレーム数
 const int ONE_SECOND_FRAME = 60;
@@ -42,14 +44,15 @@ enum DIR {
 	DIR_MAX
 };
 
+// .colデータと同じにすること
 enum MAP_IDENTIFICATION {
 	IDENTIFICATION_NONE,
 	IDENTIFICATION_COLLIDER,
 	IDENTIFICATION_SHUTTER,
-	IDENTIFICATION_ENDPOINT,
 	IDENTIFICATION_FIXEDPOINT_START,
 	IDENTIFICATION_FIXEDPOINT_PLAY,
 	IDENTIFICATION_FIXEDPOINT_END,
+	IDENTIFICATION_ENDPOINT,
 	MAP_IDENTIFICATION_MAX
 };
 
