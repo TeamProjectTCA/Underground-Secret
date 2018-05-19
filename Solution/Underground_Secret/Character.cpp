@@ -14,10 +14,11 @@ const int ELEVATOR_ASCIICODE_MAX = 'z';
 const int ENDPOINT_ASCIICODE = '6';
 const int CHANGE_ASCIICODE = 'a' - 'A';
 
-Character::Character( MapPtr map ) :
-_map( map ) {
+Character::Character( MapPtr map, std::vector< std::string > info ) :
+_map( map ),
+_info( info ) {
 	_drawer = Drawer::getTask( );
-
+	
 	_anim_type = WALK;
 	_anim_change_time = DEFAULT_ANIM_TIME;
 
@@ -87,7 +88,6 @@ bool Character::isLooking( Vector pos ) const {
 	return false;
 }
 
-
 bool Character::isEndpoint( Vector pos ) const {
 	int width = _anim.find(_anim_type)->second.width / 2;
 	int height = _anim.find(_anim_type)->second.height / 2;
@@ -123,21 +123,22 @@ int Character::getMapDataCollider( Vector pos ) const {
 
 	data -= COLLIDER_ASCIICODE_MIN;
 
+	// “–‚½‚è”»’è‚ðŒ©‚Ä‚¢‚éêŠ‚ð•\Ž¦(debug)
 	 if ( _debug ) {
-		 _drawer->drawBox(
-			( float )( pos.x + ( _scroll.x * BLOCK_SIZE ) ), 
-			( float )( pos.y + ( _scroll.y * BLOCK_SIZE ) ),
-			( float )( position.x + ( _scroll.x * BLOCK_SIZE ) ), 
-			( float )( position.y + ( _scroll.y * BLOCK_SIZE ) ),
-			 RED, false
-		 );
+		 // ¶‰E
+		 const unsigned int CHECK_COLOR_X = BLUE;
+		 const unsigned int CHECK_COLOR_Y = YELLOW;
+		 unsigned int color = CHECK_COLOR_X;
+		 if ( pos.y > _pos.y || pos.y < _pos.y ) {
+			 color = CHECK_COLOR_Y;
+		 }
 
-		_drawer->drawBox( // “–‚½‚è”»’è‚ðŒ©‚Ä‚¢‚é•”•ª
+		_drawer->drawBox(
 			( float )( idx % _map->getCol( ) + _scroll.x ) * BLOCK_SIZE, 
 			( float )( idx / _map->getCol( ) + _scroll.y ) * BLOCK_SIZE,
 			( float )( idx % _map->getCol( ) + _scroll.x + 1 ) * BLOCK_SIZE, 
 			( float )( idx / _map->getCol( ) + _scroll.y + 1 ) * BLOCK_SIZE,
-			BLUE, true );
+			color, true );
 	 }
 
 	return data;

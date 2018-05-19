@@ -5,10 +5,11 @@
 PTR( CharaDummy );
 PTR( Map );
 PTR( Debug );
+PTR( Infomation );
 
 class CharaDummy : public Character {
 public:
-	CharaDummy( MapPtr map );
+	CharaDummy( MapPtr map, InfomationPtr info );
 	virtual ~CharaDummy( );
 
 public:

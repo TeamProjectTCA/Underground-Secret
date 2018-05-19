@@ -2,12 +2,13 @@
 #include "Drawer.h"
 #include "const.h"
 #include "Debug.h"
+#include "Infomation.h"
 
 const int MOVE_RATE_X = 3;
 const int MOVE_RATE_Y = BLOCK_SIZE;
 
-CharaDummy::CharaDummy( MapPtr map ) :
-Character( map ) {
+CharaDummy::CharaDummy( MapPtr map, InfomationPtr info ) :
+Character( map, info->getInfo( CHARA_DUMMY ) ) {
 	_debug = Debug::getTask( );
 
 	addAnim( Character::WALK, "CharaDummy_Walk", 2 );

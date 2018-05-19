@@ -48,7 +48,7 @@ private:
 	};
 
 public:
-	Character( MapPtr map );
+	Character( MapPtr map, std::vector< std::string > info );
 	virtual ~Character( );
 
 public:
@@ -96,4 +96,5 @@ private:
 	int _sx;
 	Vector _scroll;
 	ANIM_TYPE _anim_type;
+	std::vector< std::string > _info;
 };

@@ -1,12 +1,13 @@
 #include "CharaA.h"
 #include "Drawer.h"
 #include "Keyboard.h"
+#include "Infomation.h"
 
 const int START_CHARA_POS_X = 320;
 const int START_CHARA_POS_Y = 320;
 
-CharaA::CharaA( MapPtr map ) :
-Character( map ) {
+CharaA::CharaA( MapPtr map, InfomationPtr info ) :
+Character( map, info->getInfo( CHARA_A ) ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 

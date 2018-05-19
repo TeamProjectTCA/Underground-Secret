@@ -7,10 +7,11 @@ PTR( CharaA );
 PTR( Map );
 PTR( Drawer );
 PTR( Keyboard );
+PTR( Infomation );
 
 class CharaA : public Character {
 public:
-	CharaA( MapPtr map );
+	CharaA( MapPtr map, InfomationPtr info );
 	virtual ~CharaA( );
 public:
 	void update( );

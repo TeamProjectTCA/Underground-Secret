@@ -6,6 +6,7 @@ PTR( CharacterManager );
 PTR( Character );
 PTR( Debug );
 PTR( Map );
+PTR( Infomation );
 PTR( CharaA );
 PTR( CharaDummy );
 
@@ -25,6 +26,7 @@ private:
 
 	MapPtr _map;
 	DebugPtr _debug;
+	InfomationPtr _info;
 	CharaAPtr _chara_a;
 	CharaDummyPtr _chara_dummy1;
 	CharaDummyPtr _chara_dummy2;

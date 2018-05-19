@@ -14,6 +14,7 @@ const float HEIGHT_F = ( float )HEIGHT;
 const unsigned int RED = 0xff0000;
 const unsigned int GREEN = 0x00ff00;
 const unsigned int BLUE = 0x0000ff;
+const unsigned int YELLOW = 0xffff00;
 
 // フレーム数
 const int ONE_SECOND_FRAME = 60;
@@ -23,6 +24,9 @@ const double PI = 3.14;
 
 // マップブロックサイズ
 const int BLOCK_SIZE = 16;
+
+// 情報の数
+const int INFO_MAX = 7;
 
 enum BUTTON_STATE {
 	NORMAL,
@@ -47,4 +51,10 @@ enum MAP_IDENTIFICATION {
 	IDENTIFICATION_FIXEDPOINT_PLAY,
 	IDENTIFICATION_FIXEDPOINT_END,
 	MAP_IDENTIFICATION_MAX
+};
+
+enum CHARACTER {
+	CHARA_A,
+	CHARA_DUMMY,
+	CHARA_MAX
 };
