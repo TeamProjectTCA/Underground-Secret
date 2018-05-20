@@ -10,16 +10,9 @@ PTR( Map );
 PTR( Debug );
 PTR( Drawer );
 PTR( Keyboard );
+PTR( Shutter );
 
 class Map {
-private:
-	enum SHUTTER_STATE {
-		NON_ACTIVE, // ŠJ‚¢‚Ä‚¢‚éó‘Ô
-		ACTIVE,     // •Â‚¶‚Ä‚¢‚éó‘Ô
-		OPEN,       // ŠJ‚«“r’†
-		CLOSE,      // •Â‚¶“r’†
-	};
-
 public:
 	Map( int stage );
 	virtual ~Map( );
@@ -65,14 +58,10 @@ private:
 	Vector _fixedpoint_beta_start;
 	Vector _fixedpoint_beta_play;
 	Vector _fixedpoint_beta_end;
-	std::map< int, std::vector< int > > _shutter;
-	std::vector< SHUTTER_STATE > _shutter_state;
-	int _shutter_height;
-	int _shutter_handle;
-	int _shutter_cnt;
 
 	DebugPtr _debug;
 	DrawerPtr _drawer;
 	KeyboardPtr _keyboard;
+	ShutterPtr _shutter;
 };
 

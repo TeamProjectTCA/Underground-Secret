@@ -4,6 +4,7 @@
 #include "CharaA.h"
 #include "const.h"
 #include "Debug.h"
+#include "Shutter.h"
 #include <errno.h>
 #include <assert.h>
 
@@ -26,6 +27,7 @@ _stage( stage ) {
 	_debug = Debug::getTask( );
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
+	_shutter = ShutterPtr( new Shutter( ) );
 	_map_handle = _drawer->getImage( ( "stage" + std::to_string( _stage ) ).c_str( ) );
 
 	_col = 0;
@@ -40,9 +42,6 @@ _stage( stage ) {
 	_fixedpoint_beta_end   = Vector( );
 	_scroll = Vector( 0, 0 );
 	_phase = PHASE_START;
-	_shutter_height = _drawer->getImageHeight( "shutter" );
-	_shutter_handle = _drawer->getImage( "shutter" );
-	_shutter_cnt = 0;
 
 	// .colファイルから読み込み
 	loadMap( );
@@ -55,6 +54,7 @@ Map::~Map( ) {
 
 void Map::update( ) {
 	scroll( );
+	_shutter->update( );
 	draw( );
 
 	bool debug = _debug->isDebug( );
@@ -130,28 +130,31 @@ void Map::draw( ) {
 	// マップを描画
 	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _map_handle, true );
 
-	// シャッターを描画
-	const int SHUTTER_DOWN_LENGTH = _shutter_height;
-	const double MAGNIFICATION = SHUTTER_DOWN_LENGTH / SHUTTER_MOVECOUNT_MAX;
+	//シャッターを描画
+	_shutter->draw( _col, _scroll );
 
-	// シャッターの状態を見る
-	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
-		// 初期値( シャッターが上がっている状態 )
-		float x = ( float )( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
-		float y = ( float )( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE - _shutter_height;
+	//// シャッターを描画
+	//const int SHUTTER_DOWN_LENGTH = _shutter_height;
+	//const double MAGNIFICATION = SHUTTER_DOWN_LENGTH / SHUTTER_MOVECOUNT_MAX;
 
-		// 状態を反映する
-		if ( _shutter_state[ i ] != NON_ACTIVE ) {
-			y = ( float )( y + MAGNIFICATION * _shutter_cnt );
-		}
+	//// シャッターの状態を見る
+	//for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
+	//	// 初期値( シャッターが上がっている状態 )
+	//	float x = ( float )( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
+	//	float y = ( float )( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE;
 
-		// スクロール分
-		x += ( float )_scroll.x * BLOCK_SIZE;
-		y += ( float )_scroll.y * BLOCK_SIZE;
+	//	// 状態を反映する
+	//	if ( _shutter_state[ i ] != NON_ACTIVE ) {
+	//		y = ( float )( y + MAGNIFICATION * _shutter_cnt );
+	//	}
 
-		// 描画
-		_drawer->drawGraph( x, y, _shutter_handle, true );
-	}
+	//	// スクロール分
+	//	x += ( float )_scroll.x * BLOCK_SIZE;
+	//	y += ( float )_scroll.y * BLOCK_SIZE;
+
+	//	// 描画
+	//	_drawer->drawGraph( x, y, _shutter_handle, true );
+	//}
 }
 
 void Map::loadMap( ) {
@@ -237,11 +240,14 @@ void Map::setShutter( ) {
 		}
 
 		// シャッターを登録
-		_shutter[ shutter_num ].push_back( i );
-		_shutter_state.push_back( NON_ACTIVE );
+		std::vector< int > shutter;
+		shutter.push_back( i );
 		
 		// 直下を判定し、当たり判定が見つかるまでをシャッターとする
-		inputShutter( _shutter[ shutter_num ], i );
+		inputShutter( shutter, i );
+
+		// シャッターをaddする
+		_shutter->addShutter( shutter );
 	}
 }
 
