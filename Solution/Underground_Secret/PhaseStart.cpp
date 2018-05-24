@@ -20,6 +20,7 @@ _map( map ) {
 		( *ite )->setFixedpoint( PHASE_START );
 	}
 
+	_end_point = _map->getFixedpointBeta( PHASE_START );
 	_run_idx = 0;
 	_run_chara = ( *_chara.begin( ) );
 	_open_animation_count = 0;
@@ -32,7 +33,7 @@ PhaseStart::~PhaseStart( ) {
 void PhaseStart::update( ) {
 	if ( _run_idx < ( int )_chara.size( ) ) {
 		// betaポイントよりxが小さければ移動
-		if ( _run_chara->getPos( ).x < _map->getFixedpointBeta( PHASE_START ).x ) {
+		if ( _run_chara->getPos( ).x < _end_point.x ) {
 			_run_chara->move( Vector( MOVE, 0 ) );
 		} else {
 		// betaポイントに到達したらopenアニメーション

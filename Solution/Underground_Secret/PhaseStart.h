@@ -3,6 +3,7 @@
 #include "Phase.h"
 #include <list>
 #include <vector>
+#include "Vector.h"
 
 PTR( PhaseStart );
 PTR( Character );
@@ -22,6 +23,7 @@ private:
 
 private:
 	std::list< CharacterPtr > _chara;
+	Vector _end_point;
 	int _run_idx;
 	int _open_animation_count;
 	bool _open_animation;

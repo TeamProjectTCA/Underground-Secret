@@ -284,8 +284,30 @@ void Map::scroll( ) {
 }
 
 void Map::drawCollider( ) const {
+	int range_width_min = ( int )_scroll.x * -1;
+	int range_width_max = range_width_min + WIDTH / BLOCK_SIZE;
+	int range_height_min = ( int )_scroll.y * -1;
+	int range_height_max = range_height_min + HEIGHT / BLOCK_SIZE;
+
 	for ( int i = 0; i < _row; i++ ) {
+
+		// ‰æ–Ê“à‚Ì‚à‚Ì‚¾‚¯•`‰æ
+		if ( i < range_height_min ) {
+			continue;
+		}
+		if ( i > range_height_max ) {
+			break;
+		}
+
 		for ( int j = 0; j < _col; j++ ) {
+			// ‰æ–Ê“à‚Ì‚à‚Ì‚¾‚¯•`‰æ
+			if ( j < range_width_min ) {
+				continue;
+			}
+			if ( j > range_width_max ) {
+				break;
+			}
+
 			int idx = i * _col + j;
 
 			// ‰½‚à‚È‚¯‚ê‚ÎŽŸ‚ðŒ©‚é

@@ -60,7 +60,8 @@ void Character::setAnimTime( int change_time ) {
 }
 
 void Character::setFixedpoint( PHASE phase ) {
-	_pos = _map->getFixedpointAlpha( phase );
+	Vector pos = _map->getFixedpointAlpha( phase );
+	_pos = pos - Vector( 0, _anim[ _anim_type ].height );
 }
 
 void Character::changeDebugMode( ) {
