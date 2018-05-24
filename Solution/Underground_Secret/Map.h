@@ -45,6 +45,8 @@ private:
 
 private:
 	int _map_handle;
+	int _map_width;
+	int _map_height;
 	int _stage;
 	int _row;
 	int _col;

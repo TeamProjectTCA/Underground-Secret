@@ -28,7 +28,10 @@ _stage( stage ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 	_shutter = ShutterPtr( new Shutter( ) );
-	_map_handle = _drawer->getImage( ( "stage" + std::to_string( _stage ) ).c_str( ) );
+	std::string stage_path = "stage" + std::to_string( _stage );
+	_map_handle = _drawer->getImage( stage_path );
+	_map_width = _drawer->getImageWidth( stage_path );
+	_map_height = _drawer->getImageHeight( stage_path );
 
 	_col = 0;
 	_row = 0;
@@ -47,6 +50,8 @@ _stage( stage ) {
 	loadMap( );
 	setFixedpoint( );
 	setShutter( );
+
+	_shutter->setCol( _col );
 }
 
 Map::~Map( ) {
@@ -131,30 +136,7 @@ void Map::draw( ) {
 	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _map_handle, true );
 
 	//シャッターを描画
-	_shutter->draw( _col, _scroll );
-
-	//// シャッターを描画
-	//const int SHUTTER_DOWN_LENGTH = _shutter_height;
-	//const double MAGNIFICATION = SHUTTER_DOWN_LENGTH / SHUTTER_MOVECOUNT_MAX;
-
-	//// シャッターの状態を見る
-	//for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
-	//	// 初期値( シャッターが上がっている状態 )
-	//	float x = ( float )( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
-	//	float y = ( float )( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE;
-
-	//	// 状態を反映する
-	//	if ( _shutter_state[ i ] != NON_ACTIVE ) {
-	//		y = ( float )( y + MAGNIFICATION * _shutter_cnt );
-	//	}
-
-	//	// スクロール分
-	//	x += ( float )_scroll.x * BLOCK_SIZE;
-	//	y += ( float )_scroll.y * BLOCK_SIZE;
-
-	//	// 描画
-	//	_drawer->drawGraph( x, y, _shutter_handle, true );
-	//}
+	_shutter->draw( _scroll );
 }
 
 void Map::loadMap( ) {
@@ -287,19 +269,22 @@ void Map::scroll( ) {
 		_scroll.y += SCROLL_SIZE;
 	}
 
+	// マップの最大スクロール
+	int map_col = _map_width / BLOCK_SIZE;
+	int map_row = _map_height / BLOCK_SIZE;
 
 	if ( _scroll.x > 0 ) {
 		_scroll.x = 0;
 	}
-	if ( _scroll.x < WIDTH / BLOCK_SIZE - ( _col ) ) {
-		_scroll.x = WIDTH / BLOCK_SIZE - ( _col );
+	if ( _scroll.x < ( WIDTH / BLOCK_SIZE - ( map_col ) ) ) {
+		_scroll.x = WIDTH / BLOCK_SIZE - ( map_col );
 	}
 
 	if ( _scroll.y > 0 ) {
 		_scroll.y = 0;
 	}
-	if ( _scroll.y < HEIGHT / BLOCK_SIZE - ( _row ) ) {
-		_scroll.y = HEIGHT / BLOCK_SIZE - ( _row );
+	if ( _scroll.y < HEIGHT / BLOCK_SIZE - ( map_row ) ) {
+		_scroll.y = HEIGHT / BLOCK_SIZE - ( map_row );
 	}
 }
 

@@ -10,7 +10,7 @@ PTR( Mouse );
 class Shutter {
 private:
 	enum SHUTTER_STATE {
-		SHUTTER_STATE_NON_ACTIVE, // ŠJ‚¢‚Ä‚¢‚éó‘Ô
+		SHUTTER_STATE_NONACTIVE,  // ŠJ‚¢‚Ä‚¢‚éó‘Ô
 		SHUTTER_STATE_ACTIVE,     // •Â‚¶‚Ä‚¢‚éó‘Ô
 		SHUTTER_STATE_OPEN,       // ŠJ‚«“r’†
 		SHUTTER_STATE_CLOSE,      // •Â‚¶“r’†
@@ -22,15 +22,18 @@ public:
 
 public:
 	void update( );
-	void draw( int col, Vector scroll ) const;
+	void draw( Vector scroll ) const;
 
 private:
-	void action( );
+	void onShutter( );
+	void calcShutter( );
 
 public:
+	void setCol( const int col );
 	void addShutter( std::vector< int > shutter );
 
 private:
+	int _col;
 	int _shutter_width;
 	int _shutter_height;
 	int _shutter_handle;
