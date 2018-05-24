@@ -13,6 +13,8 @@ _col( 1 ) {
 	_shutter_handle = _drawer->getImage( "shutter" );
 	_shutter_width = _drawer->getImageWidth( "shutter" );
 	_shutter_height = _drawer->getImageHeight( "shutter" );
+
+	_scroll = Vector( );
 }
 
 Shutter::~Shutter( ) {
@@ -23,19 +25,39 @@ void Shutter::update( ) {
 	calcShutter( );
 }
 
-void Shutter::draw( Vector scroll ) const {
+void Shutter::draw( ) const {
 	const int SHUTTER_MAX = ( int )_shutter.size( );
 	const int MIN = BLOCK_SIZE;
 	const int RATE = ( _shutter_height - MIN ) / MOVECOUNT_MAX;
 	for ( int i = 0; i < SHUTTER_MAX; i++ ) {
-		int ry = _move_cnt * RATE + MIN;
-		int ly = _shutter_height - ry;
+		int ry = 0;
+		int ly = 0;
+
+		SHUTTER_STATE state = _shutter_state[ i ];
+
+		// 非アクティブ
+		if ( state == SHUTTER_STATE_NONACTIVE ) {
+			ry = MIN;
+		}
+		// 開閉中
+		if ( state == SHUTTER_STATE_OPEN ||
+			 state == SHUTTER_STATE_CLOSE ) {
+			ry = _move_cnt * RATE + MIN;
+		}
+		// アクティブ
+		if ( state == SHUTTER_STATE_ACTIVE ) {
+			ry = _shutter_height;
+		}
+
+		// 描画はじめを設定
+		ly = _shutter_height - ry;
+
  		float x = ( float )( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
 		float y = ( float )( ( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE );
 
 		// スクロール分を足す
-		x += ( float )scroll.x * BLOCK_SIZE;
-		y += ( float )scroll.y * BLOCK_SIZE;
+		x += ( float )_scroll.x * BLOCK_SIZE;
+		y += ( float )_scroll.y * BLOCK_SIZE;
 
 		_drawer->drawRectGraph( x, y, 0, ly, _shutter_width, ry, _shutter_handle, true );
 	}
@@ -48,7 +70,8 @@ void Shutter::onShutter( ) {
 
 	int mouse_x = _mouse->getPointX( );
 	int mouse_y = _mouse->getPointY( );
-	int idx = ( mouse_x / BLOCK_SIZE ) + ( ( mouse_y / _col ) * _col );
+	int idx = ( mouse_x / BLOCK_SIZE ) + ( ( mouse_y / BLOCK_SIZE ) * _col );
+	idx += ( int )( _scroll.x * -1 ) + ( int )( ( _scroll.y * -1 ) * _col );
 
 	int size = ( int )_shutter.size( );
 	int hit_idx = -1;
@@ -114,6 +137,10 @@ void Shutter::calcShutter( ) {
 
 void Shutter::setCol( const int col ) {
 	_col = col;
+}
+
+void Shutter::setScroll( Vector scroll ) {
+	_scroll = scroll;
 }
 
 void Shutter::addShutter( std::vector< int > shutter ) {

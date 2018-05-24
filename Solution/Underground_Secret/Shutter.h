@@ -22,7 +22,7 @@ public:
 
 public:
 	void update( );
-	void draw( Vector scroll ) const;
+	void draw( ) const;
 
 private:
 	void onShutter( );
@@ -30,6 +30,7 @@ private:
 
 public:
 	void setCol( const int col );
+	void setScroll( Vector scroll );
 	void addShutter( std::vector< int > shutter );
 
 private:
@@ -38,6 +39,7 @@ private:
 	int _shutter_height;
 	int _shutter_handle;
 	int _move_cnt;
+	Vector _scroll;
 	std::vector< std::vector< int > > _shutter;
 	std::vector< SHUTTER_STATE > _shutter_state;
 

@@ -58,6 +58,7 @@ Map::~Map( ) {
 
 void Map::update( ) {
 	scroll( );
+	_shutter->setScroll( _scroll );
 	_shutter->update( );
 	draw( );
 
@@ -135,7 +136,7 @@ void Map::draw( ) {
 	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _map_handle, true );
 
 	//シャッターを描画
-	_shutter->draw( _scroll );
+	_shutter->draw( );
 }
 
 void Map::loadMap( ) {
@@ -235,7 +236,7 @@ void Map::setShutter( ) {
 void Map::inputShutter( std::vector< int > &shutter, int idx ) {
 	int point = idx + _col;
 
-	if ( point != IDENTIFICATION_NONE ) {
+	if ( _data[ point ] - COLLIDER_ASCIICODE_MIN != IDENTIFICATION_NONE ) {
 		return;
 	}
 
