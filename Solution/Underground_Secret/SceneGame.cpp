@@ -6,13 +6,19 @@
 #include "PhaseStart.h"
 #include "PhasePlay.h"
 #include "PhaseEnd.h"
+#include "Scroll.h"
 
 SceneGame::SceneGame( int stage ) :
 _stage( stage ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
-	_map = MapPtr( new Map( _stage ) );
+	_scroll = ScrollPtr( new Scroll( ) );
+	_map = MapPtr( new Map( _stage, _scroll ) );
 	_char_manager = CharacterManagerPtr( new CharacterManager( _map ) );
+
+	// ƒXƒNƒ[ƒ‹‚É col,row ‚ð‹l‚ß‚é
+	_scroll->setCol( _map->getCol( ) );
+	_scroll->setRow( _map->getRow( ) );
 
 	_phase = PHASE_START;
 	changePhase( );
@@ -74,7 +80,7 @@ void SceneGame::changePhase( ) {
 		break;
 
 	case PHASE_PLAY:
-		_run_phase = PhasePlayPtr( new PhasePlay( _char_manager->getChara( ) ) );
+		_run_phase = PhasePlayPtr( new PhasePlay( _char_manager->getChara( ), _scroll ) );
 		break;
 
 	case PHASE_END:

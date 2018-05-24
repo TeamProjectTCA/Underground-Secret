@@ -9,6 +9,7 @@ PTR( Drawer );
 PTR( Map );
 PTR( CharacterManager );
 PTR( Phase );
+PTR( Scroll );
 
 class SceneGame : public Scene {
 public:
@@ -33,5 +34,6 @@ private:
 	MapPtr _map;
 	CharacterManagerPtr _char_manager;
 	PhasePtr _run_phase;
+	ScrollPtr _scroll;
 };
 

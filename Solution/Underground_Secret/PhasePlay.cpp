@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "Drawer.h"
 #include "const.h"
+#include "Scroll.h"
 #include <string>
 
 const float TIME_BOX_X = 10;
@@ -13,8 +14,9 @@ const float TIME_STRING_Y1 = 20;
 const float TIME_STRING_X2 = 60;
 const float TIME_STRING_Y2 = 50;
 
-PhasePlay::PhasePlay( std::list< CharacterPtr > &chara ) :
-_chara( chara ) {
+PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll ) :
+_chara( chara ),
+_scroll( scroll ) {
 	_drawer = Drawer::getTask( );
 	_time_count = FINISH_TIME * ONE_SECOND_FRAME;
 }
@@ -23,6 +25,7 @@ PhasePlay::~PhasePlay( ) {
 }
 
 void PhasePlay::update( ) {
+	_scroll->update( );
 	countClear( );
 	setEnd( );
 	drawTime( );

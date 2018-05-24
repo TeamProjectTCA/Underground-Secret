@@ -5,10 +5,10 @@
 #include "const.h"
 #include "Debug.h"
 #include "Shutter.h"
+#include "Scroll.h"
 #include <errno.h>
 #include <assert.h>
 
-const int SCROLL_SIZE = 2;
 const int COLLIDER_ASCIICODE_MIN = '0';
 const int ELEVATOR_ASCIICODE_MIN = 'A';
 const int ELEVATOR_ASCIICODE_MAX = 'z';
@@ -22,8 +22,9 @@ const int SHUTTER_MOVECOUNT_MAX = ONE_SECOND_FRAME;
 
 std::string path = "Resources/map/stage";
 
-Map::Map( int stage ) :
-_stage( stage ) {
+Map::Map( int stage, ScrollConstPtr scroll ) :
+_stage( stage ),
+_scroll( scroll ) {
 	_debug = Debug::getTask( );
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
@@ -42,7 +43,6 @@ _stage( stage ) {
 	_fixedpoint_beta_start = Vector( );
 	_fixedpoint_beta_play  = Vector( );
 	_fixedpoint_beta_end   = Vector( );
-	_scroll = Vector( 0, 0 );
 	_phase = PHASE_START;
 
 	// .colファイルから読み込み
@@ -57,8 +57,7 @@ Map::~Map( ) {
 }
 
 void Map::update( ) {
-	scroll( );
-	_shutter->setScroll( _scroll );
+	_shutter->setScroll( _scroll->getScroll( ) );
 	_shutter->update( );
 	draw( );
 
@@ -103,10 +102,6 @@ Vector Map::getFixedpointBeta( PHASE phase ) const {
 	return point;
 }
 
-Vector Map::getScrollData( ) const {
-	return Vector( _scroll.x, _scroll.y );
-}
-
 Vector Map::getElevatorPos( int ascii ) const {
 	char find = ascii;
 	int idx = ( int )_data.find_first_of( find );
@@ -119,8 +114,16 @@ Vector Map::getElevatorPos( int ascii ) const {
 	);
 }
 
+Vector Map::getScrollData( ) const {
+	return _scroll->getScroll( );
+}
+
 int Map::getCol( ) const {
 	return _col;
+}
+
+int Map::getRow( ) const {
+	return _row;
 }
 
 int Map::getMapData( int idx ) const {
@@ -137,7 +140,8 @@ bool Map::isHitShutter( int detection_idx ) const {
 
 void Map::draw( ) {
 	// マップを描画
-	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _map_handle, true );
+	Vector scroll = _scroll->getScroll( );
+	_drawer->drawGraph( ( int )scroll.x * BLOCK_SIZE, ( int )scroll.y * BLOCK_SIZE, _map_handle, true );
 
 	//シャッターを描画
 	_shutter->draw( );
@@ -250,48 +254,11 @@ void Map::inputShutter( std::vector< int > &shutter, int idx ) {
 	// 再起してもう1つ下を見る
 	inputShutter( shutter, point );
 }
-
-void Map::scroll( ) {
-	if ( _phase != PHASE_PLAY ) {
-		return;
-	}
-
-	//左
-	if ( _keyboard->getKeyDown( "d" ) || _keyboard->getState( "d" ) > 30 ) {
-		_scroll.x -= SCROLL_SIZE;
-	}
-	//右
-	if ( _keyboard->getKeyDown( "a" ) || _keyboard->getState( "a" ) > 30 ) {
-		_scroll.x += SCROLL_SIZE;
-	}
-	//上
-	if ( _keyboard->getKeyDown( "s" ) || _keyboard->getState( "s" ) > 30 ) {
-		_scroll.y -= SCROLL_SIZE;
-	}
-	//下
-	if ( _keyboard->getKeyDown( "w" ) || _keyboard->getState( "w" ) > 30 ) {
-		_scroll.y += SCROLL_SIZE;
-	}
-
-	if ( _scroll.x > 0 ) {
-		_scroll.x = 0;
-	}
-	if ( _scroll.x < ( WIDTH / BLOCK_SIZE - ( _col ) ) ) {
-		_scroll.x = WIDTH / BLOCK_SIZE - ( _col );
-	}
-
-	if ( _scroll.y > 0 ) {
-		_scroll.y = 0;
-	}
-	if ( _scroll.y < HEIGHT / BLOCK_SIZE - ( _row ) ) {
-		_scroll.y = HEIGHT / BLOCK_SIZE - ( _row );
-	}
-}
-
 void Map::drawCollider( ) const {
-	int range_width_min = ( int )_scroll.x * -1;
+	Vector scroll = _scroll->getScroll( );
+	int range_width_min = ( int )scroll.x * -1;
 	int range_width_max = range_width_min + WIDTH / BLOCK_SIZE;
-	int range_height_min = ( int )_scroll.y * -1;
+	int range_height_min = ( int )scroll.y * -1;
 	int range_height_max = range_height_min + HEIGHT / BLOCK_SIZE;
 
 	for ( int i = 0; i < _row; i++ ) {
@@ -336,8 +303,8 @@ void Map::drawCollider( ) const {
 				color = SHUTTER_COLOR;
 			}
 
-			_drawer->drawBox( ( float )(     x + _scroll.x ) * BLOCK_SIZE, ( float )(     y + _scroll.y ) * BLOCK_SIZE,
-				              ( float )( x + 1 + _scroll.x ) * BLOCK_SIZE, ( float )( y + 1 + _scroll.y ) * BLOCK_SIZE,
+			_drawer->drawBox( ( float )(     x + scroll.x ) * BLOCK_SIZE, ( float )(     y + scroll.y ) * BLOCK_SIZE,
+				              ( float )( x + 1 + scroll.x ) * BLOCK_SIZE, ( float )( y + 1 + scroll.y ) * BLOCK_SIZE,
 				              color, true );
 		}
 	}

@@ -6,10 +6,11 @@
 PTR( PhasePlay );
 PTR( Character );
 PTR( Drawer );
+PTR( Scroll );
 
 class PhasePlay : public Phase {
 public:
-	PhasePlay( std::list< CharacterPtr > &chara );
+	PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr _scroll );
 	virtual ~PhasePlay( );
 
 public:
@@ -30,5 +31,6 @@ private:
 	int _chara_handle;
 
 	DrawerPtr _drawer;
+	ScrollPtr _scroll;
 };
 

@@ -11,10 +11,11 @@ PTR( Debug );
 PTR( Drawer );
 PTR( Keyboard );
 PTR( Shutter );
+PTR( Scroll );
 
 class Map {
 public:
-	Map( int stage );
+	Map( int stage, ScrollConstPtr scroll );
 	virtual ~Map( );
 
 public:
@@ -26,9 +27,10 @@ public:
 public:
 	Vector getFixedpointAlpha( PHASE phase ) const;
 	Vector getFixedpointBeta( PHASE phase ) const;
-	Vector getScrollData( ) const;
 	Vector getElevatorPos( int ascii ) const;
+	Vector getScrollData( ) const;
 	int getCol( ) const;
+	int getRow( ) const;
 	int getMapData( int idx ) const;
 	bool isHitShutter( int detection_idx ) const;
 
@@ -38,7 +40,6 @@ private:
 	void setFixedpoint( );
 	void setShutter( );
 	void inputShutter( std::vector< int > &shutter, int idx );
-	void scroll( );
 
 private:
 	void drawCollider( ) const;
@@ -50,7 +51,6 @@ private:
 	int _row;
 	int _col;
 	PHASE _phase;
-	Vector _scroll;
 	bool _debug_mode;
 	std::string _data;
 	Vector _fixedpoint_alpha_start;
@@ -64,5 +64,6 @@ private:
 	DrawerPtr _drawer;
 	KeyboardPtr _keyboard;
 	ShutterPtr _shutter;
+	ScrollConstPtr _scroll;
 };
 
