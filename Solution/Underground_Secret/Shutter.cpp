@@ -151,3 +151,29 @@ void Shutter::addShutter( std::vector< int > shutter ) {
 	_shutter.push_back( shutter );
 	_shutter_state.push_back( SHUTTER_STATE_NONACTIVE );
 }
+
+bool Shutter::isHitShutter( int detection_idx ) const {
+	int action_idx = -1;
+
+	// アクティブなシャッターを探す
+	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
+		if ( _shutter_state[ i ] != SHUTTER_STATE_ACTIVE ) {
+			continue;
+		}
+		action_idx = i;
+		break;
+	}
+
+	if ( action_idx < 0 ) {
+		return false;
+	}
+
+	// アクティブなシャッターのmapidxを比較する
+	for ( int i = 0; i < _shutter[ action_idx ].size( ); i++ ) {
+		if ( detection_idx == _shutter[ action_idx ][ i ] ) {
+			return true;
+		}
+	}
+
+	return false;
+}

@@ -30,6 +30,7 @@ public:
 	Vector getElevatorPos( int ascii ) const;
 	int getCol( ) const;
 	int getMapData( int idx ) const;
+	bool isHitShutter( int detection_idx ) const;
 
 private:
 	void draw( );

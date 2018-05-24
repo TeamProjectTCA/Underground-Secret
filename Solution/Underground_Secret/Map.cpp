@@ -131,6 +131,10 @@ int Map::getMapData( int idx ) const {
 	return _data[ idx ];
 }
 
+bool Map::isHitShutter( int detection_idx ) const {
+	return _shutter->isHitShutter( detection_idx );
+}
+
 void Map::draw( ) {
 	// ƒ}ƒbƒv‚ð•`‰æ
 	_drawer->drawGraph( ( int )_scroll.x * BLOCK_SIZE, ( int )_scroll.y * BLOCK_SIZE, _map_handle, true );

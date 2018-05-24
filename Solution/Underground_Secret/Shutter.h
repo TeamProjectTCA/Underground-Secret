@@ -33,6 +33,9 @@ public:
 	void setScroll( Vector scroll );
 	void addShutter( std::vector< int > shutter );
 
+public:
+	bool isHitShutter( int detection_idx ) const;
+
 private:
 	int _col;
 	int _shutter_width;

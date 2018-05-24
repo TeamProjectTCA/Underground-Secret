@@ -94,28 +94,15 @@ void CharaDummy::checkCollider( ) {
 		return;
 	}
 
-	// 当たり判定が何かしらあれば
-	if ( data != IDENTIFICATION_NONE ) {
-		switch ( data ) {
-		// 当たり判定
-		case IDENTIFICATION_COLLIDER:
-			{
-				data = getMapDataCollider( getPos( ) + _distance + Vector( 0, -BLOCK_SIZE ) );
-				if ( data != IDENTIFICATION_COLLIDER ) {
-					_distance += Vector( 0, -BLOCK_SIZE );
-					break;
-				}
-				move_ok = false;
-			}
-			break;
-
-		// シャッター
-		case IDENTIFICATION_SHUTTER:
+	// 進行予測値が当たり判定であったら
+	if ( data == IDENTIFICATION_COLLIDER ) {
+		// もう1つ上を見る
+		data = getMapDataCollider( getPos( ) + _distance + Vector( 0, -BLOCK_SIZE ) );
+		if ( data == IDENTIFICATION_COLLIDER ) {
+			// 2回目も当たり判定があったら
 			move_ok = false;
-			break;
-
-		default:
-			break;
+		} else {
+			_distance += Vector( 0, -BLOCK_SIZE );
 		}
 	}
 

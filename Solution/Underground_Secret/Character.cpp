@@ -122,6 +122,11 @@ int Character::getMapDataCollider( Vector pos ) const {
 		return IDENTIFICATION_NONE;
 	}
 
+	// シャッターの判定
+	if ( _map->isHitShutter( idx ) ) {
+		return IDENTIFICATION_COLLIDER;
+	}
+
 	data -= COLLIDER_ASCIICODE_MIN;
 
 	// 当たり判定を見ている場所を表示(debug)
