@@ -28,10 +28,9 @@ _stage( stage ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
 	_shutter = ShutterPtr( new Shutter( ) );
+
 	std::string stage_path = "stage" + std::to_string( _stage );
 	_map_handle = _drawer->getImage( stage_path );
-	_map_width = _drawer->getImageWidth( stage_path );
-	_map_height = _drawer->getImageHeight( stage_path );
 
 	_col = 0;
 	_row = 0;
@@ -269,22 +268,18 @@ void Map::scroll( ) {
 		_scroll.y += SCROLL_SIZE;
 	}
 
-	// マップの最大スクロール
-	int map_col = _map_width / BLOCK_SIZE;
-	int map_row = _map_height / BLOCK_SIZE;
-
 	if ( _scroll.x > 0 ) {
 		_scroll.x = 0;
 	}
-	if ( _scroll.x < ( WIDTH / BLOCK_SIZE - ( map_col ) ) ) {
-		_scroll.x = WIDTH / BLOCK_SIZE - ( map_col );
+	if ( _scroll.x < ( WIDTH / BLOCK_SIZE - ( _col ) ) ) {
+		_scroll.x = WIDTH / BLOCK_SIZE - ( _col );
 	}
 
 	if ( _scroll.y > 0 ) {
 		_scroll.y = 0;
 	}
-	if ( _scroll.y < HEIGHT / BLOCK_SIZE - ( map_row ) ) {
-		_scroll.y = HEIGHT / BLOCK_SIZE - ( map_row );
+	if ( _scroll.y < HEIGHT / BLOCK_SIZE - ( _row ) ) {
+		_scroll.y = HEIGHT / BLOCK_SIZE - ( _row );
 	}
 }
 
