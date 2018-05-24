@@ -340,9 +340,9 @@ void Map::drawCollider( ) const {
 
 void Map::drawTable( ) const {
 	for ( int i = 1; i < HEIGHT / BLOCK_SIZE; i++ ) {
-		_drawer->drawLine( ( float )0, ( float )i * BLOCK_SIZE, ( float )WIDTH, ( float )i * BLOCK_SIZE, 0x3b3b3b );
+		_drawer->drawLine( ( float )0, ( float )i * BLOCK_SIZE, ( float )WIDTH, ( float )i * BLOCK_SIZE, GRAY );
 	}
 	for ( int i = 1; i < WIDTH / BLOCK_SIZE; i++ ) {
-		_drawer->drawLine( ( float )i * BLOCK_SIZE, ( float )0, ( float )i * BLOCK_SIZE, ( float )HEIGHT, 0x3b3b3b );
+		_drawer->drawLine( ( float )i * BLOCK_SIZE, ( float )0, ( float )i * BLOCK_SIZE, ( float )HEIGHT, GRAY );
 	}
 }

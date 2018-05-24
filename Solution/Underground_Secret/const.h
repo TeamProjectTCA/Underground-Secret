@@ -17,6 +17,7 @@ const unsigned int BLUE = 0x0000ff;
 const unsigned int YELLOW = 0xffff00;
 const unsigned int MAGENTA = 0xff00ff;
 const unsigned int WATER = 0x00ffff;
+const unsigned int GRAY = 0x3b3b3b;
 
 // ƒtƒŒ[ƒ€”
 const int ONE_SECOND_FRAME = 60;

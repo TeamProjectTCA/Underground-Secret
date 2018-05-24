@@ -31,7 +31,7 @@ void Shutter::draw( Vector scroll ) const {
 		int ry = _move_cnt * RATE + MIN;
 		int ly = _shutter_height - ry;
  		float x = ( float )( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
-		float y = ( float )( ( _shutter[ i ].front( ) / _col ) );
+		float y = ( float )( ( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE );
 
 		// ƒXƒNƒ[ƒ‹•ª‚ğ‘«‚·
 		x += ( float )scroll.x * BLOCK_SIZE;
