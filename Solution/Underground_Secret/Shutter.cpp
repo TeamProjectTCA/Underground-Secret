@@ -35,18 +35,22 @@ void Shutter::draw( ) const {
 
 		SHUTTER_STATE state = _shutter_state[ i ];
 
-		// 非アクティブ
-		if ( state == SHUTTER_STATE_NONACTIVE ) {
-			ry = MIN;
-		}
-		// 開閉中
-		if ( state == SHUTTER_STATE_OPEN ||
-			 state == SHUTTER_STATE_CLOSE ) {
-			ry = _move_cnt * RATE + MIN;
-		}
-		// アクティブ
-		if ( state == SHUTTER_STATE_ACTIVE ) {
-			ry = _shutter_height;
+		switch ( state ) {
+			case SHUTTER_STATE_ACTIVE: 
+				ry = _shutter_height;
+				break;
+
+			case SHUTTER_STATE_NONACTIVE: 
+				ry = MIN;
+				break;
+
+			case SHUTTER_STATE_OPEN:
+				ry = ( MOVECOUNT_MAX - _move_cnt ) * RATE + MIN;
+				break;
+
+			case SHUTTER_STATE_CLOSE:
+				ry = _move_cnt * RATE + MIN;
+				break;
 		}
 
 		// 描画はじめを設定
