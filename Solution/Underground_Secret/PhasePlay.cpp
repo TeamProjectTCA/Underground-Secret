@@ -3,6 +3,7 @@
 #include "Drawer.h"
 #include "const.h"
 #include "Scroll.h"
+#include "Profiling.h"
 #include <string>
 
 const float TIME_BOX_X = 10;
@@ -18,17 +19,26 @@ PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll ) :
 _chara( chara ),
 _scroll( scroll ) {
 	_drawer = Drawer::getTask( );
-	_time_count = FINISH_TIME * ONE_SECOND_FRAME;
+	_profiling = ProfilingPtr( new Profiling( ) );
+	_time_count = FINISH_TIME * FPS;
 }
 
 PhasePlay::~PhasePlay( ) {
 }
 
 void PhasePlay::update( ) {
-	_scroll->update( );
+	// プロファイリング
+	_profiling->update( );
+
+	// スクロール
+	if ( !_profiling->isActive( ) ) {
+		_scroll->update( );
+	}
+
 	countClear( );
 	setEnd( );
-	drawTime( );
+
+	draw( );
 }
 
 void PhasePlay::countClear( ) {
@@ -48,8 +58,12 @@ void PhasePlay::setEnd( ) {
 	}
 }
 
+void PhasePlay::draw( ) {
+	drawTime( );
+}
+
 void PhasePlay::drawTime( ) {
 	_drawer->drawBox( TIME_BOX_X, TIME_BOX_Y, TIME_BOX_X + TIME_BOX_WIDTH, TIME_BOX_Y + TIME_BOX_HEIGHT, BLUE, true );
 	_drawer->drawString( TIME_STRING_X1, TIME_STRING_Y1, "クリアまであと", RED );
-	_drawer->drawString( TIME_STRING_X2, TIME_STRING_Y2, std::to_string( _time_count / ONE_SECOND_FRAME ) + "秒", RED );
+	_drawer->drawString( TIME_STRING_X2, TIME_STRING_Y2, std::to_string( _time_count / FPS ) + "秒", RED );
 }

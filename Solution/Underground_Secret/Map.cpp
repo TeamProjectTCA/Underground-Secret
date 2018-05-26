@@ -18,7 +18,7 @@ const unsigned int COLLIDER_COLOR = GREEN;
 const unsigned int ENDPOINT_COLOR = MAGENTA;
 const unsigned int ELEVATOR_COLOR = YELLOW;
 const unsigned int SHUTTER_COLOR  = WATER;
-const int SHUTTER_MOVECOUNT_MAX = ONE_SECOND_FRAME;
+const int SHUTTER_MOVECOUNT_MAX = FPS;
 
 std::string path = "Resources/map/stage";
 

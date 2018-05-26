@@ -68,7 +68,7 @@ void Shutter::draw( ) const {
 }
 
 void Shutter::onShutter( ) {
-	if ( !_mouse->isClickLeft( ) ) {
+	if ( !_mouse->isClickDownLeft( ) ) {
 		return;
 	}
 

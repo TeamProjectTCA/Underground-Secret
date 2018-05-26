@@ -169,7 +169,7 @@ void Table::scroll( ) {
 }
 
 void Table::showCommandMenu( ) {
-	if ( !_mouse->isClickRight( ) ) {
+	if ( !_mouse->isClickDownRight( ) ) {
 		return;
 	}
 

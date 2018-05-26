@@ -31,7 +31,7 @@ void CharaDummy::update( ) {
 	checkCaughtCollider( );
 
 	if ( _debug->isDebug( ) ) {
-		_drawer->drawString( 10, 100, "ŠÄŽ‹ŽžŠÔ" + std::to_string( _looking_time / ONE_SECOND_FRAME ) + "•b", RED );
+		_drawer->drawString( 10, 100, "ŠÄŽ‹ŽžŠÔ" + std::to_string( _looking_time / FPS ) + "•b", RED );
 	}
 }
 

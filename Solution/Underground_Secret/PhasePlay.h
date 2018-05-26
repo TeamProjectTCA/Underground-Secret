@@ -7,6 +7,7 @@ PTR( PhasePlay );
 PTR( Character );
 PTR( Drawer );
 PTR( Scroll );
+PTR( Profiling );
 
 class PhasePlay : public Phase {
 public:
@@ -21,6 +22,7 @@ private:
 	void setEnd( );
 
 private:
+	void draw( );
 	void drawTime( );
 
 private:
@@ -32,5 +34,6 @@ private:
 
 	DrawerPtr _drawer;
 	ScrollPtr _scroll;
+	ProfilingPtr _profiling;
 };
 

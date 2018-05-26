@@ -20,7 +20,7 @@ const unsigned int WATER = 0x00ffff;
 const unsigned int GRAY = 0x3b3b3b;
 
 // ƒtƒŒ[ƒ€”
-const int ONE_SECOND_FRAME = 60;
+const int FPS = 60;
 
 // ‰~ü—¦
 const double PI = 3.14; 

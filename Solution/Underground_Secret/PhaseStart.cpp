@@ -7,7 +7,7 @@
 const int START_X = 0;
 const int START_Y = 100;
 const double MOVE = 5;
-const int OPEN_ANIMATION_TIME = ONE_SECOND_FRAME * 3;
+const int OPEN_ANIMATION_TIME = FPS * 3;
 
 PhaseStart::PhaseStart( std::list< CharacterPtr > &chara, MapPtr map ) :
 _chara( chara ),
