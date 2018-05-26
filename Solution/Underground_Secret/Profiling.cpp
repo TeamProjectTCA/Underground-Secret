@@ -5,14 +5,10 @@
 
 const int ACTIVE_BUTTON_X = ( WIDTH / 5 ) * 4;
 const int ACTIVE_BUTTON_Y = 0;
-const float UP_LENGTH = ( HEIGHT_F / 6 * 5 );
-const float DOWN_LENGTH = UP_LENGTH - ( HEIGHT_F / 5 * 4 );
-const float INITIAL_VELOCITY = 50; // 初速度
-const float ACCELERATION = ( INITIAL_VELOCITY * INITIAL_VELOCITY ) / UP_LENGTH;
-const float UP_TIME = INITIAL_VELOCITY / ACCELERATION; //t1
-const float DOWN_TIME = ( 2 * DOWN_LENGTH ) / ACCELERATION; //t2の2乗
+const float INITIAL_VELOCITY = -22; // 初速度
+const float ACCELERATION = 0.4f;
+const float TOTAL_TIME = 1.1f; //ボードが出現から止まるまでの時間（秒）
 const float NONACTIVE_BOARD_Y = HEIGHT;
-const float DECELERATE_POS = HEIGHT / 2;
 
 Profiling::Profiling( ) {
 	_mouse = Mouse::getTask( );
@@ -23,8 +19,7 @@ Profiling::Profiling( ) {
 	_back_button = _drawer->getImage( "back" );
 	_board_handle = _drawer->getImage( "ProfilingBoard" );
 	_board_y = HEIGHT_F;
-	_board_up_count = 0;
-	_board_down_count = 0;
+	_board_count = 0;
 }
 
 Profiling::~Profiling( ) {
@@ -76,23 +71,13 @@ void Profiling::calcBoardPos( ) {
 		return;
 	}
 
-	bool up = true;
+	_board_count++;
 
-	// 上昇しきったかどうか
-	//if ( UP_TIME <= _board_up_count ) {
-	//	up = false;
-	//}
-
-	// 上昇か下降
-	if ( up ) {
-		_board_up_count++;
-		float t = ( float )( _board_up_count / FPS );
-
-		_board_y = -( INITIAL_VELOCITY * t - ( ACCELERATION * ( t * t ) ) / 2 ) + HEIGHT; // x = V0t + at^2 / 2 + 初期地点
-
-	} else {
-		_board_down_count++;
+	if ( _board_count >= FPS * TOTAL_TIME ) {
+		_board_count = FPS * TOTAL_TIME;
 	}
+
+	_board_y = INITIAL_VELOCITY * _board_count + 0.5 * ACCELERATION * _board_count * _board_count + HEIGHT; // x = V0t + at^2 / 2 + 初期地点
 }
 
 bool Profiling::isActive( ) const {

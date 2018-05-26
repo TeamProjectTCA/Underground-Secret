@@ -33,8 +33,7 @@ private:
 	int _back_button;
 	int _board_handle;
 	float _board_y;
-	int _board_up_count;
-	int _board_down_count;
+	int _board_count;
 
 	MousePtr _mouse;
 	DrawerPtr _drawer;
