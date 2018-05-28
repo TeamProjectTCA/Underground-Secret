@@ -10,6 +10,7 @@ PTR( Map );
 PTR( CharacterManager );
 PTR( Phase );
 PTR( Scroll );
+PTR( Debug );
 
 class SceneGame : public Scene {
 public:
@@ -18,6 +19,7 @@ public:
 	
 public:
 	void update( );
+	void draw( );
 
 private:
 	void updatePhaseStart( );
@@ -35,5 +37,6 @@ private:
 	CharacterManagerPtr _char_manager;
 	PhasePtr _run_phase;
 	ScrollPtr _scroll;
+	DebugConstPtr _debug;
 };
 

@@ -12,7 +12,7 @@ public:
 
 public:
 	void update( );
-	void draw( );
+	void draw( ) const;
 
 private:
 	void calcActiveButton( );

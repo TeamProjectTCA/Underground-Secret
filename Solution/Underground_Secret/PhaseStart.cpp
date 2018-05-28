@@ -31,34 +31,38 @@ PhaseStart::~PhaseStart( ) {
 }
 
 void PhaseStart::update( ) {
-	if ( _run_idx < ( int )_chara.size( ) ) {
-		// betaポイントよりxが小さければ移動
-		if ( _run_chara->getPos( ).x < _end_point.x ) {
-			_run_chara->move( Vector( MOVE, 0 ) );
-		} else {
-		// betaポイントに到達したらopenアニメーション
-			if ( !_open_animation ) {
-				_run_chara->setAnim( Character::OPEN );
-				_open_animation = true;
-			}
-			_open_animation_count++;
-
-			// アニメーション終了
-			if ( _open_animation_count > OPEN_ANIMATION_TIME ) {
-				_open_animation_count = 0;
-				_open_animation = false;
-				_run_idx++;
-				_run_chara->setFixedpoint( PHASE_PLAY );
-				changeRunCharacter( );
-				return;
-			}
-		}
-
-		_run_chara->draw( );
-	} else {
-		// フェイズを変える
+	// 全キャラの演出終了で遷移
+	if ( _run_idx >= ( int )_chara.size( ) ) {
 		setPhase( PHASE_PLAY );
+		return;
 	}
+
+	// betaポイントよりxが小さければ移動
+	if ( _run_chara->getPos( ).x < _end_point.x ) {
+		_run_chara->move( Vector( MOVE, 0 ) );
+		return;
+	}
+
+	// betaポイントに到達したらopenアニメーション
+	if ( !_open_animation ) {
+		_run_chara->setAnim( Character::OPEN );
+		_open_animation = true;
+	}
+	_open_animation_count++;
+
+	// アニメーション終了
+	if ( _open_animation_count > OPEN_ANIMATION_TIME ) {
+		_open_animation_count = 0;
+		_open_animation = false;
+		_run_idx++;
+		_run_chara->setFixedpoint( PHASE_PLAY );
+		changeRunCharacter( );
+		return;
+	}
+}
+
+void PhaseStart::draw( ) const {
+	_run_chara->draw( );
 }
 
 void PhaseStart::changeRunCharacter( ) {

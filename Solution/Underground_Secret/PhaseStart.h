@@ -17,6 +17,7 @@ public:
 
 public:
 	void update( );
+	void draw( ) const;
 
 private:
 	void changeRunCharacter( );

@@ -4,7 +4,6 @@
 
 PTR( CharaDummy );
 PTR( Map );
-PTR( Debug );
 PTR( Infomation );
 
 class CharaDummy : public Character {
@@ -28,7 +27,5 @@ private:
 	MOVE_DIRECTION _dir;
 	Vector _distance;
 	bool _ride_elevator;
-
-	DebugPtr _debug;
 };
 

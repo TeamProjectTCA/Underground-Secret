@@ -16,14 +16,14 @@ public:
 
 public:
 	void update( );
+	void draw( ) const;
 
 private:
 	void countClear( );
 	void setEnd( );
 
 private:
-	void draw( );
-	void drawTime( );
+	void drawTime( ) const;
 
 private:
 	std::list< CharacterPtr > _chara;

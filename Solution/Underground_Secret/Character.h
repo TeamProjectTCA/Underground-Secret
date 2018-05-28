@@ -9,6 +9,7 @@
 PTR( Character );
 PTR( Drawer );
 PTR( Map );
+PTR( Debug );
 
 enum MOVE_DIRECTION {
 	MOVE_RIGHT,
@@ -58,7 +59,7 @@ public:
 	void setAnim( ANIM_TYPE type );
 	void setAnimTime( int change_time );
 	void setFixedpoint( PHASE phase );
-	void changeDebugMode( );
+	void setScroll( );
 
 public:
 	// à⁄ìÆèàóù
@@ -85,9 +86,9 @@ protected:
 protected:
 	MapPtr _map;
 	DrawerPtr _drawer;
+	DebugPtr _debug;
 
 private:
-	bool _debug;
 	bool _spy;
 	Vector _pos;
 	std::map< ANIM_TYPE, Animation > _anim;

@@ -20,9 +20,7 @@ public:
 
 public:
 	void update( );
-
-public:
-	void setPhase( PHASE phase );
+	void draw( ) const;
 
 public:
 	Vector getFixedpointAlpha( PHASE phase ) const;
@@ -35,7 +33,6 @@ public:
 	bool isHitShutter( int detection_idx ) const;
 
 private:
-	void draw( );
 	void loadMap( );
 	void setFixedpoint( );
 	void setShutter( );
@@ -50,7 +47,6 @@ private:
 	int _stage;
 	int _row;
 	int _col;
-	PHASE _phase;
 	bool _debug_mode;
 	std::string _data;
 	Vector _fixedpoint_alpha_start;

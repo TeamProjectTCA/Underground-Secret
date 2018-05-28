@@ -26,10 +26,10 @@ Debug::~Debug( ) {
 void Debug::initialize( ) {
 	_keyboard = Keyboard::getTask( );
 	_drawer = Drawer::getTask( );
-	_log.push_back( "test" );
 }
 
 void Debug::update( ) {
+	clearLog( );
 	if ( _keyboard->getKeyDown( "SPACE" ) ) {
 		_debug = !_debug;
 	}
@@ -47,7 +47,7 @@ void Debug::drawLog( ) const {
 	ite = _log.begin( );
 	int y = FONT_SIZE;
 	for ( ite; ite != _log.end( ); ite++ ) {
-		_drawer->drawString( LOG_X, y, ( *ite ).c_str( ), RED );
+		_drawer->drawString( ( float )LOG_X, ( float )y, ( *ite ).c_str( ), YELLOW );
 		y += FONT_SIZE;
 	}
 }

@@ -7,6 +7,9 @@ Phase::Phase( ) {
 Phase::~Phase( ) {
 }
 
+void Phase::draw( ) const {
+}
+
 void Phase::setPhase( PHASE phase ) {
 	_phase = phase;
 }

@@ -30,11 +30,9 @@ Profiling::~Profiling( ) {
 void Profiling::update( ) {
 	calcActiveButton( );
 	calcBoardPos( );
-
-	draw( );
 }
 
-void Profiling::draw( ) {
+void Profiling::draw( ) const {
 	drawActiveButton( );
 	drawBoard( );
 	drawHint( );
@@ -104,10 +102,10 @@ void Profiling::calcBoardPos( ) {
 	_board_count++;
 
 	if ( _board_count >= FPS * TOTAL_TIME ) {
-		_board_count = FPS * TOTAL_TIME;
+		_board_count = ( int )( FPS * TOTAL_TIME );
 	}
 
-	_board_y = INITIAL_VELOCITY * _board_count + 0.5 * ACCELERATION * _board_count * _board_count + HEIGHT; // x = V0t + at^2 / 2 + 初期地点
+	_board_y = ( float )( INITIAL_VELOCITY * _board_count + 0.5 * ACCELERATION * _board_count * _board_count + HEIGHT ); // x = V0t + at^2 / 2 + 初期地点
 }
 
 bool Profiling::isActive( ) const {

@@ -7,6 +7,7 @@
 #include "PhasePlay.h"
 #include "PhaseEnd.h"
 #include "Scroll.h"
+#include "Debug.h"
 
 const int ONE_STAGE_CHARACTER_NUM = 1;
 
@@ -14,6 +15,7 @@ SceneGame::SceneGame( int stage ) :
 _stage( stage ) {
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
+	_debug = Debug::getTask( );
 	_scroll = ScrollPtr( new Scroll( ) );
 	_map = MapPtr( new Map( _stage, _scroll ) );
 	_char_manager = CharacterManagerPtr( new CharacterManager( _map ) );
@@ -32,7 +34,7 @@ SceneGame::~SceneGame( ) {
 
 void SceneGame::update( ) {
 	_map->update( );
-	_run_phase->update( );
+
 	// phase ‚É‚æ‚Á‚Ä•Ï‚í‚éˆ—( ŠO•”ƒNƒ‰ƒX )
 	switch ( _phase ) {
 	case PHASE_START:
@@ -50,19 +52,26 @@ void SceneGame::update( ) {
 	default:
 		break;
 	}
-	_drawer->flip( );
+	_run_phase->update( );
 
 	PHASE next = _run_phase->getPhase( );
-	if ( next == PHASE_CONTINUE ) {
-		return;
-	}
-
-	if ( _phase != next ) {
+	if ( next != PHASE_CONTINUE && _phase != next ) {
 		_phase = next;
 		changePhase( );
-		_map->setPhase( _phase );
 	}
 
+	draw( );
+}
+
+void SceneGame::draw( ) {
+	_map->draw( );
+	if ( _phase == PHASE_PLAY ) {
+		_char_manager->draw( );
+	}
+	_run_phase->draw( );
+
+	_debug->draw( );
+	_drawer->flip( );
 }
 
 void SceneGame::updatePhaseStart( ) {

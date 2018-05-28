@@ -4,7 +4,6 @@
 
 PTR( SceneManager );
 PTR( Scene );
-PTR( Debug );
 
 class SceneManager : public Base {
 public:
@@ -25,6 +24,5 @@ private:
 
 private:
 	ScenePtr _scene;
-	DebugConstPtr _debug;
 };
 

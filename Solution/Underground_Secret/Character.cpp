@@ -2,6 +2,7 @@
 #include "Drawer.h"
 #include "Map.h"
 #include "const.h"
+#include "Debug.h"
 #include <assert.h>
 #include <errno.h>
 
@@ -13,6 +14,8 @@ const int COLLIDER_ASCIICODE_MAX = '9';
 const int ELEVATOR_ASCIICODE_MAX = 'z';
 const int ENDPOINT_ASCIICODE = '6';
 const int CHANGE_ASCIICODE = 'a' - 'A';
+const int SCREEN_WIDTH_BLOCK_NUM = WIDTH / BLOCK_SIZE;
+const int SCREEN_HEIGHT_BLOCK_NUM = HEIGHT / BLOCK_SIZE;
 
 Character::Character( MapPtr map, std::vector< std::string > info ) :
 _map( map ),
@@ -24,9 +27,9 @@ _anim_cnt( 0 ),
 _sx( 0 ),
 _max_cnt( DEFAULT_MAX_COUNT ),
 _pos( Vector( ) ),
-_scroll( Vector( ) ),
-_debug( false ) {
+_scroll( Vector( ) ) {
 	_drawer = Drawer::getTask( );
+	_debug = Debug::getTask( );
 }
 
 Character::~Character( ) {
@@ -63,8 +66,8 @@ void Character::setFixedpoint( PHASE phase ) {
 	_pos = pos - Vector( 0, _anim[ _anim_type ].height );
 }
 
-void Character::changeDebugMode( ) {
-	_debug = !_debug;
+void Character::setScroll( ) {
+	_scroll = _map->getScrollData( );
 }
 
 void Character::move( Vector move ) {
@@ -80,12 +83,8 @@ bool Character::isLooking( Vector pos ) const {
 	int screen_x = ( int )( _scroll.x * -1 );
 	int screen_y = ( int )( _scroll.y * -1 );
 
-	// スクリーンのサイズからブロック数を出す
-	int col = WIDTH  / BLOCK_SIZE;
-	int row = HEIGHT / BLOCK_SIZE;
-
-	if ( screen_x < x && x < screen_x + col &&
-		 screen_y < y && y < screen_y + row ) {
+	if ( screen_x < x && x < screen_x + SCREEN_WIDTH_BLOCK_NUM &&
+		 screen_y < y && y < screen_y + SCREEN_HEIGHT_BLOCK_NUM ) {
 		return true;
 	}
 	return false;
@@ -132,7 +131,7 @@ int Character::getMapDataCollider( Vector pos ) const {
 	data -= COLLIDER_ASCIICODE_MIN;
 
 	// 当たり判定を見ている場所を表示(debug)
-	 if ( _debug ) {
+	 if ( _debug->isDebug( ) ) {
 		 // 左右
 		 const unsigned int CHECK_COLOR_X = BLUE;
 		 const unsigned int CHECK_COLOR_Y = YELLOW;
@@ -176,9 +175,6 @@ void Character::draw( ) {
 	if ( _anim.find( _anim_type ) == _anim.end( ) ) {
 		return;
 	}
-	
-	// スクロールでずれた分を取得
-	_scroll = _map->getScrollData( );
 
 	// カウントを進める
 	_anim_cnt = ( _anim_cnt + 1 ) % _max_cnt;

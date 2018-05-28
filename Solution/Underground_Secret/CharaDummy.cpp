@@ -9,7 +9,6 @@ const int MOVE_RATE_Y = BLOCK_SIZE;
 
 CharaDummy::CharaDummy( MapPtr map, InfomationPtr info ) :
 Character( map, info->getInfo( CHARA_DUMMY ) ) {
-	_debug = Debug::getTask( );
 
 	addAnim( Character::WALK, "CharaDummy_Walk", 2 );
 	addAnim( Character::OPEN, "CharaDummy_Open", 2 );
@@ -24,14 +23,16 @@ CharaDummy::~CharaDummy( ) {
 }
 
 void CharaDummy::update( ) {
+	setScroll( );
 	_dir = MOVE_RIGHT;
 	walk( );
 	fall( );
 	countLooking( );
 	checkCaughtCollider( );
 
+	// debug
 	if ( _debug->isDebug( ) ) {
-		_drawer->drawString( 10, 100, "ŠÄŽ‹ŽžŠÔ" + std::to_string( _looking_time / FPS ) + "•b", RED );
+		_debug->addLog( "ŠÄŽ‹ŽžŠÔ:" + std::to_string( _looking_time / FPS ) + "•b" );
 	}
 }
 

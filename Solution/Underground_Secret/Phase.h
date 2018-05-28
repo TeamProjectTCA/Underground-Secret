@@ -18,6 +18,7 @@ public:
 
 public:
 	virtual void update( ) = 0;
+	virtual void draw( ) const;
 	virtual void setPhase( PHASE phase );
 	virtual PHASE getPhase( ) const;
 

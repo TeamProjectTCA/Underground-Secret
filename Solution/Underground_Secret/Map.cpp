@@ -43,7 +43,6 @@ _scroll( scroll ) {
 	_fixedpoint_beta_start = Vector( );
 	_fixedpoint_beta_play  = Vector( );
 	_fixedpoint_beta_end   = Vector( );
-	_phase = PHASE_START;
 
 	// .colファイルから読み込み
 	loadMap( );
@@ -59,21 +58,9 @@ Map::~Map( ) {
 void Map::update( ) {
 	_shutter->setScroll( _scroll->getScroll( ) );
 	_shutter->update( );
-	draw( );
 
-	bool debug = _debug->isDebug( );
-	if ( _debug_mode != debug ) {
-		_debug_mode = debug;
-	}
-
-	if ( _debug_mode ) {
-		drawCollider( );
-		drawTable( );
-	}
-}
-
-void Map::setPhase( PHASE phase ) {
-	_phase = phase;
+	// debug
+	_debug_mode = _debug->isDebug( );
 }
 
 Vector Map::getFixedpointAlpha( PHASE phase ) const {
@@ -138,13 +125,19 @@ bool Map::isHitShutter( int detection_idx ) const {
 	return _shutter->isHitShutter( detection_idx );
 }
 
-void Map::draw( ) {
+void Map::draw( ) const {
 	// マップを描画
 	Vector scroll = _scroll->getScroll( );
 	_drawer->drawGraph( ( int )scroll.x * BLOCK_SIZE, ( int )scroll.y * BLOCK_SIZE, _map_handle, true );
 
 	//シャッターを描画
 	_shutter->draw( );
+
+	// debug
+	if ( _debug_mode ) {
+		drawCollider( );
+		drawTable( );
+	}
 }
 
 void Map::loadMap( ) {

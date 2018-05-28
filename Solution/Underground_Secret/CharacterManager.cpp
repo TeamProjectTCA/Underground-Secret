@@ -1,5 +1,4 @@
 #include "CharacterManager.h"
-#include "Debug.h"
 #include "Map.h"
 #include "Infomation.h"
 #include "CharaA.h"
@@ -10,7 +9,6 @@ CharacterManager::CharacterManager( MapPtr map ) :
 _map( map ) {
 	_debug_mode = false;
 
-	_debug = Debug::getTask( );
 	_info = InfomationPtr( new Infomation( ) );
 }
 
@@ -22,17 +20,14 @@ void CharacterManager::update( ) {
 	ite = _chara.begin( );
 	for ( ite; ite != _chara.end( ); ite++ ) {
 		( *ite )->update( );
-		( *ite )->draw( );
 	}
+}
 
-	bool debug = _debug->isDebug( );
-	if ( _debug_mode != debug ) {
-		_debug_mode = debug;
-
-		ite = _chara.begin( );
-		for ( ite; ite != _chara.end( ); ite++ ) {
-			( *ite )->changeDebugMode( );
-		}
+void CharacterManager::draw( ) const {
+	std::list< CharacterPtr >::const_iterator ite;
+	ite = _chara.begin( );
+	for ( ite; ite != _chara.end( ); ite++ ) {
+		( *ite )->draw( );
 	}
 }
 

@@ -5,7 +5,6 @@
 
 PTR( CharacterManager );
 PTR( Character );
-PTR( Debug );
 PTR( Map );
 PTR( Infomation );
 PTR( CharaA );
@@ -18,6 +17,7 @@ public:
 
 public:
 	void update( );
+	void draw( ) const;
 
 public:
 	void addChara( CharacterPtr ptr );
@@ -34,7 +34,6 @@ private:
 	bool _debug_mode;
 
 	MapPtr _map;
-	DebugPtr _debug;
 	InfomationPtr _info;
 	CharaAPtr _chara_a;
 	CharaDummyPtr _chara_dummy1;
