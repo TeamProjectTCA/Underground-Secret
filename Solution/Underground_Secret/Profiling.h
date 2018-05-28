@@ -21,6 +21,7 @@ private:
 private:
 	void drawActiveButton( ) const;
 	void drawBoard( ) const;
+	void drawHint( ) const;
 
 public:
 	bool isActive( ) const;
