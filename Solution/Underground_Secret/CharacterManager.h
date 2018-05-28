@@ -1,5 +1,6 @@
 #pragma once
 #include "smart_ptr.h"
+#include "const.h"
 #include <list>
 
 PTR( CharacterManager );
@@ -17,8 +18,16 @@ public:
 
 public:
 	void update( );
+
+public:
 	void addChara( CharacterPtr ptr );
+	void setChara( int num );
+
+public:
 	std::list< CharacterPtr > getChara( );
+
+private:
+	CharacterPtr getCharaInstance( CHARACTER chara_idx );
 	
 private:
 	std::list< CharacterPtr > _chara;

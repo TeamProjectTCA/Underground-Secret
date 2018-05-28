@@ -4,6 +4,7 @@
 #include "Infomation.h"
 #include "CharaA.h"
 #include "CharaDummy.h"
+#include "Random.h"
 
 CharacterManager::CharacterManager( MapPtr map ) :
 _map( map ) {
@@ -11,16 +12,6 @@ _map( map ) {
 
 	_debug = Debug::getTask( );
 	_info = InfomationPtr( new Infomation( ) );
-
-	_chara_a = CharaAPtr( new CharaA( _map, _info ) );
-
-	// debug
-	_chara_dummy1 = CharaDummyPtr( new CharaDummy( _map, _info ) );
-	_chara_dummy2 = CharaDummyPtr( new CharaDummy( _map, _info ) );
-	_chara_dummy3 = CharaDummyPtr( new CharaDummy( _map, _info ) );
-	addChara( _chara_dummy1 );
-	//addChara( _chara_dummy2 );
-	//addChara( _chara_dummy3 );
 }
 
 CharacterManager::~CharacterManager( ) {
@@ -49,6 +40,33 @@ void CharacterManager::addChara( CharacterPtr ptr ) {
 	_chara.push_back( ptr );
 }
 
+void CharacterManager::setChara( int num ) {
+	RandomPtr random = RandomPtr( new Random( ) );
+	random->setRange( 0, CHARA_MAX - 1 );
+
+	for ( int i = 0; i < num; i++ ) {
+		// óêêîÇ≈ê∂ê¨ÉLÉÉÉâÇÃî‘çÜÇéÊìæ
+		int chara_idx = random->getInt32( );
+
+		CharacterPtr chara = getCharaInstance( ( CHARACTER )chara_idx );
+		// errorèàóù
+		if ( chara == CharacterPtr( ) ) {
+			continue;
+		}
+
+		// addÇ∑ÇÈ
+		addChara( chara );
+	}
+}
+
 std::list< CharacterPtr > CharacterManager::getChara( ) {
 	return _chara;
+}
+
+CharacterPtr CharacterManager::getCharaInstance( CHARACTER chara_idx ) {
+	switch ( chara_idx ) {
+	case CHARA_A    : return CharaAPtr    ( new CharaA    ( _map, _info ) );
+	case CHARA_DUMMY: return CharaDummyPtr( new CharaDummy( _map, _info ) );
+	}
+	return CharacterPtr( );
 }

@@ -8,6 +8,8 @@
 #include "PhaseEnd.h"
 #include "Scroll.h"
 
+const int ONE_STAGE_CHARACTER_NUM = 1;
+
 SceneGame::SceneGame( int stage ) :
 _stage( stage ) {
 	_drawer = Drawer::getTask( );
@@ -15,6 +17,7 @@ _stage( stage ) {
 	_scroll = ScrollPtr( new Scroll( ) );
 	_map = MapPtr( new Map( _stage, _scroll ) );
 	_char_manager = CharacterManagerPtr( new CharacterManager( _map ) );
+	_char_manager->setChara( ONE_STAGE_CHARACTER_NUM );
 
 	// ƒXƒNƒ[ƒ‹‚É col,row ‚ð‹l‚ß‚é
 	_scroll->setCol( _map->getCol( ) );

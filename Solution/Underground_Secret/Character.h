@@ -88,11 +88,12 @@ protected:
 
 private:
 	bool _debug;
+	bool _spy;
 	Vector _pos;
 	std::map< ANIM_TYPE, Animation > _anim;
 	int _anim_change_time;
+	int _anim_cnt;
 	int _max_cnt;
-	int _cnt;
 	int _sx;
 	Vector _scroll;
 	ANIM_TYPE _anim_type;

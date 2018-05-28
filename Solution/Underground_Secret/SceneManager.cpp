@@ -3,6 +3,7 @@
 #include "SceneTitle.h"
 #include "SceneGame.h"
 #include "SceneStageSelect.h"
+#include "Debug.h"
 
 SceneManagerPtr SceneManager::getTask( ) {
 	return std::dynamic_pointer_cast< SceneManager >( Manager::getInstance( )->getTask( getTag( ) ) );
@@ -20,6 +21,7 @@ SceneManager::~SceneManager( ) {
 
 void SceneManager::initialize( ) {
 	_scene = SceneTitlePtr( new SceneTitle( ) );
+	_debug = Debug::getTask( );
 }
 
 void SceneManager::finalize( ) {
@@ -27,6 +29,7 @@ void SceneManager::finalize( ) {
 
 void SceneManager::update( ) {
 	_scene->update( );
+	_debug->draw( );
 
 	changeScene( );
 }

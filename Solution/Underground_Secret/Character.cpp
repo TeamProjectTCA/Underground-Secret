@@ -16,18 +16,17 @@ const int CHANGE_ASCIICODE = 'a' - 'A';
 
 Character::Character( MapPtr map, std::vector< std::string > info ) :
 _map( map ),
-_info( info ) {
+_info( info ),
+_spy( false ),
+_anim_type( WALK ),
+_anim_change_time( DEFAULT_ANIM_TIME ),
+_anim_cnt( 0 ),
+_sx( 0 ),
+_max_cnt( DEFAULT_MAX_COUNT ),
+_pos( Vector( ) ),
+_scroll( Vector( ) ),
+_debug( false ) {
 	_drawer = Drawer::getTask( );
-	
-	_anim_type = WALK;
-	_anim_change_time = DEFAULT_ANIM_TIME;
-
-	_cnt = 0;
-	_sx = 0;
-	_max_cnt = DEFAULT_MAX_COUNT;
-	_pos = Vector( );
-	_scroll = Vector( );
-	_debug = false;
 }
 
 Character::~Character( ) {
@@ -51,7 +50,7 @@ void Character::setAnim( ANIM_TYPE type ) {
 
 	_anim_type = type;
 	_max_cnt = _anim[ _anim_type ].frame * _anim_change_time;
-	_cnt = 0;
+	_anim_cnt = 0;
 }
 
 void Character::setAnimTime( int change_time ) {
@@ -73,17 +72,20 @@ void Character::move( Vector move ) {
 }
 
 bool Character::isLooking( Vector pos ) const {
-	int width  = _anim.find( _anim_type )->second.width / 2;
-	int height = _anim.find( _anim_type )->second.height / 2;
-	Vector central    = pos + _scroll + Vector( width, height );
-	Vector left_up    = central + Vector( -width, -height ); 
-	Vector right_up   = central + Vector(  width, -height );
-	Vector left_down  = central + Vector( -width,  height );
-	Vector right_down = central + Vector(  width,  height );
-	if ( ( 0 <=    left_up.x &&    left_up.x <= WIDTH && 0 <=    left_up.y &&    left_up.y <= HEIGHT) ||
-		 ( 0 <=  left_down.x &&  left_down.x <= WIDTH && 0 <=  left_down.y &&  left_down.y <= HEIGHT) ||
-		 ( 0 <=   right_up.x &&   right_up.x <= WIDTH && 0 <=   right_up.y &&   right_up.y <= HEIGHT) ||
-		 ( 0 <= right_down.x && right_down.x <= WIDTH && 0 <= right_down.y && right_down.y <= HEIGHT) ) {
+	// キャラの中心のブロックの x, y
+	int x = ( int )( pos.x / BLOCK_SIZE ) + ( int )_anim.find( _anim_type )->second.width / BLOCK_SIZE / 2;
+	int y = ( int )( pos.y / BLOCK_SIZE ) + ( int )_anim.find( _anim_type )->second.height / BLOCK_SIZE / 2;
+
+	// スクリーンの左上座標
+	int screen_x = ( int )( _scroll.x * -1 );
+	int screen_y = ( int )( _scroll.y * -1 );
+
+	// スクリーンのサイズからブロック数を出す
+	int col = WIDTH  / BLOCK_SIZE;
+	int row = HEIGHT / BLOCK_SIZE;
+
+	if ( screen_x < x && x < screen_x + col &&
+		 screen_y < y && y < screen_y + row ) {
 		return true;
 	}
 	return false;
@@ -175,12 +177,15 @@ void Character::draw( ) {
 		return;
 	}
 	
+	// スクロールでずれた分を取得
 	_scroll = _map->getScrollData( );
-	_cnt = ( _cnt + 1 ) % _max_cnt;
 
-	if ( _cnt % _anim_change_time == 0 ) {
+	// カウントを進める
+	_anim_cnt = ( _anim_cnt + 1 ) % _max_cnt;
+
+	if ( _anim_cnt % _anim_change_time == 0 ) {
 		// 画像を切り替える( 左端をずらす )
-		_sx = ( ( _cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
+		_sx = ( ( _anim_cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
 	}
 
 	_drawer->drawRectGraph( 
