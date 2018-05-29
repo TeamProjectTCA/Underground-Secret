@@ -45,7 +45,7 @@ void PhaseStart::update( ) {
 
 	// betaポイントに到達したらopenアニメーション
 	if ( !_open_animation ) {
-		_run_chara->setAnim( Character::OPEN );
+		_run_chara->setAnim( Character::ANIM_OPEN );
 		_open_animation = true;
 	}
 	_open_animation_count++;
@@ -56,6 +56,7 @@ void PhaseStart::update( ) {
 		_open_animation = false;
 		_run_idx++;
 		_run_chara->setFixedpoint( PHASE_PLAY );
+		_run_chara->setAnim( Character::ANIM_WALK );
 		changeRunCharacter( );
 		return;
 	}

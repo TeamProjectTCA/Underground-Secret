@@ -20,7 +20,7 @@ const int SCREEN_HEIGHT_BLOCK_NUM = HEIGHT / BLOCK_SIZE;
 Character::Character( MapPtr map, std::vector< std::string > info ) :
 _map( map ),
 _info( info ),
-_anim_type( WALK ),
+_anim_type( ANIM_WALK ),
 _anim_change_time( DEFAULT_ANIM_TIME ),
 _anim_cnt( 0 ),
 _sx( 0 ),

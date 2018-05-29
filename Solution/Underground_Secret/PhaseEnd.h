@@ -19,6 +19,8 @@ public:
 
 private:
 	Vector _endpoint;
+	Vector _move;
+	int _count;
 
 	CharacterPtr _spy;
 	MapPtr _map;

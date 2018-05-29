@@ -21,8 +21,8 @@ enum MOVE_DIRECTION {
 class Character {
 public:
 	enum ANIM_TYPE {
-		WALK,
-		OPEN,
+		ANIM_WALK,
+		ANIM_OPEN,
 		ANIM_TYPE_MAX,
 	};
 

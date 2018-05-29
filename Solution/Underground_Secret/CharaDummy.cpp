@@ -15,9 +15,9 @@ _ride_elevator( false ),
 _return_move( false ) {
 	_random = RandomPtr( new Random( ) );
 
-	addAnim( Character::WALK, "CharaDummy_Walk", 2 );
-	addAnim( Character::OPEN, "CharaDummy_Open", 2 );
-	setAnim( Character::WALK );
+	addAnim( Character::ANIM_WALK, "CharaDummy_Walk", 2 );
+	addAnim( Character::ANIM_OPEN, "CharaDummy_Open", 2 );
+	setAnim( Character::ANIM_WALK );
 
 	_dir = MOVE_RIGHT;
 	setDistance( );
