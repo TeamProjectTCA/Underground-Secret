@@ -62,7 +62,7 @@ void Character::setAnimTime( int change_time ) {
 
 void Character::setFixedpoint( PHASE phase ) {
 	Vector pos = _map->getFixedpointAlpha( phase );
-	_pos = pos - Vector( 0, _anim[ _anim_type ].height );
+	_pos = pos;
 }
 
 void Character::setScroll( ) {
@@ -75,8 +75,8 @@ void Character::move( Vector move ) {
 
 bool Character::isLooking( Vector pos ) const {
 	// キャラの中心のブロックの x, y
-	int x = ( int )( pos.x / BLOCK_SIZE ) + ( int )_anim.find( _anim_type )->second.width / BLOCK_SIZE / 2;
-	int y = ( int )( pos.y / BLOCK_SIZE ) + ( int )_anim.find( _anim_type )->second.height / BLOCK_SIZE / 2;
+	int x = ( int )( pos.x / BLOCK_SIZE );
+	int y = ( int )( ( pos.y - _anim.find( _anim_type )->second.height / 2 ) / BLOCK_SIZE );
 
 	// スクリーンの左上座標
 	int screen_x = ( int )( _scroll.x * -1 );
@@ -110,8 +110,7 @@ int Character::getMapDataCollider( Vector pos ) const {
 	int data = -1;
 
 	Vector position = pos;
-	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
-	position.y += ( int )_anim.find( _anim_type )->second.height - 1; //ぴったりになってしまうのを防ぐ
+	position.y -= 1; //ぴったりになってしまうのを防ぐ
 
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 
@@ -134,24 +133,6 @@ int Character::getMapDataCollider( Vector pos ) const {
 
 	data -= COLLIDER_ASCIICODE_MIN;
 
-	// 当たり判定を見ている場所を表示(debug)
-	 if ( _debug->isDebug( ) ) {
-		 // 左右
-		 const unsigned int CHECK_COLOR_X = BLUE;
-		 const unsigned int CHECK_COLOR_Y = YELLOW;
-		 unsigned int color = CHECK_COLOR_X;
-		 if ( pos.y > _pos.y || pos.y < _pos.y ) {
-			 color = CHECK_COLOR_Y;
-		 }
-
-		_drawer->drawBox(
-			( float )( idx % _map->getCol( ) + _scroll.x ) * BLOCK_SIZE, 
-			( float )( idx / _map->getCol( ) + _scroll.y ) * BLOCK_SIZE,
-			( float )( idx % _map->getCol( ) + _scroll.x + 1 ) * BLOCK_SIZE, 
-			( float )( idx / _map->getCol( ) + _scroll.y + 1 ) * BLOCK_SIZE,
-			color, true );
-	 }
-
 	return data;
 }
 
@@ -159,8 +140,7 @@ int Character::getMapDataElevator( Vector pos ) const {
 	int data = -1;
 
 	Vector position = pos;
-	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
-	position.y += ( int )_anim.find( _anim_type )->second.height - 1; //ぴったりになってしまうのを防ぐ
+	position.y -= 1; //ぴったりになってしまうのを防ぐ
 
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 
@@ -187,8 +167,10 @@ void Character::draw( ) {
 		_sx = ( ( _anim_cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
 	}
 
+
+	Vector pos = Vector( _pos.x - _anim[ _anim_type ].width / 2, _pos.y - _anim[ _anim_type ].height );
 	_drawer->drawRectGraph( 
-		( float )( _pos.x + _scroll.x * BLOCK_SIZE ), ( float )( _pos.y + _scroll.y * BLOCK_SIZE ),
+		( float )( pos.x + _scroll.x * BLOCK_SIZE ), ( float )( pos.y + _scroll.y * BLOCK_SIZE ),
 		_sx, 0,
 		_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
 		_anim[ _anim_type ].handle,
@@ -198,9 +180,10 @@ void Character::draw( ) {
 void Character::setFallPos( Vector now_position ) {
 	Vector position = now_position;
 
-	position.y += ( int )_anim.find( _anim_type )->second.height;
 	int idx = ( int )( position.y / BLOCK_SIZE );
-	position.y = ( idx * BLOCK_SIZE ) - _anim[ _anim_type ].height;
+
+	// ぴったりにそろえる
+	position.y = ( idx * BLOCK_SIZE );
 
 	_pos.y = position.y;
 }
@@ -229,8 +212,7 @@ void Character::setElevatorPos( int ascii ) {
 
 void Character::checkCaughtCollider( ) {
 	Vector position = _pos;
-	position.x += ( int )_anim.find( _anim_type )->second.width / 2;
-	position.y += ( int )_anim.find( _anim_type )->second.height - 1;
+	position.y -= 1;
 
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 
@@ -242,7 +224,7 @@ void Character::checkCaughtCollider( ) {
 		return;
 	}
 
-	_pos = Vector( _pos.x, ( idx / _map->getCol( ) ) * BLOCK_SIZE  - _anim[ _anim_type ].height );
+	_pos = Vector( _pos.x, ( idx / _map->getCol( ) ) * BLOCK_SIZE );
 
 
 	// 再起

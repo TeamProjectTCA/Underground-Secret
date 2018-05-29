@@ -96,7 +96,7 @@ void SceneGame::changePhase( ) {
 		break;
 
 	case PHASE_END:
-		_run_phase = PhaseEndPtr( new PhaseEnd( ) );
+		_run_phase = PhaseEndPtr( new PhaseEnd( _char_manager->getChara( ), _char_manager->getSpyIdx( ), _map ) );
 		break;
 
 	default:

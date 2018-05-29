@@ -144,7 +144,6 @@ void CharaDummy::checkElevator( ) {
 		return;
 	}
 
-
 	setElevatorPos( data );
 	_ride_elevator = true;
 }

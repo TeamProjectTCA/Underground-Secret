@@ -24,7 +24,7 @@ private:
 
 private:
 	std::list< CharacterPtr > _chara;
-	Vector _end_point;
+	Vector _endpoint;
 	int _run_idx;
 	int _open_animation_count;
 	bool _open_animation;

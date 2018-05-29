@@ -90,7 +90,7 @@ protected:
 	DebugPtr _debug;
 
 private:
-	Vector _pos;
+	Vector _pos; // キャラクタの足元中心座標
 	std::map< ANIM_TYPE, Animation > _anim;
 	int _anim_change_time;
 	int _anim_cnt;
