@@ -11,13 +11,14 @@ const float WIDTH_F = ( float )WIDTH;
 const float HEIGHT_F = ( float )HEIGHT;
 
 // êF
-const unsigned int RED = 0xff0000;
-const unsigned int GREEN = 0x00ff00;
-const unsigned int BLUE = 0x0000ff;
-const unsigned int YELLOW = 0xffff00;
+const unsigned int RED     = 0xff0000;
+const unsigned int GREEN   = 0x00ff00;
+const unsigned int BLUE    = 0x0000ff;
+const unsigned int YELLOW  = 0xffff00;
 const unsigned int MAGENTA = 0xff00ff;
-const unsigned int WATER = 0x00ffff;
-const unsigned int GRAY = 0x3b3b3b;
+const unsigned int WATER   = 0x00ffff;
+const unsigned int GRAY    = 0x3b3b3b;
+const unsigned int WHITE   = 0xffffff;
 
 // ÉtÉåÅ[ÉÄêî
 const int FPS = 60;

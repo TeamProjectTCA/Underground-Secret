@@ -205,6 +205,10 @@ void Character::setFallPos( Vector now_position ) {
 	_pos.y = position.y;
 }
 
+std::vector< std::string > &Character::getInfo( ) {
+	return _info;
+}
+
 void Character::setPos( Vector pos ) {
 	_pos = pos;
 }

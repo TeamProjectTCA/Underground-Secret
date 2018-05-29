@@ -71,6 +71,7 @@ public:
 	int getMapDataElevator( Vector pos ) const;
 	bool isLooking( Vector pos ) const;
 	bool isEndpoint( Vector pos ) const;
+	std::vector< std::string > &getInfo( );
 
 public:
 	void draw( );

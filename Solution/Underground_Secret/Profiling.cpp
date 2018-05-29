@@ -12,7 +12,10 @@ const float TOTAL_TIME = 1.1f; //ボードが出現から止まるまでの時間（秒）
 const float NONACTIVE_BOARD_Y = HEIGHT;
 const int BOARD_EXIT_SPEED = 50;
 
-Profiling::Profiling( ) {
+Profiling::Profiling( std::vector< std::string > &profiling ) :
+_profiling( profiling ),
+_board_count( 0 ),
+_board_y( HEIGHT_F ) {
 	_mouse = Mouse::getTask( );
 	_drawer = Drawer::getTask( );
 	_active_button_handle = _drawer->getImage( "Profiling" );
@@ -20,8 +23,8 @@ Profiling::Profiling( ) {
 	_active_button_height = _drawer->getImageHeight( "Profiling" );
 	_back_button = _drawer->getImage( "back" );
 	_board_handle = _drawer->getImage( "ProfilingBoard" );
-	_board_y = HEIGHT_F;
-	_board_count = 0;
+	_board_width = _drawer->getImageWidth( "ProfilingBoard" );
+	_board_height = _drawer->getImageHeight( "ProfilingBoard" );
 }
 
 Profiling::~Profiling( ) {
@@ -35,7 +38,7 @@ void Profiling::update( ) {
 void Profiling::draw( ) const {
 	drawActiveButton( );
 	drawBoard( );
-	drawHint( );
+	drawProfiling( );
 }
 
 void Profiling::drawActiveButton( ) const {
@@ -48,24 +51,18 @@ void Profiling::drawActiveButton( ) const {
 }
 
 void Profiling::drawBoard( ) const {
-	int _board_width = _drawer->getImageWidth("ProfilingBoard");
 	_drawer->drawGraph( ( float )( WIDTH_F - _board_width) / 2, _board_y, _board_handle, true);
-
-	_drawer->drawFormatString( 20, 100, RED, "%.lf", _board_y );
 }
 
-void Profiling::drawHint( ) const {
-	int _hint_count = 5;
-	int _board_height = _drawer->getImageHeight("ProfilingBoard");
-	int _hint_width = 300;
-	int _hint_height = 50;
-	int _hint_interval = _hint_height / 2;
-	float _hint_x = ( float )( WIDTH_F - _hint_width ) / 2;
-	float _hint_start_y = ( float )( _board_height - _hint_height * _hint_count - _hint_interval * ( _hint_count - 1 ) ) / 2 + _board_y;
-	for ( int i = 0; i < _hint_count; i++ ) {
-		float _hint_y = _hint_start_y + i * (_hint_height + _hint_interval);
-		_drawer->drawBox(_hint_x, _hint_y, _hint_x + _hint_width, _hint_y + _hint_height, BLUE, true);
-		_drawer->drawFormatString(_hint_x + 120, _hint_y + 15, RED, "hint %d", i + 1 );
+void Profiling::drawProfiling( ) const {
+	int size = ( int )_profiling.size( );
+	const float PROFILING_X = WIDTH / 2;
+	const float PITCH = ( float )( _board_height / ( size + 2 ) );
+
+	for ( int i = 0; i < size; i++ ) {
+		// 余白 + i * ピッチ
+		float y = PITCH + _board_y + PITCH * i;
+		_drawer->drawFormatStringCenter( PROFILING_X, y, WHITE, _profiling[ i ].c_str( ) );
 	}
 }
 

@@ -19,7 +19,6 @@ PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, int spy_idx, ScrollPtr s
 _chara( chara ),
 _scroll( scroll ) {
 	_drawer = Drawer::getTask( );
-	_profiling = ProfilingPtr( new Profiling( ) );
 	_time_count = FINISH_TIME * FPS;
 
 	std::list< CharacterPtr >::iterator ite;
@@ -28,6 +27,8 @@ _scroll( scroll ) {
 		ite++;
 	}
 	_spy = ( *ite );
+
+	_profiling = ProfilingPtr( new Profiling( _spy->getInfo( ) ) );
 }
 
 PhasePlay::~PhasePlay( ) {
