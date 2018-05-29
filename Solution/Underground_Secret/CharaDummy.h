@@ -5,6 +5,7 @@
 PTR( CharaDummy );
 PTR( Map );
 PTR( Infomation );
+PTR( Random );
 
 class CharaDummy : public Character {
 public:
@@ -21,11 +22,15 @@ private:
 	void countLooking( );
 	void checkCollider( );
 	void checkElevator( );
+	void returnMove( );
 
 private:
 	int _looking_time;
 	MOVE_DIRECTION _dir;
 	Vector _distance;
 	bool _ride_elevator;
+	bool _return_move;
+
+	RandomPtr _random;
 };
 

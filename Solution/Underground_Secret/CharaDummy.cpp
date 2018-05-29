@@ -3,19 +3,23 @@
 #include "const.h"
 #include "Debug.h"
 #include "Infomation.h"
+#include "Random.h"
 
 const int MOVE_RATE_X = 3;
 const int MOVE_RATE_Y = BLOCK_SIZE;
+const float RANDOM_PROBABILITY = 0.3f;
 
 CharaDummy::CharaDummy( MapPtr map, InfomationPtr info ) :
-Character( map, info->getInfo( CHARA_DUMMY ) ) {
+Character( map, info->getInfo( CHARA_DUMMY ) ),
+_ride_elevator( false ),
+_return_move( false ) {
+	_random = RandomPtr( new Random( ) );
 
 	addAnim( Character::WALK, "CharaDummy_Walk", 2 );
 	addAnim( Character::OPEN, "CharaDummy_Open", 2 );
 	setAnim( Character::WALK );
 
 	_dir = MOVE_RIGHT;
-	_ride_elevator = false;
 	setDistance( );
 }
 
@@ -24,7 +28,6 @@ CharaDummy::~CharaDummy( ) {
 
 void CharaDummy::update( ) {
 	setScroll( );
-	_dir = MOVE_RIGHT;
 	walk( );
 	fall( );
 	countLooking( );
@@ -48,10 +51,15 @@ void CharaDummy::walk( ) {
 }
 
 void CharaDummy::fall( ) {
+	MOVE_DIRECTION past = _dir;
 	_dir = MOVE_DOWN;
 
 	// 進行方向に予測座標をセット
 	setDistance( );
+
+	// 横方向に進行方向を戻す
+	_dir = past;
+
 	bool move_ok = true;
 	
 	int data = getMapDataCollider( getPos( ) + _distance );
@@ -85,8 +93,6 @@ void CharaDummy::countLooking( ) {
 }
 
 void CharaDummy::checkCollider( ) {
-	bool move_ok = true;
-
 	// アスキーコードを取得
 	int data = getMapDataCollider( getPos( ) + _distance );
 
@@ -101,14 +107,17 @@ void CharaDummy::checkCollider( ) {
 		data = getMapDataCollider( getPos( ) + _distance + Vector( 0, -BLOCK_SIZE ) );
 		if ( data == IDENTIFICATION_COLLIDER ) {
 			// 2回目も当たり判定があったら
-			move_ok = false;
+			_return_move = true;
 		} else {
 			_distance += Vector( 0, -BLOCK_SIZE );
 		}
 	}
 
-	if ( !move_ok ) {
-		return;
+	// 方向転換
+	if ( _return_move ) {
+		returnMove( );
+		setDistance( );
+		_return_move = false;
 	}
 
 	// 移動させる	
@@ -125,11 +134,25 @@ void CharaDummy::checkElevator( ) {
 		return;
 	}
 
+	// 乗るか乗らないかの抽選
+	if ( _random->getRealOne( ) > RANDOM_PROBABILITY && !_ride_elevator ) {
+		_ride_elevator = true;
+	}
+
 	// 連続で乗るのを防ぐ
 	if ( _ride_elevator ) {
 		return;
 	}
 
+
 	setElevatorPos( data );
 	_ride_elevator = true;
+}
+
+void CharaDummy::returnMove( ) {
+	switch ( _dir ) {
+	case MOVE_RIGHT: _dir = MOVE_LEFT ; break;
+	case MOVE_LEFT : _dir = MOVE_RIGHT; break;
+	default: return;
+	}
 }

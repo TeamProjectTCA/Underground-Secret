@@ -2,7 +2,6 @@
 #include "Mouse.h"
 #include "Drawer.h"
 #include "const.h"
-#include <string>
 
 const int ACTIVE_BUTTON_X = ( WIDTH / 5 ) * 4;
 const int ACTIVE_BUTTON_Y = 0;
