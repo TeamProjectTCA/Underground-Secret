@@ -4,11 +4,11 @@
 PTR ( Scene );
 
 enum SCENE {
-	CONTINUE,//åªèÛà€éù
-	TITLE,
-	GAME,
-	STAGESELECT,
-	SCENE_MAX,
+	SCENE_CONTINUE,//åªèÛà€éù
+	SCENE_TITLE,
+	SCENE_GAME,
+	SCENE_STAGESELECT,
+	SCENE_SCENE_MAX,
 };
 
 class Scene {

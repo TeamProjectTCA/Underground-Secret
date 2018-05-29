@@ -54,8 +54,8 @@ void SceneTitle::changeNextScene( ) {
 		int hit = getHitButton( );
 
 		switch ( hit ) {
-			case START_BUTTON:
-				setNextScene( STAGESELECT );
+			case BUTTON_START:
+				setNextScene( SCENE_STAGESELECT );
 				break;
 			default:
 				_startbutton_clicking = false;
@@ -67,7 +67,7 @@ void SceneTitle::changeNextScene( ) {
 void SceneTitle::calcButtonAction( ) {
 	_startbutton.image.handle = _startbutton_handle[ NORMAL ];
 
-	if ( getHitButton( ) == NONE_BUTTON ) {
+	if ( getHitButton( ) == BUTTON_NONE ) {
 		return;
 	}
 
@@ -77,7 +77,7 @@ void SceneTitle::calcButtonAction( ) {
 
 	BUTTON hit = getHitButton( );
 	switch ( hit ) {
-		case START_BUTTON:
+		case BUTTON_START:
 			_startbutton.image.handle = _startbutton_handle[ CLICKING ];
 			_startbutton_clicking = true;
 			break;
@@ -92,9 +92,9 @@ SceneTitle::BUTTON SceneTitle::getHitButton( ) const {
 	if ( _startbutton.collider.left <= mouse_x && mouse_x <= _startbutton.collider.right &&
 		_startbutton.collider.up <= mouse_y && mouse_y <= _startbutton.collider.down ) {
 		SetCursor( _cur_hand );
-		return START_BUTTON;
+		return BUTTON_START;
 	}
-	return NONE_BUTTON;
+	return BUTTON_NONE;
 }
 
 void SceneTitle::drawBackGround( ) const{

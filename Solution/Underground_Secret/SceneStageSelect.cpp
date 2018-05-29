@@ -1,6 +1,7 @@
 #include "SceneStageSelect.h"
 #include "Keyboard.h"
 #include "Drawer.h"
+#include "const.h"
 
 SceneStageSelect::SceneStageSelect( ) {
 	_stage = 1;
@@ -12,10 +13,8 @@ SceneStageSelect::~SceneStageSelect( ) {
 }
 
 void SceneStageSelect::update( ) {
-	_drawer->drawString( 10, 10, "SceneStageSelect", 0xff0000 );
-
 	if ( _keyboard->getKeyDown( "z" ) ) {
-		setNextScene( GAME );
+		setNextScene( SCENE_GAME );
 	}
 
 	_drawer->flip( );

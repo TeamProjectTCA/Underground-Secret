@@ -11,7 +11,7 @@ PTR( Profiling );
 
 class PhasePlay : public Phase {
 public:
-	PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr _scroll );
+	PhasePlay( std::list< CharacterPtr > &chara, int spy_idx, ScrollPtr _scroll );
 	virtual ~PhasePlay( );
 
 public:
@@ -20,7 +20,7 @@ public:
 
 private:
 	void countClear( );
-	void setEnd( );
+	bool isInvasion( ) const;
 
 private:
 	void drawTime( ) const;
@@ -35,5 +35,6 @@ private:
 	DrawerPtr _drawer;
 	ScrollPtr _scroll;
 	ProfilingPtr _profiling;
+	CharacterPtr _spy;
 };
 

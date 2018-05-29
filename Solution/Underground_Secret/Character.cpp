@@ -20,7 +20,6 @@ const int SCREEN_HEIGHT_BLOCK_NUM = HEIGHT / BLOCK_SIZE;
 Character::Character( MapPtr map, std::vector< std::string > info ) :
 _map( map ),
 _info( info ),
-_spy( false ),
 _anim_type( WALK ),
 _anim_change_time( DEFAULT_ANIM_TIME ),
 _anim_cnt( 0 ),
@@ -118,9 +117,14 @@ int Character::getMapDataCollider( Vector pos ) const {
 
 	data = _map->getMapData( idx );
 	
-	// エレベーター若しくは終点であったら進行可能
-	if ( ( ELEVATOR_ASCIICODE_MIN <= data && data <= ELEVATOR_ASCIICODE_MAX ) || data == ENDPOINT_ASCIICODE ) {
+	// エレベーターであったら進行可能
+	if ( ELEVATOR_ASCIICODE_MIN <= data && data <= ELEVATOR_ASCIICODE_MAX ) {
 		return IDENTIFICATION_NONE;
+	}
+
+	// endpoint
+	if ( data == ENDPOINT_ASCIICODE ) {
+		return IDENTIFICATION_ENDPOINT;
 	}
 
 	// シャッターの判定
@@ -169,7 +173,6 @@ int Character::getMapDataElevator( Vector pos ) const {
 
 	return data;
 }
-
 
 void Character::draw( ) {
 	if ( _anim.find( _anim_type ) == _anim.end( ) ) {

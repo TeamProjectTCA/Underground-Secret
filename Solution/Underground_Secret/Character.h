@@ -89,7 +89,6 @@ protected:
 	DebugPtr _debug;
 
 private:
-	bool _spy;
 	Vector _pos;
 	std::map< ANIM_TYPE, Animation > _anim;
 	int _anim_change_time;

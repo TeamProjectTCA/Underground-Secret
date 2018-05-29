@@ -6,8 +6,8 @@
 #include "Random.h"
 
 CharacterManager::CharacterManager( MapPtr map ) :
-_map( map ) {
-	_debug_mode = false;
+_map( map ),
+_spy_idx( -1 ) {
 
 	_info = InfomationPtr( new Infomation( ) );
 }
@@ -52,10 +52,18 @@ void CharacterManager::setChara( int num ) {
 		// add‚·‚é
 		addChara( chara );
 	}
+
+	// ƒXƒpƒC‚ðŒˆ‚ß‚é
+	random->setRange( 0, num - 1 );
+	_spy_idx = random->getInt32( );
 }
 
 std::list< CharacterPtr > CharacterManager::getChara( ) {
 	return _chara;
+}
+
+int CharacterManager::getSpyIdx( ) const {
+	return _spy_idx;
 }
 
 CharacterPtr CharacterManager::getCharaInstance( CHARACTER chara_idx ) {

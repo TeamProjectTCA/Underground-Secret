@@ -15,12 +15,19 @@ const float TIME_STRING_Y1 = 20;
 const float TIME_STRING_X2 = 60;
 const float TIME_STRING_Y2 = 50;
 
-PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll ) :
+PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, int spy_idx, ScrollPtr scroll ) :
 _chara( chara ),
 _scroll( scroll ) {
 	_drawer = Drawer::getTask( );
 	_profiling = ProfilingPtr( new Profiling( ) );
 	_time_count = FINISH_TIME * FPS;
+
+	std::list< CharacterPtr >::iterator ite;
+	ite = _chara.begin( );
+	for ( int i = 0; i < spy_idx; i++ ) {
+		ite++;
+	}
+	_spy = ( *ite );
 }
 
 PhasePlay::~PhasePlay( ) {
@@ -36,7 +43,9 @@ void PhasePlay::update( ) {
 	}
 
 	countClear( );
-	setEnd( );
+	if ( isInvasion( ) ) {
+		setPhase( PHASE_END );
+	}
 }
 
 void PhasePlay::countClear( ) {
@@ -47,13 +56,11 @@ void PhasePlay::countClear( ) {
 	}
 }
 
-void PhasePlay::setEnd( ) {
-	std::list< CharacterPtr >::iterator ite = _chara.begin( );
-	for ( ite; ite != _chara.end( ); ite++ ) {
-		if ( ( *ite )->isEndpoint( ( *ite )->getPos( ) ) ) {
-			setPhase( PHASE_END );
-		}
+bool PhasePlay::isInvasion( ) const {
+	if ( _spy->getMapDataCollider( _spy->getPos( ) ) == IDENTIFICATION_ENDPOINT ) {
+		return true;
 	}
+	return false;
 }
 
 void PhasePlay::draw( ) const {

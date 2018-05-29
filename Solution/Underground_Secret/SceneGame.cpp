@@ -92,7 +92,7 @@ void SceneGame::changePhase( ) {
 		break;
 
 	case PHASE_PLAY:
-		_run_phase = PhasePlayPtr( new PhasePlay( _char_manager->getChara( ), _scroll ) );
+		_run_phase = PhasePlayPtr( new PhasePlay( _char_manager->getChara( ), _char_manager->getSpyIdx( ), _scroll ) );
 		break;
 
 	case PHASE_END:

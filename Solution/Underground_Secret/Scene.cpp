@@ -1,8 +1,7 @@
 #include "Scene.h"
 
 Scene::Scene( ) {
-	_next_scene = CONTINUE;
-	
+	_next_scene = SCENE_CONTINUE;
 }
 
 Scene::~Scene( ) {

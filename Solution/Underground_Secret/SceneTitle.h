@@ -15,8 +15,8 @@ PTR( Mouse );
 class SceneTitle : public Scene {
 private:
 	enum BUTTON {
-		NONE_BUTTON,
-		START_BUTTON,
+		BUTTON_NONE,
+		BUTTON_START,
 		BUTTON_MAX,
 	}; 
 	struct BoxObject {

@@ -32,20 +32,20 @@ void SceneManager::update( ) {
 }
 
 void SceneManager::changeScene( ) {
-	if ( _scene->getNextScene( ) == CONTINUE ) {
+	if ( _scene->getNextScene( ) == SCENE_CONTINUE ) {
 		return;
 	}
 
 	switch ( _scene->getNextScene( ) ) {
-	case TITLE:
+	case SCENE_TITLE:
 		_scene = SceneTitlePtr( new SceneTitle( ) );
 		break;
 
-	case STAGESELECT:
+	case SCENE_STAGESELECT:
 		_scene = SceneStageSelectPtr( new SceneStageSelect( ) );
 		break;
 
-	case GAME:
+	case SCENE_GAME:
 		{
 			SceneStageSelectPtr stage = std::dynamic_pointer_cast< SceneStageSelect >( _scene );
 			_scene = SceneGamePtr( new SceneGame( stage->getStage( ) ) );
