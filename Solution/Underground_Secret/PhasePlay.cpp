@@ -19,7 +19,7 @@ PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, int spy_idx, ScrollPtr s
 _chara( chara ),
 _scroll( scroll ) {
 	_drawer = Drawer::getTask( );
-	_time_count = FINISH_TIME * FPS;
+	_time_count = TIME_LIMIT * FPS;
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );

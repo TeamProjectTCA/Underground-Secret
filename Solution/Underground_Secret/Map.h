@@ -30,7 +30,8 @@ public:
 	int getCol( ) const;
 	int getRow( ) const;
 	int getMapData( int idx ) const;
-	bool isHitShutter( int detection_idx ) const;
+	std::vector< bool > isHitShutter( int detection_idx ) const;
+	int getShutterCount( ) const;
 
 private:
 	void loadMap( );

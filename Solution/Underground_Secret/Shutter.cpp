@@ -152,28 +152,37 @@ void Shutter::addShutter( std::vector< int > shutter ) {
 	_shutter_state.push_back( SHUTTER_STATE_NONACTIVE );
 }
 
-bool Shutter::isHitShutter( int detection_idx ) const {
-	int action_idx = -1;
+int Shutter::getShutterCount( ) const {
+	return _shutter_state.size( );
+}
+std::vector< bool > Shutter::isHitShutter( int detection_idx ) {
+	
+	std::vector< bool > is_hit( _shutter_state.size( ) );
+	std::vector< int > action_idx( _shutter_state.size( ) );
 
-	// アクティブなシャッターを探す
+	//初期化
+	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
+		is_hit[ i ] = false;
+		action_idx[ i ] = -1;
+	}
+
+	//シャッターの状態を配列に入れる
 	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
 		if ( _shutter_state[ i ] != SHUTTER_STATE_ACTIVE ) {
 			continue;
 		}
-		action_idx = i;
-		break;
+		action_idx[ i ] = i;
 	}
 
-	if ( action_idx < 0 ) {
-		return false;
-	}
-
-	// アクティブなシャッターのmapidxを比較する
-	for ( int i = 0; i < _shutter[ action_idx ].size( ); i++ ) {
-		if ( detection_idx == _shutter[ action_idx ][ i ] ) {
-			return true;
+	//各シャッターのmapidxを比較する
+	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
+		if ( action_idx[ i ] >= 0 ) {
+			for ( int j = 0; j < ( int )_shutter[ action_idx[ i ] ].size( ); j++ ) {
+				if ( detection_idx == _shutter[ action_idx[ i ] ][ j ] ) {
+					is_hit[ i ] = true;
+				}
+			}
 		}
 	}
-
-	return false;
+	return is_hit;
 }

@@ -32,9 +32,10 @@ public:
 	void setCol( const int col );
 	void setScroll( Vector scroll );
 	void addShutter( std::vector< int > shutter );
+	int getShutterCount( ) const;
 
 public:
-	bool isHitShutter( int detection_idx ) const;
+	std::vector< bool > isHitShutter( int detection_idx );
 
 private:
 	int _col;

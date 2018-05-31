@@ -27,7 +27,7 @@ private:
 
 private:
 	std::list< CharacterPtr > _chara;
-	const int FINISH_TIME = 60;
+	const int TIME_LIMIT = 60;
 
 	int _time_count;
 	int _chara_handle;

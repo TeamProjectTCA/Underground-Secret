@@ -121,8 +121,12 @@ int Map::getMapData( int idx ) const {
 	return _data[ idx ];
 }
 
-bool Map::isHitShutter( int detection_idx ) const {
+std::vector< bool > Map::isHitShutter( int detection_idx ) const {
 	return _shutter->isHitShutter( detection_idx );
+}
+
+int Map::getShutterCount( ) const {
+	return _shutter->getShutterCount( );
 }
 
 void Map::draw( ) const {
