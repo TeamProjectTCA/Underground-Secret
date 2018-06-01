@@ -4,7 +4,7 @@
 #include "const.h"
 
 const float MOVE_FRAME = FPS * 3;
-const float PERFORMANCE_TIME = FPS * 10;
+const float PERFORMANCE_TIME = FPS * 2;
 
 PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, int spy_idx, MapPtr map ) :
 _map( map ),
@@ -26,9 +26,10 @@ PhaseEnd::~PhaseEnd( ) {
 }
 
 void PhaseEnd::update( ) {
+	_count++;
+
 	// 定点まで移動
 	if ( _count < MOVE_FRAME ) {
-		_count++;
 		_spy->move( _move );
 		return;
 	}
@@ -37,9 +38,8 @@ void PhaseEnd::update( ) {
 		// アニメーション
 		_spy->setAnim( Character::ANIM_OPEN );
 	}
-	_count++;
 
-	if ( _count > PERFORMANCE_TIME ) {
+	if ( _count == MOVE_FRAME + PERFORMANCE_TIME ) {
 		setPhase( PHASE_RETURN_TITLE );
 	}
 }

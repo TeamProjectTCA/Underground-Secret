@@ -6,7 +6,7 @@
 #include <assert.h>
 #include <errno.h>
 
-const int DEFAULT_ANIM_TIME = 30;
+const int DEFAULT_ANIM_TIME = FPS / 2;
 const int DEFAULT_MAX_COUNT = 0xffffff;
 
 const int COLLIDER_ASCIICODE_MIN = '0';

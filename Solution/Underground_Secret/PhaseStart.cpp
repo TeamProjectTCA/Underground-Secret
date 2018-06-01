@@ -4,27 +4,28 @@
 #include "Map.h"
 #include "const.h"
 
-const int START_X = 0;
-const int START_Y = 100;
-const double MOVE = 5;
-const int OPEN_ANIMATION_TIME = FPS * 3;
+const float MOVE_FRAME = FPS * 2;
+const int PERFORMANCE_TIME = FPS * 2;
 
 PhaseStart::PhaseStart( std::list< CharacterPtr > &chara, MapPtr map ) :
 _chara( chara ),
-_map( map ) {
+_map( map ),
+_count( 0 ) {
 	_keyboard = Keyboard::getTask( );
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );
 	for ( ite; ite != _chara.end( ); ite++ ) {
 		( *ite )->setFixedpoint( PHASE_START );
+		( *ite )->setAnimTime( FPS / 4 );
 	}
 
 	_endpoint = _map->getFixedpointBeta( PHASE_START );
 	_run_idx = 0;
 	_run_chara = ( *_chara.begin( ) );
-	_open_animation_count = 0;
-	_open_animation = false;
+
+	const float SPEED = ( float )( _endpoint - _run_chara->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
+	_move = ( _endpoint - _run_chara->getPos( ) ).normalize( ) * SPEED;
 }
 
 PhaseStart::~PhaseStart( ) {
@@ -37,28 +38,31 @@ void PhaseStart::update( ) {
 		return;
 	}
 
-	// betaポイントよりxが小さければ移動
-	if ( _run_chara->getPos( ).x < _endpoint.x ) {
-		_run_chara->move( Vector( MOVE, 0 ) );
-		return;
+	_count++;
+
+	// 移動
+	if ( _count < MOVE_FRAME ) {
+		_run_chara->move( _move );
 	}
 
-	// betaポイントに到達したらopenアニメーション
-	if ( !_open_animation ) {
+	// オープンアニメーションをセット
+	if ( _count == MOVE_FRAME ) {
 		_run_chara->setAnim( Character::ANIM_OPEN );
-		_open_animation = true;
 	}
-	_open_animation_count++;
 
 	// アニメーション終了
-	if ( _open_animation_count > OPEN_ANIMATION_TIME ) {
-		_open_animation_count = 0;
-		_open_animation = false;
-		_run_idx++;
+	if ( _count == MOVE_FRAME + PERFORMANCE_TIME ) {
+		// アニメーションと位置を設定
 		_run_chara->setFixedpoint( PHASE_PLAY );
 		_run_chara->setAnim( Character::ANIM_WALK );
+		_run_chara->setAnimTime( FPS / 2 );
+
+		// 次の演出キャラに切り替える
+		_run_idx++;
 		changeRunCharacter( );
-		return;
+
+		// カウントをリセット
+		_count = 0;
 	}
 }
 

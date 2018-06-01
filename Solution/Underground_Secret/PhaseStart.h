@@ -25,9 +25,10 @@ private:
 private:
 	std::list< CharacterPtr > _chara;
 	Vector _endpoint;
+	Vector _move;
+	int _count;
+
 	int _run_idx;
-	int _open_animation_count;
-	bool _open_animation;
 
 	CharacterPtr _run_chara;
 	KeyboardPtr _keyboard;
