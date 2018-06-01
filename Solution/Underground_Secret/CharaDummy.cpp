@@ -8,18 +8,21 @@
 const int MOVE_RATE_X = 3;
 const int MOVE_RATE_Y = BLOCK_SIZE;
 const float RANDOM_PROBABILITY = 0.3f;
+const int INFO_SHOWTIME = FPS * 5;
 
 CharaDummy::CharaDummy( MapPtr map, InfomationPtr info ) :
 Character( map, info->getInfo( CHARA_DUMMY ) ),
 _ride_elevator( false ),
-_return_move( false ) {
-	_random = RandomPtr( new Random( ) );
+_return_move( false ),
+_looking_time( 0 ) {
+	_random = Random::getTask( );
 
 	addAnim( Character::ANIM_WALK, "CharaDummy_Walk", 2 );
 	addAnim( Character::ANIM_OPEN, "CharaDummy_Open", 2 );
 	setAnim( Character::ANIM_WALK );
 
-	_dir = MOVE_RIGHT;
+	_dir = ( _random->getInt32( 0, 1 ) ? MOVE_RIGHT : MOVE_LEFT );
+
 	setDistance( );
 }
 
@@ -32,6 +35,11 @@ void CharaDummy::update( ) {
 	fall( );
 	countLooking( );
 	checkCaughtCollider( );
+
+	// ŽžŠÔŒo‰ß‚Åî•ñ‚ð•\Ž¦
+	if ( _looking_time % INFO_SHOWTIME == 0 ) {
+		addShowInfoNum( );
+	}
 
 	// debug
 	if ( _debug->isDebug( ) ) {

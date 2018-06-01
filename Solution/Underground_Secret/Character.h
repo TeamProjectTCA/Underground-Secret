@@ -60,6 +60,7 @@ public:
 	void setAnimTime( int change_time );
 	void setFixedpoint( PHASE phase );
 	void setScroll( );
+	void addShowInfoNum( );
 
 public:
 	// ˆÚ“®ˆ—
@@ -99,4 +100,5 @@ private:
 	Vector _scroll;
 	ANIM_TYPE _anim_type;
 	std::vector< std::string > _info;
+	int _show_info_num;
 };

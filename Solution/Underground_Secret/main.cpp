@@ -5,6 +5,7 @@
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "Debug.h"
+#include "Random.h"
 
 void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
@@ -19,6 +20,7 @@ void main( ) {
 	KeyboardPtr keyboard( new Keyboard( ) );
 	MousePtr mouse( new Mouse( ) );
 	DebugPtr debug( new Debug( ) );
+	RandomPtr random( new Random( ) );
 
 	//add
 	manager->add( Drawer::getTag( ), drawer );
@@ -26,4 +28,5 @@ void main( ) {
 	manager->add( Keyboard::getTag( ), keyboard );
 	manager->add( Mouse::getTag( ), mouse );
 	manager->add( Debug::getTag( ), debug );
+	manager->add( Random::getTag( ), random );
 }

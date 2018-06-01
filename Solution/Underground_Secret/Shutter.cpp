@@ -174,8 +174,6 @@ void Shutter::addShutter( std::vector< int > shutter ) {
 
 bool Shutter::isHitShutter( int detection_idx ) const {
 
-	bool hit = false;
-
 	int size = ( int )_shutter_state.size( );
 	std::vector< int > active_idx;
 

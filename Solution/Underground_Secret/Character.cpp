@@ -8,14 +8,18 @@
 
 const int DEFAULT_ANIM_TIME = 30;
 const int DEFAULT_MAX_COUNT = 0xffffff;
+
 const int COLLIDER_ASCIICODE_MIN = '0';
 const int ELEVATOR_ASCIICODE_MIN = 'A';
 const int COLLIDER_ASCIICODE_MAX = '9';
 const int ELEVATOR_ASCIICODE_MAX = 'z';
 const int ENDPOINT_ASCIICODE = '6';
 const int CHANGE_ASCIICODE = 'a' - 'A';
+
 const int SCREEN_WIDTH_BLOCK_NUM = WIDTH / BLOCK_SIZE;
 const int SCREEN_HEIGHT_BLOCK_NUM = HEIGHT / BLOCK_SIZE;
+
+const int FONT_SIZE = 20;
 
 Character::Character( MapPtr map, std::vector< std::string > info ) :
 _map( map ),
@@ -26,7 +30,8 @@ _anim_cnt( 0 ),
 _sx( 0 ),
 _max_cnt( DEFAULT_MAX_COUNT ),
 _pos( Vector( ) ),
-_scroll( Vector( ) ) {
+_scroll( Vector( ) ),
+_show_info_num( 0 ) {
 	_drawer = Drawer::getTask( );
 	_debug = Debug::getTask( );
 }
@@ -67,6 +72,14 @@ void Character::setFixedpoint( PHASE phase ) {
 
 void Character::setScroll( ) {
 	_scroll = _map->getScrollData( );
+}
+
+void Character::addShowInfoNum( ) {
+	int num = _show_info_num + 1;
+
+	if ( num < ( int )_info.size( ) + 1 ) {
+		_show_info_num = num;
+	}
 }
 
 void Character::move( Vector move ) {
@@ -155,26 +168,41 @@ int Character::getMapDataElevator( Vector pos ) const {
 }
 
 void Character::draw( ) {
-	if ( _anim.find( _anim_type ) == _anim.end( ) ) {
-		return;
+	Vector chara_size = Vector( _anim[ _anim_type ].width, _anim[ _anim_type ].height );
+
+	{ // キャラの描画
+		if ( _anim.find( _anim_type ) == _anim.end( ) ) {
+			return;
+		}
+
+		// カウントを進める
+		_anim_cnt = ( _anim_cnt + 1 ) % _max_cnt;
+
+		if ( _anim_cnt % _anim_change_time == 0 ) {
+			// 画像を切り替える( 左端をずらす )
+			_sx = ( ( _anim_cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
+		}
+
+		Vector pos = Vector( _pos.x - _anim[ _anim_type ].width / 2, _pos.y - _anim[ _anim_type ].height );
+		_drawer->drawRectGraph( 
+			( float )( pos.x + _scroll.x * BLOCK_SIZE ), ( float )( pos.y + _scroll.y * BLOCK_SIZE ),
+			_sx, 0,
+			_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
+			_anim[ _anim_type ].handle,
+			true, false );
 	}
 
-	// カウントを進める
-	_anim_cnt = ( _anim_cnt + 1 ) % _max_cnt;
+	{ // 情報の表示
+		if ( _show_info_num < 1 ) {
+			return;
+		}
 
-	if ( _anim_cnt % _anim_change_time == 0 ) {
-		// 画像を切り替える( 左端をずらす )
-		_sx = ( ( _anim_cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
+		Vector info = _pos - ( Vector( -chara_size.x * 0.5, chara_size.y ) ) + _scroll * BLOCK_SIZE;
+
+		for ( int i = 0; i < _show_info_num; i++ ) {
+			_drawer->drawString( ( float )info.x, ( float )info.y + i * FONT_SIZE, _info[ i ].c_str( ), BLUE );
+		}
 	}
-
-
-	Vector pos = Vector( _pos.x - _anim[ _anim_type ].width / 2, _pos.y - _anim[ _anim_type ].height );
-	_drawer->drawRectGraph( 
-		( float )( pos.x + _scroll.x * BLOCK_SIZE ), ( float )( pos.y + _scroll.y * BLOCK_SIZE ),
-		_sx, 0,
-		_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
-		_anim[ _anim_type ].handle,
-		true, false );
 }
 
 void Character::setFallPos( Vector now_position ) {

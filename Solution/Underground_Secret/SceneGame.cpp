@@ -9,7 +9,7 @@
 #include "Scroll.h"
 #include "Debug.h"
 
-const int ONE_STAGE_CHARACTER_NUM = 1;
+const int ONE_STAGE_CHARACTER_NUM = 5;
 
 SceneGame::SceneGame( int stage ) :
 _stage( stage ) {

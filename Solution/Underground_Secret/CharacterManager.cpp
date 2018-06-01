@@ -36,12 +36,11 @@ void CharacterManager::addChara( CharacterPtr ptr ) {
 }
 
 void CharacterManager::setChara( int num ) {
-	RandomPtr random = RandomPtr( new Random( ) );
-	random->setRange( 0, CHARA_MAX - 1 );
+	RandomPtr random = Random::getTask( );
 
 	for ( int i = 0; i < num; i++ ) {
 		// 乱数で生成キャラの番号を取得
-		int chara_idx = random->getInt32( );
+		int chara_idx = random->getInt32( 0, CHARA_MAX - 1 );
 
 		CharacterPtr chara = getCharaInstance( ( CHARACTER )chara_idx );
 		// error処理
@@ -54,8 +53,7 @@ void CharacterManager::setChara( int num ) {
 	}
 
 	// スパイを決める
-	random->setRange( 0, num - 1 );
-	_spy_idx = random->getInt32( );
+	_spy_idx = random->getInt32( 0, ( int )_chara.size( ) - 1 );
 }
 
 std::list< CharacterPtr > CharacterManager::getChara( ) {

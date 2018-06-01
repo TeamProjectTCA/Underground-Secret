@@ -3,7 +3,7 @@
 #include "Random.h"
 
 Infomation::Infomation( ) {
-	_rand = RandomPtr( new Random( ) );
+	_rand = Random::getTask( );
 
 	// csv‚©‚çî•ñ‚ğ‚·‚×‚Äæ“¾
 	_csv = LoadCSVPtr( new LoadCSV( "Resources/CharacterData/" ) );
@@ -45,10 +45,10 @@ void Infomation::convCsvdataToInfodata( std::vector< std::string > &input, CHARA
 
 void Infomation::setUseInfo( CHARACTER chara, std::vector< std::string > &data ) {
 	int size = ( int )data.size( );
-	_rand->setRange( 0, size - 1 );
+
 	for ( int i = 0; i < size; i++ ) {
 		// —”‚ğæ“¾
-		int num = _rand->getInt32( );
+		int num = _rand->getInt32( 0, size - 1 );
 
 		// “ü—Í
 		_info[ chara ].push_back( data[ num ] );
@@ -60,7 +60,6 @@ void Infomation::setUseInfo( CHARACTER chara, std::vector< std::string > &data )
 			break;
 		}
 	}
-	_rand->resetRange( );
 	_rand->resetIgnore( );
 }
 
