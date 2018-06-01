@@ -127,10 +127,8 @@ int Character::getMapDataCollider( Vector pos ) const {
 	}
 
 	// シャッターの判定
-	for ( int i = 0; i < _map->getShutterCount( ); i++ ) {
-		if ( _map->isHitShutter( idx )[ i ] ) {
-			return IDENTIFICATION_COLLIDER;
-		}
+	if ( _map->isHitShutter( idx ) ) {
+		return IDENTIFICATION_SHUTTER;
 	}
 
 	data -= COLLIDER_ASCIICODE_MIN;

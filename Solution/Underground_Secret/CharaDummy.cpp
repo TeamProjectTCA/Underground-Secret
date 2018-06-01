@@ -101,6 +101,11 @@ void CharaDummy::checkCollider( ) {
 		return;
 	}
 
+	// 進行予想値がシャッター
+	if ( data == IDENTIFICATION_SHUTTER ) {
+		_return_move = true;
+	}
+
 	// 進行予測値が当たり判定であったら
 	if ( data == IDENTIFICATION_COLLIDER ) {
 		// もう1つ上を見る

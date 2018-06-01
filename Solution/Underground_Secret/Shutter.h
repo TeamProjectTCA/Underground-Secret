@@ -17,7 +17,7 @@ private:
 	};
 
 public:
-	Shutter( );
+	Shutter( int stage );
 	virtual ~Shutter( );
 
 public:
@@ -32,17 +32,18 @@ public:
 	void setCol( const int col );
 	void setScroll( Vector scroll );
 	void addShutter( std::vector< int > shutter );
-	int getShutterCount( ) const;
 
 public:
-	std::vector< bool > isHitShutter( int detection_idx );
+	bool isHitShutter( int detection_idx ) const;
 
 private:
+	const int ON_SHUTTER_MAX;
 	int _col;
 	int _shutter_width;
 	int _shutter_height;
 	int _shutter_handle;
 	int _move_cnt;
+	int _active_num;
 	Vector _scroll;
 	std::vector< std::vector< int > > _shutter;
 	std::vector< SHUTTER_STATE > _shutter_state;

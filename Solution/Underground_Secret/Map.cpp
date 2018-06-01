@@ -28,7 +28,7 @@ _scroll( scroll ) {
 	_debug = Debug::getTask( );
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
-	_shutter = ShutterPtr( new Shutter( ) );
+	_shutter = ShutterPtr( new Shutter( stage ) );
 
 	std::string stage_path = "stage" + std::to_string( _stage );
 	_map_handle = _drawer->getImage( stage_path );
@@ -121,12 +121,8 @@ int Map::getMapData( int idx ) const {
 	return _data[ idx ];
 }
 
-std::vector< bool > Map::isHitShutter( int detection_idx ) const {
+bool Map::isHitShutter( int detection_idx ) const {
 	return _shutter->isHitShutter( detection_idx );
-}
-
-int Map::getShutterCount( ) const {
-	return _shutter->getShutterCount( );
 }
 
 void Map::draw( ) const {

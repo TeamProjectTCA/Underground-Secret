@@ -3,10 +3,15 @@
 #include "Mouse.h"
 #include "const.h"
 
+const int DEFAULT_ON_SHUTTER_MAX = 2;
+const int STAGE_ON_SHUTTER_NUM[ ] = { DEFAULT_ON_SHUTTER_MAX };
+
 const int MOVECOUNT_MAX = 60;
 
-Shutter::Shutter( ) :
-_col( 1 ) {
+Shutter::Shutter( int stage ) :
+_col( 1 ),
+ON_SHUTTER_MAX( STAGE_ON_SHUTTER_NUM[ stage - 1 ] ),
+_active_num( 0 ) {
 	_drawer = Drawer::getTask( );
 	_mouse = Mouse::getTask( );
 
@@ -102,8 +107,17 @@ void Shutter::onShutter( ) {
 	}
 
 	switch ( state ) {
-	case SHUTTER_STATE_ACTIVE   : _shutter_state[ hit_idx ] = SHUTTER_STATE_OPEN ; break;
-	case SHUTTER_STATE_NONACTIVE: _shutter_state[ hit_idx ] = SHUTTER_STATE_CLOSE; break;
+	case SHUTTER_STATE_ACTIVE   :
+		_shutter_state[ hit_idx ] = SHUTTER_STATE_OPEN;
+		break;
+
+	case SHUTTER_STATE_NONACTIVE:
+		if ( _active_num == ON_SHUTTER_MAX ) {
+			return;
+		}
+		_shutter_state[ hit_idx ] = SHUTTER_STATE_CLOSE;
+		_active_num++;
+		break;
 	}
 }
 
@@ -133,8 +147,14 @@ void Shutter::calcShutter( ) {
 
 	// 完全にカウントが満たしたらステータスを変更
 	switch ( _shutter_state[ action_idx ] ) {
-	case SHUTTER_STATE_OPEN : _shutter_state[ action_idx ] = SHUTTER_STATE_NONACTIVE; break;
-	case SHUTTER_STATE_CLOSE: _shutter_state[ action_idx ] = SHUTTER_STATE_ACTIVE   ; break;
+	case SHUTTER_STATE_OPEN : 
+		_shutter_state[ action_idx ] = SHUTTER_STATE_NONACTIVE;
+		_active_num--;
+		break;
+
+	case SHUTTER_STATE_CLOSE: 
+		_shutter_state[ action_idx ] = SHUTTER_STATE_ACTIVE;
+		break;
 	}
 	_move_cnt = 0;
 }
@@ -152,37 +172,29 @@ void Shutter::addShutter( std::vector< int > shutter ) {
 	_shutter_state.push_back( SHUTTER_STATE_NONACTIVE );
 }
 
-int Shutter::getShutterCount( ) const {
-	return _shutter_state.size( );
-}
-std::vector< bool > Shutter::isHitShutter( int detection_idx ) {
-	
-	std::vector< bool > is_hit( _shutter_state.size( ) );
-	std::vector< int > action_idx( _shutter_state.size( ) );
+bool Shutter::isHitShutter( int detection_idx ) const {
 
-	//初期化
-	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
-		is_hit[ i ] = false;
-		action_idx[ i ] = -1;
-	}
+	bool hit = false;
 
-	//シャッターの状態を配列に入れる
-	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
+	int size = ( int )_shutter_state.size( );
+	std::vector< int > active_idx;
+
+	// アクティブなものを探す
+	for ( int i = 0; i < size; i++ ) {
 		if ( _shutter_state[ i ] != SHUTTER_STATE_ACTIVE ) {
 			continue;
 		}
-		action_idx[ i ] = i;
+		active_idx.push_back( i );
 	}
 
-	//各シャッターのmapidxを比較する
-	for ( int i = 0; i < ( int )_shutter_state.size( ); i++ ) {
-		if ( action_idx[ i ] >= 0 ) {
-			for ( int j = 0; j < ( int )_shutter[ action_idx[ i ] ].size( ); j++ ) {
-				if ( detection_idx == _shutter[ action_idx[ i ] ][ j ] ) {
-					is_hit[ i ] = true;
-				}
-			}
+	// 判定する
+	size = ( int )active_idx.size( );
+	for ( int i = 0; i < size; i++ ) {
+		int shutter_last_idx = ( int )_shutter[ active_idx[ i ] ].size( ) - 1;
+		if ( _shutter[ active_idx[ i ] ][ shutter_last_idx ] == detection_idx ) {
+			return true;
 		}
 	}
-	return is_hit;
+
+	return false;
 }
