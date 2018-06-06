@@ -35,6 +35,7 @@ _scroll( scroll ) {
 
 	_col = 0;
 	_row = 0;
+	_end_scroll = Vector( );
 	_data = "";
 	_debug_mode = false;
 	_fixedpoint_alpha_start = Vector( );
@@ -105,6 +106,10 @@ Vector Map::getScrollData( ) const {
 	return _scroll->getScroll( );
 }
 
+Vector Map::getMapPos( ) const {
+	return Vector( ( int )( _scroll->getScroll( ).x * BLOCK_SIZE - _end_scroll.x ), ( int )( _scroll->getScroll( ).y * BLOCK_SIZE - _end_scroll.y ) );
+}
+
 int Map::getCol( ) const {
 	return _col;
 }
@@ -128,7 +133,7 @@ bool Map::isHitShutter( int detection_idx ) const {
 void Map::draw( ) const {
 	// マップを描画
 	Vector scroll = _scroll->getScroll( );
-	_drawer->drawGraph( ( int )scroll.x * BLOCK_SIZE, ( int )scroll.y * BLOCK_SIZE, _map_handle, true );
+	_drawer->drawGraph( ( int )( scroll.x * BLOCK_SIZE - _end_scroll.x ), ( int )( scroll.y * BLOCK_SIZE - _end_scroll.y ), _map_handle, true );
 
 	//シャッターを描画
 	_shutter->draw( );
@@ -247,6 +252,15 @@ void Map::inputShutter( std::vector< int > &shutter, int idx ) {
 	// 再起してもう1つ下を見る
 	inputShutter( shutter, point );
 }
+
+void Map::endScroll( Vector move ) {
+	_end_scroll += move;
+}
+
+void Map::focusScroll( Vector move ) {
+	_end_scroll += move;
+}
+
 void Map::drawCollider( ) const {
 	Vector scroll = _scroll->getScroll( );
 	int range_width_min = ( int )scroll.x * -1;
@@ -296,8 +310,8 @@ void Map::drawCollider( ) const {
 				color = SHUTTER_COLOR;
 			}
 
-			_drawer->drawBox( ( float )(     x + scroll.x ) * BLOCK_SIZE, ( float )(     y + scroll.y ) * BLOCK_SIZE,
-				              ( float )( x + 1 + scroll.x ) * BLOCK_SIZE, ( float )( y + 1 + scroll.y ) * BLOCK_SIZE,
+			_drawer->drawBox( ( float )(     x + scroll.x ) * BLOCK_SIZE - _end_scroll.x, ( float )(     y + scroll.y ) * BLOCK_SIZE - _end_scroll.y,
+				              ( float )( x + 1 + scroll.x ) * BLOCK_SIZE - _end_scroll.x, ( float )( y + 1 + scroll.y ) * BLOCK_SIZE - _end_scroll.y,
 				              color, true );
 		}
 	}

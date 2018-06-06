@@ -19,8 +19,11 @@ public:
 
 private:
 	Vector _endpoint;
+	Vector _scroll;
 	Vector _move;
+	Vector _focus_move;
 	int _count;
+	int _focus_count;
 
 	CharacterPtr _spy;
 	MapPtr _map;
