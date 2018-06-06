@@ -1,6 +1,7 @@
 #include "Shutter.h"
 #include "Drawer.h"
 #include "Mouse.h"
+#include "map.h"
 #include "const.h"
 
 const int DEFAULT_ON_SHUTTER_MAX = 2;
@@ -20,6 +21,7 @@ _active_num( 0 ) {
 	_shutter_height = _drawer->getImageHeight( "shutter" );
 
 	_scroll = Vector( );
+	_end_scroll = Vector( );
 }
 
 Shutter::~Shutter( ) {
@@ -68,7 +70,7 @@ void Shutter::draw( ) const {
 		x += ( float )_scroll.x * BLOCK_SIZE;
 		y += ( float )_scroll.y * BLOCK_SIZE;
 
-		_drawer->drawRectGraph( x, y, 0, ly, _shutter_width, ry, _shutter_handle, true );
+		_drawer->drawRectGraph( x - _end_scroll.x, y - _end_scroll.y, 0, ly, _shutter_width, ry, _shutter_handle, true );
 	}
 }
 
@@ -165,6 +167,10 @@ void Shutter::setCol( const int col ) {
 
 void Shutter::setScroll( Vector scroll ) {
 	_scroll = scroll;
+}
+
+void Shutter::setEndScroll( Vector end_scroll ) {
+	_end_scroll = end_scroll;
 }
 
 void Shutter::addShutter( std::vector< int > shutter ) {

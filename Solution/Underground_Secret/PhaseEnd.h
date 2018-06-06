@@ -7,6 +7,7 @@
 PTR( PhaseEnd );
 PTR( Character );
 PTR( Map );
+PTR( Shutter );
 
 class PhaseEnd : public Phase {
 public:
@@ -27,5 +28,6 @@ private:
 
 	CharacterPtr _spy;
 	MapPtr _map;
+	ShutterPtr _shutter;
 };
 

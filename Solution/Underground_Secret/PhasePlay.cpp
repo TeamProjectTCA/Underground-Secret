@@ -1,6 +1,7 @@
 #include "PhasePlay.h"
 #include "Character.h"
 #include "Drawer.h"
+#include "Soundplayer.h"
 #include "const.h"
 #include "Scroll.h"
 #include "Profiling.h"
@@ -15,11 +16,22 @@ const float TIME_STRING_Y1 = 20;
 const float TIME_STRING_X2 = 60;
 const float TIME_STRING_Y2 = 50;
 
+const int TIME_LIMIT = 60;
+
 PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, int spy_idx, ScrollPtr scroll ) :
 _chara( chara ),
 _scroll( scroll ) {
 	_drawer = Drawer::getTask( );
+	_soundplayer = Soundplayer::getTask( );
 	_time_count = TIME_LIMIT * FPS;
+
+	//BGM
+	_play_bgm = _soundplayer->getSound( "gamebgm1" );
+	_soundplayer->play( _play_bgm, true );
+
+	//SE
+	_win_se = _soundplayer->getSound( "win" );
+	_lose_se = _soundplayer->getSound( "lose" );
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );
@@ -43,18 +55,26 @@ void PhasePlay::update( ) {
 		_scroll->update( );
 	}
 
-	countClear( );
+	_time_count--;
+
 	if ( isInvasion( ) ) {
+		_soundplayer->stop( _play_bgm );
+		_soundplayer->play( _lose_se );
+		setPhase( PHASE_END );
+	}
+
+	if ( isClear( ) ) {
+		_soundplayer->stop( _play_bgm );
+		_soundplayer->play( _win_se );
 		setPhase( PHASE_END );
 	}
 }
 
-void PhasePlay::countClear( ) {
-	_time_count--;
+bool PhasePlay::isClear( ) {
 	if ( _time_count <= 0 ) {
-		_time_count = 0;
-		setPhase( PHASE_END );
+		return true;
 	}
+	return false;
 }
 
 bool PhasePlay::isInvasion( ) const {

@@ -6,6 +6,7 @@
 PTR( PhasePlay );
 PTR( Character );
 PTR( Drawer );
+PTR( Soundplayer );
 PTR( Scroll );
 PTR( Profiling );
 
@@ -19,7 +20,7 @@ public:
 	void draw( ) const;
 
 private:
-	void countClear( );
+	bool isClear( );
 	bool isInvasion( ) const;
 
 private:
@@ -27,12 +28,16 @@ private:
 
 private:
 	std::list< CharacterPtr > _chara;
-	const int TIME_LIMIT = 60;
 
 	int _time_count;
 	int _chara_handle;
 
+	int _play_bgm;
+	int _win_se;
+	int _lose_se;
+
 	DrawerPtr _drawer;
+	SoundplayerPtr _soundplayer;
 	ScrollPtr _scroll;
 	ProfilingPtr _profiling;
 	CharacterPtr _spy;

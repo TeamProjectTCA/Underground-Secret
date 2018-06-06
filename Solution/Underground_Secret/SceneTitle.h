@@ -9,6 +9,7 @@
 
 PTR( SceneTitle );
 PTR( Drawer );
+PTR( Soundplayer );
 PTR( Keyboard );
 PTR( Mouse );
 
@@ -50,12 +51,17 @@ private:
 
 	int _background_handle;
 	int _title_handle;
+
+	int _title_bgm;
+	int _button_se;
+
 	std::array< int, BUTTON_MAX > _startbutton_handle;
 	BoxObject _startbutton;
 
 
 	//ƒNƒ‰ƒX
 	DrawerPtr _drawer;
+	SoundplayerPtr _soundplayer;
 	MousePtr _mouse;
 	KeyboardPtr _keyboard;
 };

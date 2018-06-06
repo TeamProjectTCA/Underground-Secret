@@ -58,6 +58,7 @@ Map::~Map( ) {
 
 void Map::update( ) {
 	_shutter->setScroll( _scroll->getScroll( ) );
+	_shutter->setEndScroll( _end_scroll );
 	_shutter->update( );
 
 	// debug

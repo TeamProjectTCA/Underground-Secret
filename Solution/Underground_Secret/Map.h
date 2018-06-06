@@ -44,7 +44,7 @@ private:
 private:
 	void drawCollider( ) const;
 	void drawTable( ) const;
-
+	
 private:
 	int _map_handle;
 	int _stage;
