@@ -108,6 +108,10 @@ Vector Map::getElevatorPos( char id ) const {
 	ElevatorPtr elevator = _elevator.find( id )->second;
 	int idx = elevator->getDestinationPos( );
 
+	if ( idx < 0 ) {
+		return Vector( -1, -1, -1 );
+	}
+
 	return Vector(
 		( idx % _col ) * BLOCK_SIZE,
 		( idx / _col ) * BLOCK_SIZE 

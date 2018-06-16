@@ -178,6 +178,9 @@ void CharaDummy::checkElevator( ) {
 	}
 
 	case ELEVATOR_STATE_ARRIVE:
+		if ( getAnimType( ) != Character::ANIM_RIDE ) {
+			break;
+		}
 		setElevatorPos( id );
 		setAnim( Character::ANIM_WALK );
 		_ride_elevator = true;

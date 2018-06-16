@@ -10,7 +10,8 @@ Elevator::Elevator( const char id ) :
 _id( id ),
 _next_input_pos( ELEVATOR_POS_UP ),
 _active_elevator( ELEVATOR_POS_UP ),
-_elevator_state( ELEVATOR_STATE_NONE ) {
+_elevator_state( ELEVATOR_STATE_NONE ),
+_destination( ELEVATOR_POS_UP ) {
 	RandomPtr random = Random::getTask( );
 	int start = random->getInt32( 0, ELEVATOR_POS_MAX - 1 );
 	_count = ( start * ( ELEVATOR_WAIT_TIME + ELEVATOR_MOVE_TIME ) ) % ELEVATOR_TOTAL_TIME;
@@ -28,7 +29,12 @@ void Elevator::update( ) {
 	// active elevator の更新
 	// destination の更新
 	if ( _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_MOVE_TIME ) == 0 ) {
-		_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ELEVATOR_POS_MAX );
+
+		if ( _data.size( ) < ELEVATOR_POS_MAX ) {
+			_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ( int )_data.size( ) );
+		} else {
+			_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ELEVATOR_POS_MAX );
+		}
 		decideDestination( );
 	}
 
@@ -73,6 +79,13 @@ void Elevator::decideDestination( ) {
 		break;
 	}
 
+	int size = ( int )_data.size( );
+	if ( size < 1 ) {
+		return;
+	}
+	if ( size < ELEVATOR_POS_MAX && _active_elevator < size ) {
+		_destination = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % size );
+	}
 }
 
 char Elevator::getId( ) const {
