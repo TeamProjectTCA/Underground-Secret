@@ -23,10 +23,10 @@ _count( 0 ) {
 	_spy->setFixedpoint( PHASE_END );
 	_spy->setAnimTime( FPS );
 	_endpoint = _map->getFixedpointBeta( PHASE_END );
-	_scroll = _map->getScrollData( );
+	_scroll = _map->getScrollData( ); 
 	const float SPEED = ( float )( _endpoint - _spy->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
 	_move = ( _endpoint - _spy->getPos( ) ).normalize( ) * SPEED;
-	const float FOCUS_SPEED = ( Vector( WIDTH_F / 2, HEIGHT_F / 2 ) - _scroll * BLOCK_SIZE - _spy->getPos( ) ).getLength( ) * ( 1 / FOCUS_FRAME );
+	const float FOCUS_SPEED = ( float )( ( Vector( WIDTH_F / 2, HEIGHT_F / 2 ) - _scroll * BLOCK_SIZE - _spy->getPos( ) ).getLength( ) * ( 1 / FOCUS_FRAME ) );
 	_focus_move = ( Vector( WIDTH_F / 2, HEIGHT_F / 2 ) - _scroll * BLOCK_SIZE - _spy->getPos( ) ).normalize( ) * FOCUS_SPEED;
 }
 
@@ -58,7 +58,7 @@ void PhaseEnd::update( ) {
 
 	if ( _count == MOVE_FRAME ) {
 		// アニメーション
-		_spy->setAnim( Character::ANIM_OPEN );
+		_spy->setAnim( Character::ANIM_RIDE );
 	}
 
 	if ( _count == MOVE_FRAME + PERFORMANCE_TIME ) {

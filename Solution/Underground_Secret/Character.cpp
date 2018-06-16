@@ -115,11 +115,15 @@ bool Character::isEndpoint( Vector pos ) const {
 	return false;
 }
 
+Character::ANIM_TYPE Character::getAnimType( ) const {
+	return _anim_type;
+}
+
 Vector Character::getPos( ) const {
 	return _pos;
 }
 
-int Character::getMapDataCollider( Vector pos ) const {
+int Character::getMapData( Vector pos ) const {
 	int data = -1;
 
 	Vector position = pos;
@@ -149,22 +153,18 @@ int Character::getMapDataCollider( Vector pos ) const {
 	return data;
 }
 
-int Character::getMapDataElevator( Vector pos ) const {
-	int data = -1;
-
+char Character::getElevatorId( Vector pos ) const {
 	Vector position = pos;
 	position.y -= 1; //ぴったりになってしまうのを防ぐ
-
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+	return _map->getElevatorId( idx );
+}
 
-	data = _map->getMapData( idx );
-
-	// エレベーター以外であったら
-	if ( COLLIDER_ASCIICODE_MIN <= data && data <= COLLIDER_ASCIICODE_MAX ) {
-		return -1;
-	}
-
-	return data;
+ELEVATOR_STATE Character::getElevatorState( char id, Vector pos ) const {
+	Vector position = pos;
+	position.y -= 1; //ぴったりになってしまうのを防ぐ
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+	return _map->getElevatorState( id, idx );
 }
 
 void Character::draw( ) {
@@ -224,13 +224,8 @@ void Character::setPos( Vector pos ) {
 	_pos = pos;
 }
 
-void Character::setElevatorPos( int ascii ) {
-	if ( 'a' <= ascii && ascii <= 'z' ) {
-		ascii += -CHANGE_ASCIICODE;
-	} else {
-		ascii +=  CHANGE_ASCIICODE;
-	}
-	Vector pos = _map->getElevatorPos( ascii );
+void Character::setElevatorPos( char id ) {
+	Vector pos = _map->getElevatorPos( id );
 	if ( pos.x < 0 ) {
 		return;
 	}

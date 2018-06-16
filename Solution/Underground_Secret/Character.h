@@ -2,6 +2,7 @@
 #include "smart_ptr.h"
 #include "Vector.h"
 #include "Phase.h"
+#include "Elevator.h"
 #include <string>
 #include <map>
 #include <vector>
@@ -22,7 +23,8 @@ class Character {
 public:
 	enum ANIM_TYPE {
 		ANIM_WALK,
-		ANIM_OPEN,
+		ANIM_WAIT,
+		ANIM_RIDE,
 		ANIM_TYPE_MAX,
 	};
 
@@ -67,9 +69,11 @@ public:
 	void move( Vector move );
 
 public:
+	ANIM_TYPE getAnimType( ) const;
 	Vector getPos( ) const;
-	int getMapDataCollider( Vector pos ) const;
-	int getMapDataElevator( Vector pos ) const;
+	int getMapData( Vector pos ) const;
+	char getElevatorId( Vector pos ) const;
+	ELEVATOR_STATE getElevatorState( char id, Vector pos ) const;
 	bool isLooking( Vector pos ) const;
 	bool isEndpoint( Vector pos ) const;
 	std::vector< std::string > &getInfo( );
@@ -81,7 +85,7 @@ public:
 protected:
 	void setFallPos( Vector now_position );
 	void setPos( Vector pos );
-	void setElevatorPos( int ascii );
+	void setElevatorPos( char id );
 	// コライダーに埋まってしまっているときの処理
 	void checkCaughtCollider( );
 

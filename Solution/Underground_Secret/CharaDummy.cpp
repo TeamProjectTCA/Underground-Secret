@@ -18,7 +18,8 @@ _looking_time( 0 ) {
 	_random = Random::getTask( );
 
 	addAnim( Character::ANIM_WALK, "CharaDummy_Walk", 2 );
-	addAnim( Character::ANIM_OPEN, "CharaDummy_Open", 2 );
+	addAnim( Character::ANIM_RIDE, "CharaDummy_Ride", 2 );
+	addAnim( Character::ANIM_WAIT, "CharaDummy_Wait", 2 );
 	setAnim( Character::ANIM_WALK );
 
 	_dir = ( _random->getInt32( 0, 1 ) ? MOVE_RIGHT : MOVE_LEFT );
@@ -31,12 +32,18 @@ CharaDummy::~CharaDummy( ) {
 
 void CharaDummy::update( ) {
 	setScroll( );
-	walk( );
-	fall( );
-	countLooking( );
-	checkCaughtCollider( );
+
+	if ( getAnimType( ) == Character::ANIM_WALK ) {
+		walk( );
+		fall( );
+		checkCaughtCollider( );
+	}
+
+	// エレベーター
+	checkElevator( );
 
 	// 時間経過で情報を表示
+	countLooking( );
 	if ( _looking_time % INFO_SHOWTIME == 0 ) {
 		addShowInfoNum( );
 	}
@@ -55,7 +62,6 @@ void CharaDummy::walk( ) {
 	setDistance( );
 
 	checkCollider( );
-	checkElevator( );
 }
 
 void CharaDummy::fall( ) {
@@ -70,7 +76,7 @@ void CharaDummy::fall( ) {
 
 	bool move_ok = true;
 	
-	int data = getMapDataCollider( getPos( ) + _distance );
+	int data = getMapData( getPos( ) + _distance );
 	if ( data < 0 ) {
 		return;
 	}
@@ -102,7 +108,7 @@ void CharaDummy::countLooking( ) {
 
 void CharaDummy::checkCollider( ) {
 	// アスキーコードを取得
-	int data = getMapDataCollider( getPos( ) + _distance );
+	int data = getMapData( getPos( ) + _distance );
 
 	// エレベーターだったら
 	if ( data < 0 ) {
@@ -117,7 +123,7 @@ void CharaDummy::checkCollider( ) {
 	// 進行予測値が当たり判定であったら
 	if ( data == IDENTIFICATION_COLLIDER ) {
 		// もう1つ上を見る
-		data = getMapDataCollider( getPos( ) + _distance + Vector( 0, -BLOCK_SIZE ) );
+		data = getMapData( getPos( ) + _distance + Vector( 0, -BLOCK_SIZE ) );
 		if ( data == IDENTIFICATION_COLLIDER ) {
 			// 2回目も当たり判定があったら
 			_return_move = true;
@@ -139,17 +145,12 @@ void CharaDummy::checkCollider( ) {
 
 void CharaDummy::checkElevator( ) {
 	// アスキーコードを取得
-	int data = getMapDataElevator( getPos( ) );
+	char id = getElevatorId( getPos( ) );
 
 	// エレベーター以外だったら
-	if ( data < 0 ) {
+	if ( id == 0x00 ) {
 		_ride_elevator = false;
 		return;
-	}
-
-	// 乗るか乗らないかの抽選
-	if ( _random->getRealOne( ) > RANDOM_PROBABILITY && !_ride_elevator ) {
-		_ride_elevator = true;
 	}
 
 	// 連続で乗るのを防ぐ
@@ -157,8 +158,34 @@ void CharaDummy::checkElevator( ) {
 		return;
 	}
 
-	setElevatorPos( data );
-	_ride_elevator = true;
+	// エレベータの状態を取得
+	ELEVATOR_STATE state = getElevatorState( id, getPos( ) );
+
+	switch ( state ) {
+	case ELEVATOR_STATE_WAIT:
+		if ( getAnimType( ) != Character::ANIM_WAIT ) {
+			setAnim( Character::ANIM_WAIT );
+		}
+		return;
+
+	case ELEVATOR_STATE_MOVE:
+	{
+		Character::ANIM_TYPE anim = getAnimType( );
+		if ( anim != Character::ANIM_RIDE && anim == Character::ANIM_WAIT ) {
+			setAnim( Character::ANIM_RIDE );
+		}
+		return;
+	}
+
+	case ELEVATOR_STATE_ARRIVE:
+		setElevatorPos( id );
+		setAnim( Character::ANIM_WALK );
+		_ride_elevator = true;
+		return;
+
+	default:
+		break;
+	}
 }
 
 void CharaDummy::returnMove( ) {

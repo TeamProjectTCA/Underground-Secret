@@ -47,7 +47,7 @@ void PhaseStart::update( ) {
 
 	// オープンアニメーションをセット
 	if ( _count == MOVE_FRAME ) {
-		_run_chara->setAnim( Character::ANIM_OPEN );
+		_run_chara->setAnim( Character::ANIM_RIDE );
 	}
 
 	// アニメーション終了

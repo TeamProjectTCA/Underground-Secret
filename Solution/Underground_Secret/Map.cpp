@@ -6,6 +6,7 @@
 #include "Debug.h"
 #include "Shutter.h"
 #include "Scroll.h"
+#include "Elevator.h"
 #include <errno.h>
 #include <assert.h>
 
@@ -49,6 +50,7 @@ _scroll( scroll ) {
 	loadMap( );
 	setFixedpoint( );
 	setShutter( );
+	setElevator( );
 
 	_shutter->setCol( _col );
 }
@@ -60,6 +62,13 @@ void Map::update( ) {
 	_shutter->setScroll( _scroll->getScroll( ) );
 	_shutter->setEndScroll( _end_scroll );
 	_shutter->update( );
+
+	// elevator
+	std::unordered_map< char, ElevatorPtr >::iterator ite;
+	ite = _elevator.begin( );
+	for ( ite; ite != _elevator.end( ); ite++ ) {
+		ite->second->update( );
+	}
 
 	// debug
 	_debug_mode = _debug->isDebug( );
@@ -91,12 +100,14 @@ Vector Map::getFixedpointBeta( PHASE phase ) const {
 	return point;
 }
 
-Vector Map::getElevatorPos( int ascii ) const {
-	char find = ascii;
-	int idx = ( int )_data.find_first_of( find );
-	if ( idx == std::string::npos ) {
+Vector Map::getElevatorPos( char id ) const {
+	if ( _elevator.find( id ) == _elevator.end( ) ) {
 		return Vector( -1, -1, -1 );
 	}
+
+	ElevatorPtr elevator = _elevator.find( id )->second;
+	int idx = elevator->getDestinationPos( );
+
 	return Vector(
 		( idx % _col ) * BLOCK_SIZE,
 		( idx / _col ) * BLOCK_SIZE 
@@ -129,6 +140,40 @@ int Map::getMapData( int idx ) const {
 
 bool Map::isHitShutter( int detection_idx ) const {
 	return _shutter->isHitShutter( detection_idx );
+}
+
+char Map::getElevatorId( int idx ) const {
+	char id = getMapData( idx );
+
+	if ( _elevator.find( id ) == _elevator.end( ) ) {
+		return 0x00;
+	}
+
+	ElevatorPtr elevator = _elevator.find( id )->second;
+	int up     = elevator->getElevatorPos( ELEVATOR_POS_UP );
+	int center = elevator->getElevatorPos( ELEVATOR_POS_CENTER );
+	int down   = elevator->getElevatorPos( ELEVATOR_POS_DOWN );
+
+	if ( up     == idx ||
+		 center == idx ||
+		 down   == idx ) {
+		return id;
+	}
+
+	return 0x00;
+}
+
+ELEVATOR_STATE Map::getElevatorState( char id, int idx ) const {
+	if ( _elevator.find( id ) == _elevator.end( ) ) {
+		return ELEVATOR_STATE_NONE;
+	}
+
+	ElevatorPtr elevator = _elevator.find( id )->second;
+	if ( elevator->getElevatorPos( elevator->getActiveElevator( ) ) != idx ) {
+		return ELEVATOR_STATE_NONE;
+	}
+
+	return elevator->getElevatorState( );
 }
 
 void Map::draw( ) const {
@@ -240,6 +285,20 @@ void Map::setShutter( ) {
 	}
 }
 
+void Map::setElevator( ) {
+	int length = ( int )_data.length( );
+	for ( int i = 0; i < length; i++ ) {
+		char id = _data[ i ];
+		if ( id < ELEVATOR_ASCIICODE_MIN || ELEVATOR_ASCIICODE_MAX < id ) {
+			continue;
+		}
+		if ( _elevator.find( id ) == _elevator.end( ) ) {
+			_elevator[ id ] = ElevatorPtr( new Elevator( id ) );
+		}
+		_elevator[ id ]->add( i );
+	}
+}
+
 void Map::inputShutter( std::vector< int > &shutter, int idx ) {
 	int point = idx + _col;
 
@@ -311,8 +370,10 @@ void Map::drawCollider( ) const {
 				color = SHUTTER_COLOR;
 			}
 
-			_drawer->drawBox( ( float )(     x + scroll.x ) * BLOCK_SIZE - _end_scroll.x, ( float )(     y + scroll.y ) * BLOCK_SIZE - _end_scroll.y,
-				              ( float )( x + 1 + scroll.x ) * BLOCK_SIZE - _end_scroll.x, ( float )( y + 1 + scroll.y ) * BLOCK_SIZE - _end_scroll.y,
+			_drawer->drawBox( ( float )( (     x + scroll.x ) * BLOCK_SIZE - _end_scroll.x ),
+				              ( float )( (     y + scroll.y ) * BLOCK_SIZE - _end_scroll.y ),
+				              ( float )( ( x + 1 + scroll.x ) * BLOCK_SIZE - _end_scroll.x ),
+				              ( float )( ( y + 1 + scroll.y ) * BLOCK_SIZE - _end_scroll.y ),
 				              color, true );
 		}
 	}

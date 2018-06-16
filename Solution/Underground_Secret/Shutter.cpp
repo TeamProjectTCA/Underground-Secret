@@ -70,7 +70,7 @@ void Shutter::draw( ) const {
 		x += ( float )_scroll.x * BLOCK_SIZE;
 		y += ( float )_scroll.y * BLOCK_SIZE;
 
-		_drawer->drawRectGraph( x - _end_scroll.x, y - _end_scroll.y, 0, ly, _shutter_width, ry, _shutter_handle, true );
+		_drawer->drawRectGraph( x - ( float )_end_scroll.x, y - ( float )_end_scroll.y, 0, ly, _shutter_width, ry, _shutter_handle, true );
 	}
 }
 

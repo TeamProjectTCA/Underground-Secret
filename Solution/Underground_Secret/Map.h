@@ -2,8 +2,9 @@
 #include "smart_ptr.h"
 #include "Vector.h"
 #include "Phase.h"
+#include "Elevator.h"
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 PTR( Map );
@@ -12,6 +13,7 @@ PTR( Drawer );
 PTR( Keyboard );
 PTR( Shutter );
 PTR( Scroll );
+PTR( Elevator );
 
 class Map {
 public:
@@ -25,12 +27,14 @@ public:
 public:
 	Vector getFixedpointAlpha( PHASE phase ) const;
 	Vector getFixedpointBeta( PHASE phase ) const;
-	Vector getElevatorPos( int ascii ) const;
+	Vector getElevatorPos( char id ) const;
 	Vector getScrollData( ) const;
 	Vector getMapPos( ) const;
 	int getCol( ) const;
 	int getRow( ) const;
 	int getMapData( int idx ) const;
+	char getElevatorId( int idx ) const;
+	ELEVATOR_STATE getElevatorState( char id, int idx ) const;
 	bool isHitShutter( int detection_idx ) const;
 	void endScroll( Vector move );
 	void focusScroll( Vector move );
@@ -39,6 +43,7 @@ private:
 	void loadMap( );
 	void setFixedpoint( );
 	void setShutter( );
+	void setElevator( );
 	void inputShutter( std::vector< int > &shutter, int idx );
 
 private:
@@ -59,6 +64,7 @@ private:
 	Vector _fixedpoint_beta_start;
 	Vector _fixedpoint_beta_play;
 	Vector _fixedpoint_beta_end;
+	std::unordered_map< char, ElevatorPtr > _elevator;
 
 	DebugPtr _debug;
 	DrawerPtr _drawer;

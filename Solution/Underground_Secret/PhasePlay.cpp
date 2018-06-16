@@ -78,7 +78,7 @@ bool PhasePlay::isClear( ) {
 }
 
 bool PhasePlay::isInvasion( ) const {
-	if ( _spy->getMapDataCollider( _spy->getPos( ) ) == IDENTIFICATION_ENDPOINT ) {
+	if ( _spy->getMapData( _spy->getPos( ) ) == IDENTIFICATION_ENDPOINT ) {
 		return true;
 	}
 	return false;

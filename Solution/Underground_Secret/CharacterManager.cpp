@@ -42,7 +42,7 @@ void CharacterManager::setChara( int num ) {
 		// —”‚Å¶¬ƒLƒƒƒ‰‚Ì”Ô†‚ğæ“¾
 		int chara_idx = random->getInt32( 0, CHARA_MAX - 1 );
 
-		CharacterPtr chara = getCharaInstance( ( CHARACTER )chara_idx );
+		CharacterPtr chara = getCharaInstance( ( CHARACTER )1 );
 		// errorˆ—
 		if ( chara == CharacterPtr( ) ) {
 			continue;
