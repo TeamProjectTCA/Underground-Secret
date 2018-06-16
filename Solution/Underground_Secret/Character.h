@@ -24,6 +24,7 @@ public:
 	enum ANIM_TYPE {
 		ANIM_WALK,
 		ANIM_WAIT,
+		ANIM_WAIT_ELEVATOR,
 		ANIM_RIDE,
 		ANIM_TYPE_MAX,
 	};

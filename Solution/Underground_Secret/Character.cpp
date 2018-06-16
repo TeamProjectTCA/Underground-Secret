@@ -16,9 +16,6 @@ const int ELEVATOR_ASCIICODE_MAX = 'z';
 const int ENDPOINT_ASCIICODE = '6';
 const int CHANGE_ASCIICODE = 'a' - 'A';
 
-const int SCREEN_WIDTH_BLOCK_NUM = WIDTH / BLOCK_SIZE;
-const int SCREEN_HEIGHT_BLOCK_NUM = HEIGHT / BLOCK_SIZE;
-
 const int FONT_SIZE = 20;
 
 Character::Character( MapPtr map, std::vector< std::string > info ) :
@@ -88,15 +85,15 @@ void Character::move( Vector move ) {
 
 bool Character::isLooking( Vector pos ) const {
 	// キャラの中心のブロックの x, y
-	int x = ( int )( pos.x / BLOCK_SIZE );
-	int y = ( int )( ( pos.y - _anim.find( _anim_type )->second.height / 2 ) / BLOCK_SIZE );
+	int x = ( int )   pos.x;
+	int y = ( int ) ( pos.y - _anim.find( _anim_type )->second.height / 2 );
 
 	// スクリーンの左上座標
 	int screen_x = ( int )( _scroll.x * -1 );
 	int screen_y = ( int )( _scroll.y * -1 );
 
-	if ( screen_x < x && x < screen_x + SCREEN_WIDTH_BLOCK_NUM &&
-		 screen_y < y && y < screen_y + SCREEN_HEIGHT_BLOCK_NUM ) {
+	if ( screen_x < x && x < screen_x + WIDTH &&
+		 screen_y < y && y < screen_y + HEIGHT ) {
 		return true;
 	}
 	return false;
@@ -185,7 +182,7 @@ void Character::draw( ) {
 
 		Vector pos = Vector( _pos.x - _anim[ _anim_type ].width / 2, _pos.y - _anim[ _anim_type ].height );
 		_drawer->drawRectGraph( 
-			( float )( pos.x + _scroll.x * BLOCK_SIZE ), ( float )( pos.y + _scroll.y * BLOCK_SIZE ),
+			( float )( pos.x + _scroll.x ), ( float )( pos.y + _scroll.y ),
 			_sx, 0,
 			_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
 			_anim[ _anim_type ].handle,
@@ -197,7 +194,7 @@ void Character::draw( ) {
 			return;
 		}
 
-		Vector info = _pos - ( Vector( -chara_size.x * 0.5, chara_size.y ) ) + _scroll * BLOCK_SIZE;
+		Vector info = _pos - ( Vector( -chara_size.x * 0.5, chara_size.y ) ) + _scroll;
 
 		for ( int i = 0; i < _show_info_num; i++ ) {
 			_drawer->drawString( ( float )info.x, ( float )info.y + i * FONT_SIZE, _info[ i ].c_str( ), BLUE );

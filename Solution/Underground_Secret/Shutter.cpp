@@ -63,14 +63,14 @@ void Shutter::draw( ) const {
 		// 描画はじめを設定
 		ly = _shutter_height - ry;
 
- 		float x = ( float )( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
+ 		float x = ( float )( ( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE );
 		float y = ( float )( ( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE );
 
 		// スクロール分を足す
-		x += ( float )_scroll.x * BLOCK_SIZE;
-		y += ( float )_scroll.y * BLOCK_SIZE;
+		x += ( float )( _scroll.x - _end_scroll.x );
+		y += ( float )( _scroll.y - _end_scroll.y );
 
-		_drawer->drawRectGraph( x - ( float )_end_scroll.x, y - ( float )_end_scroll.y, 0, ly, _shutter_width, ry, _shutter_handle, true );
+		_drawer->drawRectGraph( x, y, 0, ly, _shutter_width, ry, _shutter_handle, true );
 	}
 }
 
@@ -81,17 +81,22 @@ void Shutter::onShutter( ) {
 
 	int mouse_x = _mouse->getPointX( );
 	int mouse_y = _mouse->getPointY( );
-	int idx = ( mouse_x / BLOCK_SIZE ) + ( ( mouse_y / BLOCK_SIZE ) * _col );
-	idx += ( int )( _scroll.x * -1 ) + ( int )( ( _scroll.y * -1 ) * _col );
 
 	int size = ( int )_shutter.size( );
 	int hit_idx = -1;
 
 	// シャッターの一番上のマスをクリックしているかどうか
 	for ( int i = 0; i < size; i++ ) {
-		if ( _shutter[ i ].front( ) != idx ) {
+		int x = ( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
+		int y = ( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE;
+		x += ( int )_scroll.x;
+		y += ( int )_scroll.y ;
+
+		if ( mouse_x < x || mouse_x > ( x + BLOCK_SIZE ) ||
+			 mouse_y < y || mouse_y > ( y + BLOCK_SIZE ) ) {
 			continue;
 		}
+
 		hit_idx = i;
 		break;
 	}

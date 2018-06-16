@@ -1,6 +1,6 @@
 #include "SceneTitle.h"
 #include "Drawer.h"
-#include "Soundplayer.h"
+#include "Sound.h"
 #include "Keyboard.h"
 #include "Mouse.h"
 #include "const.h"
@@ -10,7 +10,7 @@ const float START_BUTTON_Y = HEIGHT / 5 * 4 ;
 
 SceneTitle::SceneTitle( ) {
 	_drawer = Drawer::getTask( );
-	_soundplayer = Soundplayer::getTask( );
+	_sound = Sound::getTask( );
 	_keyboard = Keyboard::getTask( );
 	_mouse = Mouse::getTask( );
 	_background_handle = _drawer->getImage( "back_001" );
@@ -30,11 +30,11 @@ SceneTitle::SceneTitle( ) {
 	_startbutton.collider.down = ( float )START_BUTTON_Y + _startbutton.image.height * 0.5f;
 
 	//BGM
-	_title_bgm = _soundplayer->getSound( "title1" );
-	_soundplayer->play( _title_bgm, true );
+	_title_bgm = _sound->load( "Resources/sound/TitleBGM/title1.ogg" );
+	_sound->play( _title_bgm, true );
 
 	//SE
-	_button_se = _soundplayer->getSound( "button" );
+	_button_se = _sound->load( "Resources/sound/SoundEffect/button.ogg" );
 }
 
 SceneTitle::~SceneTitle( ) {
@@ -64,8 +64,8 @@ void SceneTitle::changeNextScene( ) {
 
 		switch ( hit ) {
 			case BUTTON_START:
-				_soundplayer->stop( _title_bgm );
-				_soundplayer->play( _button_se );
+				_sound->stop( _title_bgm );
+				_sound->play( _button_se );
 				setNextScene( SCENE_STAGESELECT );
 				break;
 			default:

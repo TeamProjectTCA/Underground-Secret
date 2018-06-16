@@ -9,17 +9,23 @@ const int MOVE_RATE_X = 3;
 const int MOVE_RATE_Y = BLOCK_SIZE;
 const float RANDOM_PROBABILITY = 0.3f;
 const int INFO_SHOWTIME = FPS * 5;
+const int CHECK_WAIT_TIME = FPS * 3;
+const float WAIT_PROBABILITY = 1.0f;
 
 CharaDummy::CharaDummy( MapPtr map, InfomationPtr info ) :
 Character( map, info->getInfo( CHARA_DUMMY ) ),
 _ride_elevator( false ),
 _return_move( false ),
-_looking_time( 0 ) {
+_looking_time( 0 ),
+_wait_count( 0 ),
+_wait_ani_time( 0 ),
+_wait_time( 0 ) {
 	_random = Random::getTask( );
 
 	addAnim( Character::ANIM_WALK, "CharaDummy_Walk", 2 );
 	addAnim( Character::ANIM_RIDE, "CharaDummy_Ride", 2 );
 	addAnim( Character::ANIM_WAIT, "CharaDummy_Wait", 2 );
+	addAnim( Character::ANIM_WAIT_ELEVATOR, "CharaDummy_WaitElevator", 2 );
 	setAnim( Character::ANIM_WALK );
 
 	_dir = ( _random->getInt32( 0, 1 ) ? MOVE_RIGHT : MOVE_LEFT );
@@ -38,6 +44,9 @@ void CharaDummy::update( ) {
 		fall( );
 		checkCaughtCollider( );
 	}
+
+	//立ち止まる
+	wait( );
 
 	// エレベーター
 	checkElevator( );
@@ -58,12 +67,41 @@ void CharaDummy::walk( ) {
 	if ( _dir == MOVE_DOWN ) {
 		return;
 	}
+	if ( getAnimType( ) == Character::ANIM_WAIT ) {
+		return;
+	}
 	// 進行方向に予測座標をセット
 	setDistance( );
 
 	checkCollider( );
 }
 
+void CharaDummy::wait( ) {
+	if ( _dir == MOVE_DOWN ) {
+		return;
+	}
+
+	if ( getAnimType( ) == Character::ANIM_WALK ) {
+		_wait_count++;
+		if ( _wait_count >= CHECK_WAIT_TIME ) {
+			//立ち止まる処理
+			if ( _random->getRealOne( ) <= WAIT_PROBABILITY ) {
+				setAnim( Character::ANIM_WAIT );
+				_wait_time = _random->getInt32( 2, 4 );
+			}
+			_wait_count = 0;
+		}
+	}
+
+	if ( getAnimType( ) == Character::ANIM_WAIT ) {
+		_wait_ani_time++;
+		//2~5秒経ったらWalkに戻る
+		if ( _wait_ani_time >= _wait_time * FPS ) {
+			setAnim( Character::ANIM_WALK );
+			_wait_ani_time = 0;
+		}
+	}
+}
 void CharaDummy::fall( ) {
 	MOVE_DIRECTION past = _dir;
 	_dir = MOVE_DOWN;
@@ -163,15 +201,15 @@ void CharaDummy::checkElevator( ) {
 
 	switch ( state ) {
 	case ELEVATOR_STATE_WAIT:
-		if ( getAnimType( ) != Character::ANIM_WAIT ) {
-			setAnim( Character::ANIM_WAIT );
+		if ( getAnimType( ) != Character::ANIM_WAIT_ELEVATOR ) {
+			setAnim( Character::ANIM_WAIT_ELEVATOR );
 		}
 		return;
 
 	case ELEVATOR_STATE_MOVE:
 	{
 		Character::ANIM_TYPE anim = getAnimType( );
-		if ( anim != Character::ANIM_RIDE && anim == Character::ANIM_WAIT ) {
+		if ( anim != Character::ANIM_RIDE && anim == Character::ANIM_WAIT_ELEVATOR ) {
 			setAnim( Character::ANIM_RIDE );
 		}
 		return;

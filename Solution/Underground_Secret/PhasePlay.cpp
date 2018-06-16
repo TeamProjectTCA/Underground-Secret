@@ -1,7 +1,7 @@
 #include "PhasePlay.h"
 #include "Character.h"
 #include "Drawer.h"
-#include "Soundplayer.h"
+#include "Sound.h"
 #include "const.h"
 #include "Scroll.h"
 #include "Profiling.h"
@@ -22,16 +22,16 @@ PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, int spy_idx, ScrollPtr s
 _chara( chara ),
 _scroll( scroll ) {
 	_drawer = Drawer::getTask( );
-	_soundplayer = Soundplayer::getTask( );
+	_sound = Sound::getTask( );
 	_time_count = TIME_LIMIT * FPS;
 
 	//BGM
-	_play_bgm = _soundplayer->getSound( "gamebgm1" );
-	_soundplayer->play( _play_bgm, true );
+	_play_bgm = _sound->load( "Resources/sound/GameBGM/gamebgm1.ogg" );
+	_sound->play( _play_bgm, true );
 
 	//SE
-	_win_se = _soundplayer->getSound( "win" );
-	_lose_se = _soundplayer->getSound( "lose" );
+	_win_se = _sound->load( "Resources/sound/SoundEffect/win.ogg" );
+	_lose_se = _sound->load( "Resources/sound/SoundEffect/lose.ogg" );
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );
@@ -58,14 +58,14 @@ void PhasePlay::update( ) {
 	_time_count--;
 
 	if ( isInvasion( ) ) {
-		_soundplayer->stop( _play_bgm );
-		_soundplayer->play( _lose_se );
+		_sound->stop( _play_bgm );
+		_sound->play( _lose_se );
 		setPhase( PHASE_END );
 	}
 
 	if ( isClear( ) ) {
-		_soundplayer->stop( _play_bgm );
-		_soundplayer->play( _win_se );
+		_sound->stop( _play_bgm );
+		_sound->play( _win_se );
 		setPhase( PHASE_END );
 	}
 }

@@ -9,7 +9,7 @@
 
 PTR( SceneTitle );
 PTR( Drawer );
-PTR( Soundplayer );
+PTR( Sound );
 PTR( Keyboard );
 PTR( Mouse );
 
@@ -61,7 +61,7 @@ private:
 
 	//ƒNƒ‰ƒX
 	DrawerPtr _drawer;
-	SoundplayerPtr _soundplayer;
+	SoundPtr _sound;
 	MousePtr _mouse;
 	KeyboardPtr _keyboard;
 };

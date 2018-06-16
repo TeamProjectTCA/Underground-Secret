@@ -6,7 +6,7 @@
 PTR( PhasePlay );
 PTR( Character );
 PTR( Drawer );
-PTR( Soundplayer );
+PTR( Sound );
 PTR( Scroll );
 PTR( Profiling );
 
@@ -37,7 +37,7 @@ private:
 	int _lose_se;
 
 	DrawerPtr _drawer;
-	SoundplayerPtr _soundplayer;
+	SoundPtr _sound;
 	ScrollPtr _scroll;
 	ProfilingPtr _profiling;
 	CharacterPtr _spy;

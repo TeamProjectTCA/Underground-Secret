@@ -1,7 +1,7 @@
 #include "Manager.h"
 #include "DxSetting.h"
 #include "Drawer.h"
-#include "Soundplayer.h"
+#include "Sound.h"
 #include "SceneManager.h"
 #include "Keyboard.h"
 #include "Mouse.h"
@@ -17,7 +17,7 @@ void main( ) {
 	setting->setDrawScreenBack( );
 
 	DrawerPtr drawer( new Drawer( "Resources/image" ) );
-	SoundplayerPtr soundplayer( new Soundplayer( "Resources/sound" ) );
+	SoundPtr soundplayer( new Sound( ) );
 	SceneManagerPtr scene_manager( new SceneManager( ) );
 	KeyboardPtr keyboard( new Keyboard( ) );
 	MousePtr mouse( new Mouse( ) );
@@ -26,7 +26,7 @@ void main( ) {
 
 	//add
 	manager->add( Drawer::getTag( ), drawer );
-	manager->add( Soundplayer::getTag( ), soundplayer );
+	manager->add( Sound::getTag( ), soundplayer );
 	manager->add( SceneManager::getTag( ), scene_manager );
 	manager->add( Keyboard::getTag( ), keyboard );
 	manager->add( Mouse::getTag( ), mouse );

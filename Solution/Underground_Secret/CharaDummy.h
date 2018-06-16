@@ -17,6 +17,7 @@ public:
 
 private:
 	void walk( );
+	void wait( );
 	void fall( );
 	void setDistance( );
 	void countLooking( );
@@ -26,6 +27,9 @@ private:
 
 private:
 	int _looking_time;
+	int _wait_count;
+	int _wait_ani_time;
+	int _wait_time;
 	MOVE_DIRECTION _dir;
 	Vector _distance;
 	bool _ride_elevator;

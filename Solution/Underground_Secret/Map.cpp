@@ -183,7 +183,7 @@ ELEVATOR_STATE Map::getElevatorState( char id, int idx ) const {
 void Map::draw( ) const {
 	// マップを描画
 	Vector scroll = _scroll->getScroll( );
-	_drawer->drawGraph( ( int )( scroll.x * BLOCK_SIZE - _end_scroll.x ), ( int )( scroll.y * BLOCK_SIZE - _end_scroll.y ), _map_handle, true );
+	_drawer->drawGraph( ( int )( scroll.x - _end_scroll.x ), ( int )( scroll.y - _end_scroll.y ), _map_handle, true );
 
 	//シャッターを描画
 	_shutter->draw( );
@@ -327,9 +327,9 @@ void Map::focusScroll( Vector move ) {
 
 void Map::drawCollider( ) const {
 	Vector scroll = _scroll->getScroll( );
-	int range_width_min = ( int )scroll.x * -1;
+	int range_width_min = ( int )scroll.x / 16 * -1;
 	int range_width_max = range_width_min + WIDTH / BLOCK_SIZE;
-	int range_height_min = ( int )scroll.y * -1;
+	int range_height_min = ( int )scroll.y / 16 * -1;
 	int range_height_max = range_height_min + HEIGHT / BLOCK_SIZE;
 
 	for ( int i = 0; i < _row; i++ ) {
@@ -374,10 +374,10 @@ void Map::drawCollider( ) const {
 				color = SHUTTER_COLOR;
 			}
 
-			_drawer->drawBox( ( float )( (     x + scroll.x ) * BLOCK_SIZE - _end_scroll.x ),
-				              ( float )( (     y + scroll.y ) * BLOCK_SIZE - _end_scroll.y ),
-				              ( float )( ( x + 1 + scroll.x ) * BLOCK_SIZE - _end_scroll.x ),
-				              ( float )( ( y + 1 + scroll.y ) * BLOCK_SIZE - _end_scroll.y ),
+			_drawer->drawBox( ( float )( (     x ) * BLOCK_SIZE + scroll.x  - _end_scroll.x ),
+				              ( float )( (     y ) * BLOCK_SIZE + scroll.y  - _end_scroll.y ),
+				              ( float )( ( x + 1 ) * BLOCK_SIZE + scroll.x  - _end_scroll.x ),
+				              ( float )( ( y + 1 ) * BLOCK_SIZE + scroll.y  - _end_scroll.y ),
 				              color, true );
 		}
 	}
