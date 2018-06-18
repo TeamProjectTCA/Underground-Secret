@@ -123,7 +123,7 @@ Vector Map::getScrollData( ) const {
 }
 
 Vector Map::getMapPos( ) const {
-	return Vector( ( int )( _scroll->getScroll( ).x * BLOCK_SIZE - _end_scroll.x ), ( int )( _scroll->getScroll( ).y * BLOCK_SIZE - _end_scroll.y ) );
+	return Vector( ( int )( getScrollData( ).x - _end_scroll.x ), ( int )( getScrollData( ).y - _end_scroll.y ) );
 }
 
 int Map::getCol( ) const {
@@ -374,10 +374,10 @@ void Map::drawCollider( ) const {
 				color = SHUTTER_COLOR;
 			}
 
-			_drawer->drawBox( ( float )( (     x ) * BLOCK_SIZE + scroll.x  - _end_scroll.x ),
-				              ( float )( (     y ) * BLOCK_SIZE + scroll.y  - _end_scroll.y ),
-				              ( float )( ( x + 1 ) * BLOCK_SIZE + scroll.x  - _end_scroll.x ),
-				              ( float )( ( y + 1 ) * BLOCK_SIZE + scroll.y  - _end_scroll.y ),
+			_drawer->drawBox( ( float )( (     x ) * BLOCK_SIZE + scroll.x - _end_scroll.x ),
+				              ( float )( (     y ) * BLOCK_SIZE + scroll.y - _end_scroll.y ),
+				              ( float )( ( x + 1 ) * BLOCK_SIZE + scroll.x - _end_scroll.x ),
+				              ( float )( ( y + 1 ) * BLOCK_SIZE + scroll.y - _end_scroll.y ),
 				              color, true );
 		}
 	}
