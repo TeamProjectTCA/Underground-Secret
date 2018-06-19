@@ -100,6 +100,11 @@ ELEVATOR_POS Elevator::getActiveElevator( ) const {
 	return _active_elevator;
 }
 
+
+ELEVATOR_POS Elevator::getDestination( ) const {
+	return _destination;
+}
+
 int Elevator::getElevatorPos( ELEVATOR_POS pos ) const {
 	if ( _data.size( ) <= ( int )pos ) {
 		return -1;

@@ -30,10 +30,13 @@ private:
 	int _wait_count;
 	int _wait_ani_time;
 	int _wait_time;
+	float _ride_probability;
 	MOVE_DIRECTION _dir;
 	Vector _distance;
 	bool _ride_elevator;
 	bool _return_move;
+	bool _hit_shutter;
+	bool _elevator_down;
 
 	RandomPtr _random;
 };

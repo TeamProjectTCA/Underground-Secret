@@ -164,6 +164,20 @@ ELEVATOR_STATE Character::getElevatorState( char id, Vector pos ) const {
 	return _map->getElevatorState( id, idx );
 }
 
+ELEVATOR_POS Character::getActiveElevator( char id, Vector pos ) const {
+	Vector position = pos;
+	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+	return _map->getActiveElevator( id, idx );
+}
+
+ELEVATOR_POS  Character::getDestination( char id, Vector pos ) const {
+	Vector position = pos;
+	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+	return _map->getDestination( id, idx );
+}
+
 void Character::draw( ) {
 	Vector chara_size = Vector( _anim[ _anim_type ].width, _anim[ _anim_type ].height );
 

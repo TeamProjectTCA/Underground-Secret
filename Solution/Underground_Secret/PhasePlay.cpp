@@ -26,12 +26,12 @@ _scroll( scroll ) {
 	_time_count = TIME_LIMIT * FPS;
 
 	//BGM
-	_play_bgm = _sound->load( "Resources/sound/GameBGM/gamebgm1.ogg" );
+	_play_bgm = _sound->load( "GameBGM/gamebgm1.ogg" );
 	_sound->play( _play_bgm, true );
 
 	//SE
-	_win_se = _sound->load( "Resources/sound/SoundEffect/win.ogg" );
-	_lose_se = _sound->load( "Resources/sound/SoundEffect/lose.ogg" );
+	_win_se = _sound->load( "SoundEffect/win.ogg" );
+	_lose_se = _sound->load( "SoundEffect/lose.ogg" );
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );

@@ -40,6 +40,7 @@ public:
 	int getDestinationPos( ) const;
 	ELEVATOR_STATE getElevatorState( ) const;
 	ELEVATOR_POS getActiveElevator( ) const;
+	ELEVATOR_POS getDestination( ) const;
 
 
 private:

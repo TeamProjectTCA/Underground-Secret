@@ -30,11 +30,11 @@ SceneTitle::SceneTitle( ) {
 	_startbutton.collider.down = ( float )START_BUTTON_Y + _startbutton.image.height * 0.5f;
 
 	//BGM
-	_title_bgm = _sound->load( "Resources/sound/TitleBGM/title1.ogg" );
+	_title_bgm = _sound->load( "TitleBGM/title1.ogg" );
 	_sound->play( _title_bgm, true );
 
 	//SE
-	_button_se = _sound->load( "Resources/sound/SoundEffect/button.ogg" );
+	_button_se = _sound->load( "SoundEffect/button.ogg" );
 }
 
 SceneTitle::~SceneTitle( ) {

@@ -7,15 +7,20 @@
 
 const int MOVE_RATE_X = 3;
 const int MOVE_RATE_Y = BLOCK_SIZE;
-const float RANDOM_PROBABILITY = 0.3f;
 const int INFO_SHOWTIME = FPS * 5;
 const int CHECK_WAIT_TIME = FPS * 3;
-const float WAIT_PROBABILITY = 1.0f;
+const float WAIT_PROBABILITY = 0.2f;
+const float RIDE_PROBABILITY = 0.3f;
+const float DOWN_SCALE = 1.5f;
+const float HIT_SHUTTER_SCALE = 2.0f;
 
 CharaDummy::CharaDummy( MapPtr map, InfomationPtr info ) :
 Character( map, info->getInfo( CHARA_DUMMY ) ),
 _ride_elevator( false ),
+_ride_probability( RIDE_PROBABILITY ),
 _return_move( false ),
+_hit_shutter( false ),
+_elevator_down( false ),
 _looking_time( 0 ),
 _wait_count( 0 ),
 _wait_ani_time( 0 ),
@@ -156,6 +161,7 @@ void CharaDummy::checkCollider( ) {
 	// 進行予想値がシャッター
 	if ( data == IDENTIFICATION_SHUTTER ) {
 		_return_move = true;
+		_hit_shutter = true;
 	}
 
 	// 進行予測値が当たり判定であったら
@@ -165,6 +171,7 @@ void CharaDummy::checkCollider( ) {
 		if ( data == IDENTIFICATION_COLLIDER ) {
 			// 2回目も当たり判定があったら
 			_return_move = true;
+			_hit_shutter = false;
 		} else {
 			_distance += Vector( 0, -BLOCK_SIZE );
 		}
@@ -198,10 +205,38 @@ void CharaDummy::checkElevator( ) {
 
 	// エレベータの状態を取得
 	ELEVATOR_STATE state = getElevatorState( id, getPos( ) );
+	ELEVATOR_POS active_elevator = getActiveElevator( id, getPos( ) );
+	ELEVATOR_POS destination = getDestination( id, getPos( ) );
 
 	switch ( state ) {
 	case ELEVATOR_STATE_WAIT:
 		if ( getAnimType( ) != Character::ANIM_WAIT_ELEVATOR ) {
+
+			if ( active_elevator == ELEVATOR_POS_UP ||
+				( active_elevator == ELEVATOR_POS_CENTER && destination == ELEVATOR_POS_DOWN ) ) {
+				_elevator_down = true;
+			} else {
+				_elevator_down = false;
+			}
+
+			//エレベーターに乗る確率判定
+			if ( !_hit_shutter && !_elevator_down ) {
+				_ride_probability = RIDE_PROBABILITY;
+			}
+			if ( !_hit_shutter && _elevator_down ) {
+				_ride_probability = RIDE_PROBABILITY * DOWN_SCALE;
+			}
+			if ( _hit_shutter && !_elevator_down ) {
+				_ride_probability = RIDE_PROBABILITY * HIT_SHUTTER_SCALE;
+			}
+			if ( _hit_shutter && _elevator_down ) {
+				_ride_probability = RIDE_PROBABILITY * DOWN_SCALE * HIT_SHUTTER_SCALE;
+			}
+
+			if ( _random->getRealOne( ) > _ride_probability ) {
+				break;
+			}
+
 			setAnim( Character::ANIM_WAIT_ELEVATOR );
 		}
 		return;

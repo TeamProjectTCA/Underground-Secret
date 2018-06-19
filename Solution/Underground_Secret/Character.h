@@ -75,6 +75,8 @@ public:
 	int getMapData( Vector pos ) const;
 	char getElevatorId( Vector pos ) const;
 	ELEVATOR_STATE getElevatorState( char id, Vector pos ) const;
+	ELEVATOR_POS getActiveElevator( char id, Vector pos ) const;
+	ELEVATOR_POS getDestination( char id, Vector pos ) const;
 	bool isLooking( Vector pos ) const;
 	bool isEndpoint( Vector pos ) const;
 	std::vector< std::string > &getInfo( );

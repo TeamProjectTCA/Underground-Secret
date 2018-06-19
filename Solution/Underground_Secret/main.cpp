@@ -17,7 +17,7 @@ void main( ) {
 	setting->setDrawScreenBack( );
 
 	DrawerPtr drawer( new Drawer( "Resources/image" ) );
-	SoundPtr soundplayer( new Sound( ) );
+	SoundPtr soundplayer( new Sound( "Resources/sound" ) );
 	SceneManagerPtr scene_manager( new SceneManager( ) );
 	KeyboardPtr keyboard( new Keyboard( ) );
 	MousePtr mouse( new Mouse( ) );

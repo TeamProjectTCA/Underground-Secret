@@ -35,6 +35,8 @@ public:
 	int getMapData( int idx ) const;
 	char getElevatorId( int idx ) const;
 	ELEVATOR_STATE getElevatorState( char id, int idx ) const;
+	ELEVATOR_POS getActiveElevator( char id, int idx ) const;
+	ELEVATOR_POS getDestination( char id, int idx ) const;
 	bool isHitShutter( int detection_idx ) const;
 	void endScroll( Vector move );
 	void focusScroll( Vector move );

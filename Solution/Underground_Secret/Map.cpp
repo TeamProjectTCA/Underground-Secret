@@ -180,6 +180,20 @@ ELEVATOR_STATE Map::getElevatorState( char id, int idx ) const {
 	return elevator->getElevatorState( );
 }
 
+ELEVATOR_POS Map::getActiveElevator( char id, int idx ) const {
+	if ( getElevatorState( id, idx ) != ELEVATOR_STATE_NONE ) {
+		ElevatorPtr elevator = _elevator.find( id )->second;
+		return elevator->getActiveElevator( );
+	}
+}
+
+ELEVATOR_POS Map::getDestination( char id, int idx ) const {
+	if ( getElevatorState( id, idx ) != ELEVATOR_STATE_NONE ) {
+		ElevatorPtr elevator = _elevator.find( id )->second;
+		return elevator->getDestination( );
+	}
+}
+
 void Map::draw( ) const {
 	// ƒ}ƒbƒv‚ð•`‰æ
 	Vector scroll = _scroll->getScroll( );
