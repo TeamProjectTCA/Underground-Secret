@@ -11,7 +11,7 @@ PTR( Shutter );
 
 class PhaseEnd : public Phase {
 public:
-	PhaseEnd( std::list< CharacterPtr > &chara, int spy_idx, MapPtr map );
+	PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map );
 	virtual ~PhaseEnd( );
 
 public:

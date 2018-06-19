@@ -11,13 +11,15 @@ const float PERFORMANCE_TIME = FPS * 2;
 const double MAP_SCROLL_SPEED_RATE = 0.7;
 const double CHARA_SCROLL_SPEED_RATE = 1 - MAP_SCROLL_SPEED_RATE;
 
-PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, int spy_idx, MapPtr map ) :
+PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map ) :
 _map( map ),
 _count( 0 ) {
 	std::list< CharacterPtr >::iterator ite;
 	ite = chara.begin( );
-	for ( int i = 0; i < spy_idx; i++ ) {
-		ite++;
+	for ( ite; ite != chara.end( ); ite++ ) {
+		if ( ( *ite )->isSpy( ) ) {
+			break;
+		}
 	}
 	_spy = ( *ite );
 	_spy->setFixedpoint( PHASE_END );

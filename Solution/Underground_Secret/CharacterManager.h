@@ -25,14 +25,12 @@ public:
 
 public:
 	std::list< CharacterPtr > getChara( );
-	int getSpyIdx( ) const;
 
 private:
 	CharacterPtr getCharaInstance( CHARACTER chara_idx );
 	
 private:
 	std::list< CharacterPtr > _chara;
-	int _spy_idx;
 
 	MapPtr _map;
 	InfomationPtr _info;

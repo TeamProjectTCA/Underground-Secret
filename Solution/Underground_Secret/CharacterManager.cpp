@@ -6,9 +6,7 @@
 #include "Random.h"
 
 CharacterManager::CharacterManager( MapPtr map ) :
-_map( map ),
-_spy_idx( -1 ) {
-
+_map( map ) {
 	_info = InfomationPtr( new Infomation( ) );
 }
 
@@ -53,15 +51,17 @@ void CharacterManager::setChara( int num ) {
 	}
 
 	// ƒXƒpƒC‚ðŒˆ‚ß‚é
-	_spy_idx = random->getInt32( 0, ( int )_chara.size( ) - 1 );
+	int spy_idx = random->getInt32( 0, ( int )_chara.size( ) - 1 );
+	std::list< CharacterPtr >::iterator ite;
+	ite = _chara.begin( );
+	for ( int i = 0; i < spy_idx; i++ ) {
+		ite++;
+	}
+	( *ite )->setSpy( true );
 }
 
 std::list< CharacterPtr > CharacterManager::getChara( ) {
 	return _chara;
-}
-
-int CharacterManager::getSpyIdx( ) const {
-	return _spy_idx;
 }
 
 CharacterPtr CharacterManager::getCharaInstance( CHARACTER chara_idx ) {

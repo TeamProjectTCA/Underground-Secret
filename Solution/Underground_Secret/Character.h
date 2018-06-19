@@ -63,6 +63,7 @@ public:
 	void setAnimTime( int change_time );
 	void setFixedpoint( PHASE phase );
 	void setScroll( );
+	void setSpy( bool spy );
 	void addShowInfoNum( );
 
 public:
@@ -79,6 +80,7 @@ public:
 	ELEVATOR_POS getDestination( char id, Vector pos ) const;
 	bool isLooking( Vector pos ) const;
 	bool isEndpoint( Vector pos ) const;
+	bool isSpy( ) const;
 	std::vector< std::string > &getInfo( );
 
 public:
@@ -98,6 +100,7 @@ protected:
 	DebugPtr _debug;
 
 private:
+	bool _spy;
 	Vector _pos; // キャラクタの足元中心座標
 	std::map< ANIM_TYPE, Animation > _anim;
 	int _anim_change_time;

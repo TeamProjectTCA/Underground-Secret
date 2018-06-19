@@ -37,6 +37,7 @@ private:
 	bool _return_move;
 	bool _hit_shutter;
 	bool _elevator_down;
+	bool _judged_probability ;
 
 	RandomPtr _random;
 };

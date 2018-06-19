@@ -18,7 +18,7 @@ const float TIME_STRING_Y2 = 50;
 
 const int TIME_LIMIT = 60;
 
-PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, int spy_idx, ScrollPtr scroll ) :
+PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll ) :
 _chara( chara ),
 _scroll( scroll ) {
 	_drawer = Drawer::getTask( );
@@ -35,8 +35,10 @@ _scroll( scroll ) {
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );
-	for ( int i = 0; i < spy_idx; i++ ) {
-		ite++;
+	for ( ite; ite != _chara.end( ); ite++ ) {
+		if ( ( *ite )->isSpy( ) ) {
+			break;
+		}
 	}
 	_spy = ( *ite );
 

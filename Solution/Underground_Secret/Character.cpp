@@ -28,7 +28,8 @@ _sx( 0 ),
 _max_cnt( DEFAULT_MAX_COUNT ),
 _pos( Vector( ) ),
 _scroll( Vector( ) ),
-_show_info_num( 0 ) {
+_show_info_num( 0 ),
+_spy( false ) {
 	_drawer = Drawer::getTask( );
 	_debug = Debug::getTask( );
 }
@@ -71,6 +72,10 @@ void Character::setScroll( ) {
 	_scroll = _map->getScrollData( );
 }
 
+void Character::setSpy( bool spy ) {
+	_spy = spy;
+}
+
 void Character::addShowInfoNum( ) {
 	int num = _show_info_num + 1;
 
@@ -110,6 +115,10 @@ bool Character::isEndpoint( Vector pos ) const {
 		return true;
 	}
 	return false;
+}
+
+bool Character::isSpy( ) const {
+	return _spy;
 }
 
 Character::ANIM_TYPE Character::getAnimType( ) const {
