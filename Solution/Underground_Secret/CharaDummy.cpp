@@ -49,9 +49,11 @@ void CharaDummy::update( ) {
 		fall( );
 		checkCaughtCollider( );
 	}
-
-	//—§‚¿Ž~‚Ü‚é
-	wait( );
+	
+	if (getAnimType() == Character::ANIM_WAIT) {
+		//—§‚¿Ž~‚Ü‚é
+		wait();
+	}
 
 	// ƒGƒŒƒx[ƒ^[
 	checkElevator( );
@@ -72,9 +74,17 @@ void CharaDummy::walk( ) {
 	if ( _dir == MOVE_DOWN ) {
 		return;
 	}
-	if ( getAnimType( ) == Character::ANIM_WAIT ) {
-		return;
+
+	//—§‚¿Ž~‚Ü‚éˆ—
+	_wait_count++;
+	if ( _wait_count >= CHECK_WAIT_TIME ) {
+		if ( _random->getRealOne() <= WAIT_PROBABILITY ) {
+			setAnim( Character::ANIM_WAIT );
+			_wait_time = _random->getInt32( 2, 4 );
+		}
+		_wait_count = 0;
 	}
+
 	// is•ûŒü‚É—\‘ªÀ•W‚ðƒZƒbƒg
 	setDistance( );
 
@@ -82,29 +92,12 @@ void CharaDummy::walk( ) {
 }
 
 void CharaDummy::wait( ) {
-	if ( _dir == MOVE_DOWN ) {
-		return;
-	}
+	_wait_ani_time++;
 
-	if ( getAnimType( ) == Character::ANIM_WALK ) {
-		_wait_count++;
-		if ( _wait_count >= CHECK_WAIT_TIME ) {
-			//—§‚¿Ž~‚Ü‚éˆ—
-			if ( _random->getRealOne( ) <= WAIT_PROBABILITY ) {
-				setAnim( Character::ANIM_WAIT );
-				_wait_time = _random->getInt32( 2, 4 );
-			}
-			_wait_count = 0;
-		}
-	}
-
-	if ( getAnimType( ) == Character::ANIM_WAIT ) {
-		_wait_ani_time++;
-		//2~5•bŒo‚Á‚½‚çWalk‚É–ß‚é
-		if ( _wait_ani_time >= _wait_time * FPS ) {
-			setAnim( Character::ANIM_WALK );
-			_wait_ani_time = 0;
-		}
+	//2~4•bŒo‚Á‚½‚çWalk‚É–ß‚é
+	if ( _wait_ani_time >= _wait_time * FPS ) {
+		setAnim( Character::ANIM_WALK );
+		_wait_ani_time = 0;
 	}
 }
 void CharaDummy::fall( ) {
