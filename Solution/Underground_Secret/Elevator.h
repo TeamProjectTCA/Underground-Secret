@@ -1,5 +1,6 @@
 #pragma once
 #include "smart_ptr.h"
+#include "Vector.h"
 #include <string>
 #include <vector>
 
@@ -15,21 +16,28 @@ enum ELEVATOR_POS {
 enum ELEVATOR_STATE {
 	ELEVATOR_STATE_NONE,
 	ELEVATOR_STATE_WAIT,
-	ELEVATOR_STATE_MOVE,
+	ELEVATOR_STATE_COME,
 	ELEVATOR_STATE_ARRIVE,
 	ELEVATOR_STATE_MAX
 };
 
 class Elevator {
 public:
-	Elevator( const char id );
+	Elevator( const int _col, const char id );
 	virtual ~Elevator( );
 
 public:
 	void update( );
+	void draw( ) const;
+
+private:
+	void updateActiveElevator( );
+	void updateElevatorState( );
+	void updateElevatorAnim( );
 
 public:
 	void add( int idx );
+	void setScroll( Vector scroll );
 
 private:
 	void decideDestination( );
@@ -44,9 +52,12 @@ public:
 
 
 private:
+	const int _col;
 	const char _id;
 	ELEVATOR_POS _next_input_pos;
 	std::vector< int > _data;
+	std::vector< int > _elevator_anim;
+	Vector _scroll;
 	ELEVATOR_POS _active_elevator;
 	ELEVATOR_POS _destination;
 	ELEVATOR_STATE _elevator_state;

@@ -1,12 +1,17 @@
 #include "Elevator.h"
 #include "const.h"
 #include "Random.h"
+#include "Drawer.h"
 
-const int ELEVATOR_TOTAL_TIME = FPS * 10;
-const int ELEVATOR_MOVE_TIME = FPS; // エレベーター移動時間
-const int ELEVATOR_WAIT_TIME = ELEVATOR_TOTAL_TIME / 3 - ELEVATOR_MOVE_TIME; // エレベーター受付時間
+const char ELEVATOR_IMAGE[ ] = "elevator";
+const float ELEVATOR_ANIM_SPEED = 0.25f;
 
-Elevator::Elevator( const char id ) :
+const int ELEVATOR_TOTAL_TIME = FPS * 12;
+const int ELEVATOR_RIDE_TIME = FPS;
+const int ELEVATOR_WAIT_TIME = ELEVATOR_TOTAL_TIME / 3 - ELEVATOR_RIDE_TIME; // エレベーター受付時間
+
+Elevator::Elevator( const int col, const char id ) :
+_col( col ),
 _id( id ),
 _next_input_pos( ELEVATOR_POS_UP ),
 _active_elevator( ELEVATOR_POS_UP ),
@@ -14,7 +19,7 @@ _elevator_state( ELEVATOR_STATE_NONE ),
 _destination( ELEVATOR_POS_UP ) {
 	RandomPtr random = Random::getTask( );
 	int start = random->getInt32( 0, ELEVATOR_POS_MAX - 1 );
-	_count = ( start * ( ELEVATOR_WAIT_TIME + ELEVATOR_MOVE_TIME ) ) % ELEVATOR_TOTAL_TIME;
+	_count = ( start * ( ELEVATOR_WAIT_TIME ) ) % ELEVATOR_TOTAL_TIME;
 	_active_elevator = ( ELEVATOR_POS )( start % ELEVATOR_POS_MAX );
 	decideDestination( );
 }
@@ -24,29 +29,77 @@ Elevator::~Elevator( ) {
 
 void Elevator::update( ) {
 	_count = ( _count + 1 ) % ELEVATOR_TOTAL_TIME;
-	int wait = _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_MOVE_TIME );
 
 	// active elevator の更新
 	// destination の更新
-	if ( _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_MOVE_TIME ) == 0 ) {
+	updateActiveElevator( );
+
+	// elevator state の更新
+	updateElevatorState( );
+
+	// elevator anim の更新
+	updateElevatorAnim( );
+}
+
+void Elevator::draw( ) const {
+	for ( int i = 0; i < _elevator_anim.size( ); i++ ) {
+		int x = ( _data[ i ] % _col ) * BLOCK_SIZE + ( int )_scroll.x;
+		int y = ( _data[ i ] / _col ) * BLOCK_SIZE + ( int )_scroll.y;
+
+		DrawerPtr drawer = Drawer::getTask( );
+		int width  = drawer->getImageWidth ( ELEVATOR_IMAGE );
+		int height = drawer->getImageHeight( ELEVATOR_IMAGE );
+
+		float draw_lx = ( float )( x - width + BLOCK_SIZE / 2 );
+		float draw_rx = ( float )( x + BLOCK_SIZE / 2 );
+		float draw_y = ( float )( y - height );
+		int handle = drawer->getImage( ELEVATOR_IMAGE );
+
+		if ( i == ( int )_active_elevator ) {
+			if ( _elevator_state == ELEVATOR_STATE_COME ) {
+				float move = _elevator_anim[ i ] * ELEVATOR_ANIM_SPEED;
+				draw_lx -= move;
+				draw_rx += move;
+			}
+		}
+
+		drawer->drawGraph( draw_lx, draw_y, handle, true );
+		drawer->drawGraph( draw_rx, draw_y, handle, true );
+	}
+}
+
+void Elevator::updateActiveElevator( ) {
+	if ( _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME ) == 0 ) {
 
 		if ( _data.size( ) < ELEVATOR_POS_MAX ) {
 			_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ( int )_data.size( ) );
 		} else {
 			_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ELEVATOR_POS_MAX );
 		}
+		_elevator_anim[ ( int )_active_elevator ] = 0;
 		decideDestination( );
 	}
+}
 
-	// elevator state の更新
+void Elevator::updateElevatorState( ) {
+	int wait = _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME );
 	if ( wait < ELEVATOR_WAIT_TIME ) {
 		_elevator_state = ELEVATOR_STATE_WAIT;
-	} else {
-		_elevator_state = ELEVATOR_STATE_MOVE;
+	} 
+	if ( ELEVATOR_WAIT_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME ) {
+		_elevator_state = ELEVATOR_STATE_COME;
 	}
-
-	if ( wait == ( ELEVATOR_WAIT_TIME + ELEVATOR_MOVE_TIME - 1 ) ) {
+	if ( wait == ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME - 1 ) ) {
 		_elevator_state = ELEVATOR_STATE_ARRIVE;
+	}
+}
+
+void Elevator::updateElevatorAnim( ) {
+	for ( int i = 0; i < _elevator_anim.size( ); i++ ) {
+		if ( i != ( int )_active_elevator ) {
+			continue;
+		}
+		_elevator_anim[ i ]++;
 	}
 }
 
@@ -56,7 +109,12 @@ void Elevator::add( int idx ) {
 	}
 
 	_data.push_back( idx );
+	_elevator_anim.push_back( 0 );
 	_next_input_pos = ( ELEVATOR_POS )( _next_input_pos + 1 );
+}
+
+void Elevator::setScroll( Vector scroll ) {
+	_scroll = scroll;
 }
 
 void Elevator::decideDestination( ) {
