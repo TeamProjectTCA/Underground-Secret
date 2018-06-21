@@ -3,6 +3,7 @@
 #include "Mouse.h"
 #include "map.h"
 #include "const.h"
+#include <array>
 
 const int DEFAULT_ON_SHUTTER_MAX = 2;
 const int STAGE_ON_SHUTTER_NUM[ ] = { DEFAULT_ON_SHUTTER_MAX };
@@ -22,6 +23,8 @@ _active_num( 0 ) {
 
 	_scroll = Vector( );
 	_end_scroll = Vector( );
+
+	
 }
 
 Shutter::~Shutter( ) {
@@ -32,10 +35,16 @@ void Shutter::update( ) {
 	calcShutter( );
 }
 
-void Shutter::draw( ) const {
+void Shutter::draw( ) {
 	const int SHUTTER_MAX = ( int )_shutter.size( );
 	const int MIN = BLOCK_SIZE;
 	const int RATE = ( _shutter_height - MIN ) / MOVECOUNT_MAX;
+	const int SHUTTER_MARGIN_RIGHT = 10;
+	const int SHUTTER_MARGIN_UP = 10;
+	const int SWITCH_WIDTH = 16;
+	const int SWITCH_HEIGHT = 16;
+
+
 	for ( int i = 0; i < SHUTTER_MAX; i++ ) {
 		int ry = 0;
 		int ly = 0;
@@ -45,10 +54,12 @@ void Shutter::draw( ) const {
 		switch ( state ) {
 			case SHUTTER_STATE_ACTIVE: 
 				ry = _shutter_height;
+				_shutter_switch_color[ i ] = RED;
 				break;
 
 			case SHUTTER_STATE_NONACTIVE: 
 				ry = MIN;
+				_shutter_switch_color[ i ] = GREEN;
 				break;
 
 			case SHUTTER_STATE_OPEN:
@@ -70,7 +81,11 @@ void Shutter::draw( ) const {
 		x += ( float )( _scroll.x - _end_scroll.x );
 		y += ( float )( _scroll.y - _end_scroll.y );
 
+		float switch_x = x + _shutter_width + SHUTTER_MARGIN_RIGHT;
+		float switch_y = y - SHUTTER_MARGIN_UP - SWITCH_HEIGHT;
+
 		_drawer->drawRectGraph( x, y, 0, ly, _shutter_width, ry, _shutter_handle, true );
+		_drawer->drawBox( switch_x, switch_y, switch_x + SWITCH_WIDTH, switch_y + SWITCH_HEIGHT, _shutter_switch_color[ i ], true );
 	}
 }
 
@@ -105,13 +120,15 @@ void Shutter::onShutter( ) {
 		return;
 	}
 
-	SHUTTER_STATE state = _shutter_state[ hit_idx ];
-
+	for ( int i = 0; i < size; i++ ) {
 	// •Â‚Ü‚è‚«‚Á‚Ä‚¢‚é‚©A‹ó‚«‚«‚Á‚Ä‚¢‚È‚¢ê‡‚Íˆ—‚µ‚È‚¢
-	if ( state != SHUTTER_STATE_NONACTIVE &&
-		 state != SHUTTER_STATE_ACTIVE ) {
-		return;
+		if ( _shutter_state[ i ] != SHUTTER_STATE_NONACTIVE &&
+		     _shutter_state[ i ] != SHUTTER_STATE_ACTIVE ) {
+			return;
+		}
 	}
+
+	SHUTTER_STATE state = _shutter_state[ hit_idx ];
 
 	switch ( state ) {
 	case SHUTTER_STATE_ACTIVE   :
@@ -181,6 +198,7 @@ void Shutter::setEndScroll( Vector end_scroll ) {
 void Shutter::addShutter( std::vector< int > shutter ) {
 	_shutter.push_back( shutter );
 	_shutter_state.push_back( SHUTTER_STATE_NONACTIVE );
+	_shutter_switch_color.push_back( GREEN );
 }
 
 bool Shutter::isHitShutter( int detection_idx ) const {

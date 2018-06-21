@@ -23,7 +23,7 @@ public:
 
 public:
 	void update( );
-	void draw( ) const;
+	void draw( );
 
 private:
 	void onShutter( );
@@ -50,6 +50,7 @@ private:
 	Vector _end_scroll;
 	std::vector< std::vector< int > > _shutter;
 	std::vector< SHUTTER_STATE > _shutter_state;
+	std::vector< int > _shutter_switch_color;
 
 	DrawerPtr _drawer;
 	MousePtr _mouse;
