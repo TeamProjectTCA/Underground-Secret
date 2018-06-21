@@ -67,6 +67,7 @@ void Map::update( ) {
 	std::unordered_map< char, ElevatorPtr >::iterator ite;
 	ite = _elevator.begin( );
 	for ( ite; ite != _elevator.end( ); ite++ ) {
+		ite->second->setScroll( _scroll->getScroll( ) - _end_scroll );
 		ite->second->update( );
 	}
 
@@ -201,8 +202,15 @@ void Map::draw( ) const {
 	Vector scroll = _scroll->getScroll( );
 	_drawer->drawGraph( ( int )( scroll.x - _end_scroll.x ), ( int )( scroll.y - _end_scroll.y ), _map_handle, true );
 
-	//シャッターを描画
+	// シャッターを描画
 	_shutter->draw( );
+
+	// エレベーターを描画
+	std::unordered_map< char, ElevatorPtr >::const_iterator ite;
+	ite = _elevator.begin( );
+	for ( ite; ite != _elevator.end( ); ite++ ) {
+		ite->second->draw( );
+	}
 
 	// debug
 	if ( _debug_mode ) {
@@ -313,7 +321,7 @@ void Map::setElevator( ) {
 			continue;
 		}
 		if ( _elevator.find( id ) == _elevator.end( ) ) {
-			_elevator[ id ] = ElevatorPtr( new Elevator( id ) );
+			_elevator[ id ] = ElevatorPtr( new Elevator( _col, id ) );
 		}
 		_elevator[ id ]->add( i );
 	}

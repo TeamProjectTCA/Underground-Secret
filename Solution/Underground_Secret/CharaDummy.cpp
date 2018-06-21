@@ -237,7 +237,7 @@ void CharaDummy::checkElevator( ) {
 		}
 		return;
 
-	case ELEVATOR_STATE_MOVE:
+	case ELEVATOR_STATE_COME:
 	{
 		Character::ANIM_TYPE anim = getAnimType( );
 		if ( anim != Character::ANIM_RIDE && anim == Character::ANIM_WAIT_ELEVATOR ) {
