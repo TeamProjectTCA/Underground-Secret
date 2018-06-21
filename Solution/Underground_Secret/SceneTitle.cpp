@@ -30,11 +30,11 @@ SceneTitle::SceneTitle( ) {
 	_startbutton.collider.down = ( float )START_BUTTON_Y + _startbutton.image.height * 0.5f;
 
 	//BGM
-	_title_bgm = _sound->load( "TitleBGM/title1.ogg" );
-	_sound->play( _title_bgm, true );
+	_sound_handle[ TITLE_BGM ] = _sound->load( "TitleBGM/titlebgm.ogg" );
+	_sound->play( _sound_handle[ TITLE_BGM ], true, true );
 
 	//SE
-	_button_se = _sound->load( "SoundEffect/button.ogg" );
+	 _sound_handle[ BUTTON_SE ] = _sound->load( "SoundEffect/button.ogg" );
 }
 
 SceneTitle::~SceneTitle( ) {
@@ -64,8 +64,8 @@ void SceneTitle::changeNextScene( ) {
 
 		switch ( hit ) {
 			case BUTTON_START:
-				_sound->stop( _title_bgm );
-				_sound->play( _button_se );
+				_sound->stop( _sound_handle[ TITLE_BGM ] );
+				_sound->play( _sound_handle[ BUTTON_SE ] );
 				setNextScene( SCENE_STAGESELECT );
 				break;
 			default:

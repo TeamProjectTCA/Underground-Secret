@@ -1,10 +1,13 @@
 #pragma once
 #include "smart_ptr.h"
+#include "const.h"
 #include <vector>
 #include <string>
+#include <unordered_map>
 
 PTR( Profiling );
 PTR( Mouse );
+PTR( Sound );
 PTR( Drawer );
 
 class Profiling {
@@ -39,9 +42,11 @@ private:
 	int _board_height;
 	float _board_y;
 	int _board_count;
+	std::unordered_map< SOUND, int > _sound_handle;
 	std::vector< std::string > _profiling;
 
 	MousePtr _mouse;
+	SoundPtr _sound;
 	DrawerPtr _drawer;
 };
 

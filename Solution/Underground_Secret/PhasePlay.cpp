@@ -26,12 +26,12 @@ _scroll( scroll ) {
 	_time_count = TIME_LIMIT * FPS;
 
 	//BGM
-	_play_bgm = _sound->load( "GameBGM/gamebgm1.ogg" );
-	_sound->play( _play_bgm, true );
+	_sound_handle[ GAME_BGM ] = _sound->load( "GameBGM/gamebgm.ogg" );
+	_sound->play( _sound_handle[ GAME_BGM ], true, true );
 
 	//SE
-	_win_se = _sound->load( "SoundEffect/win.ogg" );
-	_lose_se = _sound->load( "SoundEffect/lose.ogg" );
+	_sound_handle[ WIN_SE ] = _sound->load( "SoundEffect/win.ogg" );
+	_sound_handle[ LOSE_SE ] = _sound->load( "SoundEffect/lose.ogg" );
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );
@@ -60,19 +60,19 @@ void PhasePlay::update( ) {
 	_time_count--;
 
 	if ( isInvasion( ) ) {
-		_sound->stop( _play_bgm );
-		_sound->play( _lose_se );
+		_sound->stop( _sound_handle[ GAME_BGM ] );
+		_sound->play( _sound_handle[ LOSE_SE ] );
 		setPhase( PHASE_END );
 	}
 
 	if ( isClear( ) ) {
-		_sound->stop( _play_bgm );
-		_sound->play( _win_se );
+		_sound->stop( _sound_handle[ GAME_BGM ] );
+		_sound->play( _sound_handle[ WIN_SE ] );
 		setPhase( PHASE_END );
 	}
 }
 
-bool PhasePlay::isClear( ) {
+bool PhasePlay::isClear( ) const {
 	if ( _time_count <= 0 ) {
 		return true;
 	}

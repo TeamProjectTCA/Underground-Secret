@@ -7,6 +7,7 @@
 const float MOVE_FRAME = FPS * 3;
 const float FOCUS_FRAME = FPS * 1;
 const float PERFORMANCE_TIME = FPS * 2;
+const float SE_ADJUST_TIME = FPS * 2;
 
 const double MAP_SCROLL_SPEED_RATE = 0.7;
 const double CHARA_SCROLL_SPEED_RATE = 1 - MAP_SCROLL_SPEED_RATE;
@@ -63,7 +64,7 @@ void PhaseEnd::update( ) {
 		_spy->setAnim( Character::ANIM_RIDE );
 	}
 
-	if ( _count == MOVE_FRAME + PERFORMANCE_TIME ) {
+	if ( _count == MOVE_FRAME + PERFORMANCE_TIME + SE_ADJUST_TIME ) {
 		setPhase( PHASE_RETURN_TITLE );
 	}
 }

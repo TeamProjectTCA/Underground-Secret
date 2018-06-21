@@ -2,10 +2,12 @@
 #include "Scene.h"
 #include "Collider.h"
 #include "Image.h"
+#include "const.h"
 #include "smart_ptr.h"
 #include <string>
 #include <array>
 #include <Windows.h>
+#include <unordered_map>
 
 PTR( SceneTitle );
 PTR( Drawer );
@@ -52,8 +54,7 @@ private:
 	int _background_handle;
 	int _title_handle;
 
-	int _title_bgm;
-	int _button_se;
+	std::unordered_map< SOUND, int > _sound_handle;
 
 	std::array< int, BUTTON_MAX > _startbutton_handle;
 	BoxObject _startbutton;

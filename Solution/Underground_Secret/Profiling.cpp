@@ -2,6 +2,7 @@
 #include "Mouse.h"
 #include "Drawer.h"
 #include "const.h"
+#include "sound.h"
 
 const int ACTIVE_BUTTON_X = ( WIDTH / 5 ) * 4;
 const int ACTIVE_BUTTON_Y = 0;
@@ -16,7 +17,9 @@ _profiling( profiling ),
 _board_count( 0 ),
 _board_y( HEIGHT_F ) {
 	_mouse = Mouse::getTask( );
+	_sound = Sound::getTask( );
 	_drawer = Drawer::getTask( );
+
 	_active_button_handle = _drawer->getImage( "Profiling" );
 	_active_button_width = _drawer->getImageWidth( "Profiling" );
 	_active_button_height = _drawer->getImageHeight( "Profiling" );
@@ -24,6 +27,9 @@ _board_y( HEIGHT_F ) {
 	_board_handle = _drawer->getImage( "ProfilingBoard" );
 	_board_width = _drawer->getImageWidth( "ProfilingBoard" );
 	_board_height = _drawer->getImageHeight( "ProfilingBoard" );
+
+	//SE
+	_sound_handle[ BOARD_MOVE ] = _sound->load( "/SoundEffect/BoardMove.ogg" );
 }
 
 Profiling::~Profiling( ) {
@@ -81,6 +87,7 @@ void Profiling::calcActiveButton( ) {
 
 	if ( ACTIVE_BUTTON_X <= mouse_x && mouse_x <= ACTIVE_BUTTON_X + _active_button_width &&
 		 ACTIVE_BUTTON_Y <= mouse_y && mouse_y <= ACTIVE_BUTTON_Y + _active_button_height ) {
+		_sound->play( _sound_handle[ BOARD_MOVE ] );
 		_active = !_active;
 	}
 }

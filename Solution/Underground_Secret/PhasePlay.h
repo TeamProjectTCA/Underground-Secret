@@ -1,7 +1,10 @@
 #pragma once
 #include "Phase.h"
+#include "const.h"
 #include "smart_ptr.h"
 #include <list>
+#include <vector>
+#include <unordered_map>
 
 PTR( PhasePlay );
 PTR( Character );
@@ -9,6 +12,8 @@ PTR( Drawer );
 PTR( Sound );
 PTR( Scroll );
 PTR( Profiling );
+
+
 
 class PhasePlay : public Phase {
 public:
@@ -20,7 +25,7 @@ public:
 	void draw( ) const;
 
 private:
-	bool isClear( );
+	bool isClear( ) const;
 	bool isInvasion( ) const;
 
 private:
@@ -32,9 +37,7 @@ private:
 	int _time_count;
 	int _chara_handle;
 
-	int _play_bgm;
-	int _win_se;
-	int _lose_se;
+	std::unordered_map< SOUND, int > _sound_handle;
 
 	DrawerPtr _drawer;
 	SoundPtr _sound;
