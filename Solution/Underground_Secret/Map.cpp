@@ -182,16 +182,18 @@ ELEVATOR_STATE Map::getElevatorState( char id, int idx ) const {
 
 ELEVATOR_POS Map::getActiveElevator( char id, int idx ) const {
 	if ( getElevatorState( id, idx ) != ELEVATOR_STATE_NONE ) {
-		ElevatorPtr elevator = _elevator.find( id )->second;
-		return elevator->getActiveElevator( );
+		return ELEVATOR_POS( );
 	}
+	ElevatorPtr elevator = _elevator.find( id )->second;
+	return elevator->getActiveElevator( );
 }
 
 ELEVATOR_POS Map::getDestination( char id, int idx ) const {
 	if ( getElevatorState( id, idx ) != ELEVATOR_STATE_NONE ) {
-		ElevatorPtr elevator = _elevator.find( id )->second;
-		return elevator->getDestination( );
+		return ELEVATOR_POS( );
 	}
+	ElevatorPtr elevator = _elevator.find( id )->second;
+	return elevator->getDestination( );
 }
 
 void Map::draw( ) const {

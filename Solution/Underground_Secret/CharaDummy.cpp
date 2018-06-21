@@ -79,7 +79,7 @@ void CharaDummy::walk( ) {
 	//—§‚¿Ž~‚Ü‚éˆ—
 	_wait_count++;
 	if ( _wait_count >= CHECK_WAIT_TIME ) {
-		if ( _random->getRealOne() <= WAIT_PROBABILITY ) {
+		if ( _random->getRealOne( ) <= WAIT_PROBABILITY ) {
 			setAnim( Character::ANIM_WAIT );
 			_wait_time = _random->getInt32( 2, 4 );
 		}
