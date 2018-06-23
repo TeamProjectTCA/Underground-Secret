@@ -175,8 +175,8 @@ void Table::showCommandMenu( ) {
 
 	// コマンドメニュー表示の切り替え
 	_command_select = !_command_select;
-	_menu_x = _mouse->getPointX( );
-	_menu_y = _mouse->getPointY( );
+	_menu_x = ( int )_mouse->getPoint( ).x;
+	_menu_y = ( int )_mouse->getPoint( ).y;
 
 	if ( !_command_select ) {
 		return;
@@ -184,8 +184,8 @@ void Table::showCommandMenu( ) {
 }
 
 void Table::setCommand( ) {
-	int mouse_x = _mouse->getPointX( );
-	int mouse_y = _mouse->getPointY( );
+	int mouse_x = ( int )_mouse->getPoint( ).x;
+	int mouse_y = ( int )_mouse->getPoint( ).y;
 
 	mouse_x /= BLOCK_SIZE;
 	mouse_y /= BLOCK_SIZE;
@@ -257,8 +257,7 @@ void Table::selectCommand( ) {
 }
 
 void Table::changePage( ) {
-	int mouse_x = _mouse->getPointX( );
-	int mouse_y = _mouse->getPointY( );
+	Vector mouse = _mouse->getPoint( );
 
 	// 描画が中心座標なのでそれぞれ半分ずつ足し引きする
 	int page_back_x = _menu_x + PAGE_CHANGE_ICON_SIZE / 2;
@@ -269,14 +268,14 @@ void Table::changePage( ) {
 	int next = 0;
 
 	// 戻る
-	if ( page_back_x   <= mouse_x && mouse_x <= page_back_x   + PAGE_CHANGE_ICON_SIZE &&
-		 page_change_y <= mouse_y && mouse_y <= page_change_y + PAGE_CHANGE_ICON_SIZE ) {
+	if ( page_back_x   <= mouse.x && mouse.x <= page_back_x   + PAGE_CHANGE_ICON_SIZE &&
+		 page_change_y <= mouse.y && mouse.y <= page_change_y + PAGE_CHANGE_ICON_SIZE ) {
 		next = PAGE_MAX - 1;
 	}
 
 	// 進む
-	if ( page_next_x   <= mouse_x && mouse_x <= page_next_x   + PAGE_CHANGE_ICON_SIZE &&
-		 page_change_y <= mouse_y && mouse_y <= page_change_y + PAGE_CHANGE_ICON_SIZE ) {
+	if ( page_next_x   <= mouse.x && mouse.x <= page_next_x   + PAGE_CHANGE_ICON_SIZE &&
+		 page_change_y <= mouse.y && mouse.y <= page_change_y + PAGE_CHANGE_ICON_SIZE ) {
 		next = 1;
 	}
 
@@ -285,8 +284,7 @@ void Table::changePage( ) {
 }
 
 void Table::changeCommand( ) {
-	int mouse_x = _mouse->getPointX( );
-	int mouse_y = _mouse->getPointY( );
+	Vector mouse = _mouse->getPoint( );
 	int icon_x = _menu_x + COMMAND_ICON_START_X;
 	int icon_y = _menu_y + COMMAND_ICON_PITCH;
 
@@ -295,8 +293,8 @@ void Table::changeCommand( ) {
 		int gap_x = ( i % ( COMMAND_ICON_NUM / 2 ) ) * ( COMMAND_ICON_SIZE + COMMAND_ICON_PITCH );
 		int gap_y = ( i / ( COMMAND_ICON_NUM / 2 ) ) * ( COMMAND_ICON_SIZE + COMMAND_ICON_PITCH );
 
-		if ( icon_x + gap_x <= mouse_x && mouse_x <= icon_x + gap_x + COMMAND_ICON_SIZE &&
-			 icon_y + gap_y <= mouse_y && mouse_y <= icon_y + gap_y + COMMAND_ICON_SIZE ) {
+		if ( icon_x + gap_x <= mouse.x && mouse.x <= icon_x + gap_x + COMMAND_ICON_SIZE &&
+			 icon_y + gap_y <= mouse.y && mouse.y <= icon_y + gap_y + COMMAND_ICON_SIZE ) {
 			hit = i;
 			break;
 		}

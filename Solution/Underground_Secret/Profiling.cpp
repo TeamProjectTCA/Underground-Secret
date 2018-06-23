@@ -82,11 +82,10 @@ void Profiling::calcActiveButton( ) {
 	if (_board_count != FPS * TOTAL_TIME && _active) {
 		return;
 	}
-	double mouse_x = ( double )_mouse->getPointX( );
-	double mouse_y = ( double )_mouse->getPointY( );
+	Vector mouse = _mouse->getPoint( );
 
-	if ( ACTIVE_BUTTON_X <= mouse_x && mouse_x <= ACTIVE_BUTTON_X + _active_button_width &&
-		 ACTIVE_BUTTON_Y <= mouse_y && mouse_y <= ACTIVE_BUTTON_Y + _active_button_height ) {
+	if ( ACTIVE_BUTTON_X <= mouse.x && mouse.x <= ACTIVE_BUTTON_X + _active_button_width &&
+		 ACTIVE_BUTTON_Y <= mouse.y && mouse.y <= ACTIVE_BUTTON_Y + _active_button_height ) {
 		_sound->play( _sound_handle[ BOARD_MOVE ] );
 		_active = !_active;
 	}

@@ -1,5 +1,6 @@
 #pragma once
 #include "smart_ptr.h"
+#include "Vector.h"
 #include <vector>
 #include <string>
 #include <array>

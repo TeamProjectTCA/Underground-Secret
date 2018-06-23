@@ -5,6 +5,7 @@
 PTR( SceneStageSelect );
 PTR( Keyboard );
 PTR( Drawer );
+PTR( Button );
 
 class SceneStageSelect : public Scene {
 public:
@@ -13,6 +14,7 @@ public:
 
 public:
 	void update( );
+	void draw( ) const;
 	int getStage( ) const;
 
 private:
@@ -20,4 +22,5 @@ private:
 
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;
+	ButtonPtr _button;
 };

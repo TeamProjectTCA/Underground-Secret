@@ -97,11 +97,10 @@ void SceneTitle::calcButtonAction( ) {
 
 SceneTitle::BUTTON SceneTitle::getHitButton( ) const {
 
-	double mouse_x = _mouse->getPointX( );
-	double mouse_y = _mouse->getPointY( );
+	Vector mouse = _mouse->getPoint( );
 
-	if ( _startbutton.collider.left <= mouse_x && mouse_x <= _startbutton.collider.right &&
-		_startbutton.collider.up <= mouse_y && mouse_y <= _startbutton.collider.down ) {
+	if ( _startbutton.collider.left <= mouse.x && mouse.x <= _startbutton.collider.right &&
+		 _startbutton.collider.up   <= mouse.y && mouse.y <= _startbutton.collider.down ) {
 		SetCursor( _cur_hand );
 		return BUTTON_START;
 	}

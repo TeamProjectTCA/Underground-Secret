@@ -94,8 +94,7 @@ void Shutter::onShutter( ) {
 		return;
 	}
 
-	int mouse_x = _mouse->getPointX( );
-	int mouse_y = _mouse->getPointY( );
+	Vector mouse = _mouse->getPoint( );
 
 	int size = ( int )_shutter.size( );
 	int hit_idx = -1;
@@ -107,8 +106,8 @@ void Shutter::onShutter( ) {
 		x += ( int )_scroll.x;
 		y += ( int )_scroll.y ;
 
-		if ( mouse_x < x || mouse_x > ( x + BLOCK_SIZE ) ||
-			 mouse_y < y || mouse_y > ( y + BLOCK_SIZE ) ) {
+		if ( mouse.x < x || mouse.x > ( x + BLOCK_SIZE ) ||
+			 mouse.y < y || mouse.y > ( y + BLOCK_SIZE ) ) {
 			continue;
 		}
 
