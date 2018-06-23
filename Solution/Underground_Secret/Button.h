@@ -27,10 +27,20 @@ public:
 	void setPushImage( const char* filepath );
 	
 public:
-	inline bool click( Vector mouse );
+	inline void click( Vector mouse ) {
+		_state = BUTTON_STATE_NORMAL;
 
-private:
-	inline void setState( BUTTON_STATE state );
+		if ( _lx <= mouse.x && mouse.x <= _rx &&
+			 _ly <= mouse.y && mouse.y <= _ry ) {
+			_state = BUTTON_STATE_PUSH;
+		}
+	}
+	inline bool isPush( ) const {
+		return ( _state == BUTTON_STATE_PUSH ? true : false );
+	}
+	inline void resetState( ) {
+		_state = BUTTON_STATE_NORMAL;
+	}
 
 private:
 	int _handle;
@@ -39,7 +49,6 @@ private:
 	float _ly;
 	float _rx;
 	float _ry;
-	bool _push;
 	BUTTON_STATE _state;
 	DrawerPtr _drawer;
 };

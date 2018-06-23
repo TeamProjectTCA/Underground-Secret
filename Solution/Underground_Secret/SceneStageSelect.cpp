@@ -18,10 +18,10 @@ SceneStageSelect::SceneStageSelect( ) {
 	int button_width  = _drawer->getImageWidth( BUTTON_NORMAL_IMAGE );
 	int button_height = _drawer->getImageHeight( BUTTON_NORMAL_IMAGE );
 	_button = ButtonPtr( new Button( 
-		( float )BUTTON_POSITION.x - button_width / 2, 
-		( float )BUTTON_POSITION.y - button_height / 2,
-		( float )BUTTON_POSITION.x + button_width / 2,
-		( float )BUTTON_POSITION.y - button_height / 2 ) );
+		( float )BUTTON_POSITION.x - button_width  / 2.0f, 
+		( float )BUTTON_POSITION.y - button_height / 2.0f,
+		( float )BUTTON_POSITION.x + button_width  / 2.0f,
+		( float )BUTTON_POSITION.y + button_height / 2.0f ) );
 
 	_button->setImage( BUTTON_NORMAL_IMAGE );
 	_button->setPushImage( BUTTON_PUSH_IMAGE );
@@ -34,7 +34,17 @@ void SceneStageSelect::update( ) {
 	if ( _keyboard->getKeyDown( "z" ) ) {
 		setNextScene( SCENE_GAME );
 	}
-	Mouse::getTask( );
+
+	MousePtr mouse = Mouse::getTask( );
+	Vector mouse_pos = mouse->getPoint( );
+	if ( mouse->getClickingLeft( ) ) {
+		_button->click( mouse_pos );
+	} else {
+		if ( _button->isPush( ) ) {
+			setNextScene( SCENE_GAME );
+		}
+		_button->resetState( );
+	}
 
 	draw( );
 }

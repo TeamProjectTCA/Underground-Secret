@@ -23,6 +23,12 @@ void Button::draw( ) const {
 	}
 
 	_drawer->drawRotaGraph( _rx - ( _rx - _lx ) / 2, _ry - ( _ry - _ly ) / 2, 1, 0, handle, true );
+
+	// debug
+	//_drawer->drawCircle( _lx, _ly, 30, 0xff0000, true );
+	//_drawer->drawCircle( _lx, _ry, 30, 0xff0000, true );
+	//_drawer->drawCircle( _rx, _ly, 30, 0xff0000, true );
+	//_drawer->drawCircle( _rx, _ry, 30, 0xff0000, true );
 }
 
 void Button::setPos( float lx, float ly, float rx, float ry ) {
@@ -38,18 +44,4 @@ void Button::setImage( const char* filepath ) {
 
 void Button::setPushImage( const char* filepath ) {
 	_push_handle = _drawer->getImage( filepath );
-}
-
-inline bool Button::click( Vector mouse ) {
-	if ( _lx <= mouse.x && mouse.x <= _rx &&
-		 _ly <= mouse.y && mouse.y <= _ry ) {
-		this->setState( BUTTON_STATE_PUSH );
-		return true;
-	}
-	this->setState( BUTTON_STATE_NORMAL );
-	return false;
-}
-
-inline void Button::setState( BUTTON_STATE state ) {
-	_state = state;
 }
