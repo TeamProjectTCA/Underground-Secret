@@ -32,12 +32,6 @@ const int BLOCK_SIZE = 16;
 // èÓïÒÇÃêî
 const int INFO_MAX = 7;
 
-enum BUTTON_STATE {
-	NORMAL,
-	CLICKING,
-	BUTTON_STATE_MAX
-};
-
 enum DIR {
 	DIR_UP,
 	DIR_DOWN,

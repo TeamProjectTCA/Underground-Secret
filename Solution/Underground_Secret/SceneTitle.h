@@ -14,6 +14,7 @@ PTR( Drawer );
 PTR( Sound );
 PTR( Keyboard );
 PTR( Mouse );
+PTR( Button );
 
 class SceneTitle : public Scene {
 private:
@@ -34,16 +35,7 @@ public:
 	void initialize( );
 	void finalize( );
 	void update( );
-
-private:
-	void changeNextScene( );
-	void calcButtonAction( );
-	BUTTON getHitButton( ) const;
-	
-private:
-	void drawBackGround( ) const;
-	void drawTitle( ) const;
-	void drawStartButton( ) const;
+	void draw( ) const;
 
 private:
 	
@@ -65,5 +57,6 @@ private:
 	SoundPtr _sound;
 	MousePtr _mouse;
 	KeyboardPtr _keyboard;
+	ButtonPtr _button;
 };
 

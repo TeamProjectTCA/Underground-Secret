@@ -7,6 +7,7 @@
 PTR( Shutter );
 PTR( Drawer );
 PTR( Mouse );
+PTR( Button );
 
 class Shutter {
 private:
@@ -16,7 +17,7 @@ private:
 		SHUTTER_STATE_OPEN,       // ŠJ‚«“r’†
 		SHUTTER_STATE_CLOSE,      // •Â‚¶“r’†
 	};
-
+	
 public:
 	Shutter( int stage );
 	virtual ~Shutter( );
@@ -50,9 +51,9 @@ private:
 	Vector _end_scroll;
 	std::vector< std::vector< int > > _shutter;
 	std::vector< SHUTTER_STATE > _shutter_state;
-	std::vector< int > _shutter_switch_color;
 
 	DrawerPtr _drawer;
 	MousePtr _mouse;
+	std::vector< ButtonPtr > _button;
 };
 

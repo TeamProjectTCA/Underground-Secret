@@ -14,6 +14,7 @@ SceneStageSelect::SceneStageSelect( ) {
 	_stage = 1;
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
+	_mouse = Mouse::getTask( );
 
 	int button_width  = _drawer->getImageWidth( BUTTON_NORMAL_IMAGE );
 	int button_height = _drawer->getImageHeight( BUTTON_NORMAL_IMAGE );
@@ -35,9 +36,8 @@ void SceneStageSelect::update( ) {
 		setNextScene( SCENE_GAME );
 	}
 
-	MousePtr mouse = Mouse::getTask( );
-	Vector mouse_pos = mouse->getPoint( );
-	if ( mouse->getClickingLeft( ) ) {
+	Vector mouse_pos = _mouse->getPoint( );
+	if ( _mouse->getClickingLeft( ) ) {
 		_button->click( mouse_pos );
 	} else {
 		if ( _button->isPush( ) ) {

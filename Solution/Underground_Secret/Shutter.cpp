@@ -1,12 +1,17 @@
 #include "Shutter.h"
 #include "Drawer.h"
 #include "Mouse.h"
+#include "Button.h"
 #include "map.h"
 #include "const.h"
 #include <array>
 
 const int DEFAULT_ON_SHUTTER_MAX = 2;
 const int STAGE_ON_SHUTTER_NUM[ ] = { DEFAULT_ON_SHUTTER_MAX };
+const char SHUTTER_OPEN_NORMAL_IMAGE[ ] = "ShutterOpenNormal";
+const char SHUTTER_OPEN_PUSH_IMAGE[ ] = "ShutterOpenPush";
+const char SHUTTER_CLOSE_NORMAL_IMAGE[ ] = "ShutterCloseNormal";
+const char SHUTTER_CLOSE_PUSH_IMAGE[ ] = "ShutterClosePush";
 
 const int MOVECOUNT_MAX = 60;
 
@@ -24,7 +29,6 @@ _active_num( 0 ) {
 	_scroll = Vector( );
 	_end_scroll = Vector( );
 
-	
 }
 
 Shutter::~Shutter( ) {
@@ -39,10 +43,10 @@ void Shutter::draw( ) {
 	const int SHUTTER_MAX = ( int )_shutter.size( );
 	const int MIN = BLOCK_SIZE;
 	const int RATE = ( _shutter_height - MIN ) / MOVECOUNT_MAX;
-	const int SHUTTER_MARGIN_RIGHT = 10;
-	const int SHUTTER_MARGIN_UP = 10;
-	const int SWITCH_WIDTH = 16;
-	const int SWITCH_HEIGHT = 16;
+	const int SHUTTER_MARGIN_RIGHT = 5;
+	const int SHUTTER_MARGIN_UP = 5;
+	const int SWITCH_WIDTH = _drawer->getImageWidth( SHUTTER_OPEN_NORMAL_IMAGE );
+	const int SWITCH_HEIGHT = _drawer->getImageHeight( SHUTTER_OPEN_NORMAL_IMAGE );
 
 
 	for ( int i = 0; i < SHUTTER_MAX; i++ ) {
@@ -52,22 +56,28 @@ void Shutter::draw( ) {
 		SHUTTER_STATE state = _shutter_state[ i ];
 
 		switch ( state ) {
-			case SHUTTER_STATE_ACTIVE: 
+			case SHUTTER_STATE_ACTIVE:
 				ry = _shutter_height;
-				_shutter_switch_color[ i ] = RED;
+				_button[ i ]->setImage( SHUTTER_CLOSE_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_CLOSE_PUSH_IMAGE );
 				break;
 
-			case SHUTTER_STATE_NONACTIVE: 
+			case SHUTTER_STATE_NONACTIVE:
 				ry = MIN;
-				_shutter_switch_color[ i ] = GREEN;
+				_button[ i ]->setImage( SHUTTER_OPEN_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_OPEN_PUSH_IMAGE );
 				break;
 
 			case SHUTTER_STATE_OPEN:
 				ry = ( MOVECOUNT_MAX - _move_cnt ) * RATE + MIN;
+				_button[ i ]->setImage( SHUTTER_OPEN_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_OPEN_PUSH_IMAGE );
 				break;
 
 			case SHUTTER_STATE_CLOSE:
 				ry = _move_cnt * RATE + MIN;
+				_button[ i ]->setImage( SHUTTER_OPEN_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_OPEN_PUSH_IMAGE );
 				break;
 		}
 
@@ -81,50 +91,51 @@ void Shutter::draw( ) {
 		x += ( float )( _scroll.x - _end_scroll.x );
 		y += ( float )( _scroll.y - _end_scroll.y );
 
-		float switch_x = x + _shutter_width + SHUTTER_MARGIN_RIGHT;
-		float switch_y = y - SHUTTER_MARGIN_UP - SWITCH_HEIGHT;
+		float switch_x = x + _shutter_width + SHUTTER_MARGIN_RIGHT + SWITCH_WIDTH / 2.0f;
+		float switch_y = y - SHUTTER_MARGIN_UP - SWITCH_HEIGHT / 2.0f;
+		Vector BUTTON_POSITION = Vector( switch_x, switch_y );
+
+		_button[ i ]->setPos( ( float )BUTTON_POSITION.x - SWITCH_WIDTH / 2.0f,
+			                  ( float )BUTTON_POSITION.y - SWITCH_HEIGHT / 2.0f,
+			                  ( float )BUTTON_POSITION.x + SWITCH_WIDTH / 2.0f,
+			                  ( float )BUTTON_POSITION.y + SWITCH_HEIGHT / 2.0f );
+
 
 		_drawer->drawRectGraph( x, y, 0, ly, _shutter_width, ry, _shutter_handle, true );
-		_drawer->drawBox( switch_x, switch_y, switch_x + SWITCH_WIDTH, switch_y + SWITCH_HEIGHT, _shutter_switch_color[ i ], true );
+		_button[ i ]->draw( );
+
 	}
 }
 
 void Shutter::onShutter( ) {
-	if ( !_mouse->isClickDownLeft( ) ) {
-		return;
-	}
-
-	Vector mouse = _mouse->getPoint( );
-
 	int size = ( int )_shutter.size( );
-	int hit_idx = -1;
 
-	// シャッターの一番上のマスをクリックしているかどうか
 	for ( int i = 0; i < size; i++ ) {
-		int x = ( _shutter[ i ].front( ) % _col ) * BLOCK_SIZE;
-		int y = ( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE;
-		x += ( int )_scroll.x;
-		y += ( int )_scroll.y ;
-
-		if ( mouse.x < x || mouse.x > ( x + BLOCK_SIZE ) ||
-			 mouse.y < y || mouse.y > ( y + BLOCK_SIZE ) ) {
-			continue;
+		// 閉まりきっているか、空ききっていない場合は処理しない
+		if ( _shutter_state[ i ] != SHUTTER_STATE_NONACTIVE &&
+			_shutter_state[ i ] != SHUTTER_STATE_ACTIVE ) {
+			return;
 		}
-
-		hit_idx = i;
-		break;
 	}
+
+	Vector mouse_pos = _mouse->getPoint( );
+	int hit_idx = -1;
+	
+	//スイッチを使ってシャッターを起動
+	for ( int i = 0; i < size; i++ ) {
+		if ( _mouse->getClickingLeft( ) ) {
+			_button[ i ]->click( mouse_pos );
+		} else {
+			if ( _button[ i ]->isPush( ) ) {
+				hit_idx = i;
+			}
+			_button[ i ]->resetState( );
+		}
+	}
+	
 
 	if ( hit_idx < 0 ) {
 		return;
-	}
-
-	for ( int i = 0; i < size; i++ ) {
-	// 閉まりきっているか、空ききっていない場合は処理しない
-		if ( _shutter_state[ i ] != SHUTTER_STATE_NONACTIVE &&
-		     _shutter_state[ i ] != SHUTTER_STATE_ACTIVE ) {
-			return;
-		}
 	}
 
 	SHUTTER_STATE state = _shutter_state[ hit_idx ];
@@ -197,7 +208,7 @@ void Shutter::setEndScroll( Vector end_scroll ) {
 void Shutter::addShutter( std::vector< int > shutter ) {
 	_shutter.push_back( shutter );
 	_shutter_state.push_back( SHUTTER_STATE_NONACTIVE );
-	_shutter_switch_color.push_back( GREEN );
+	_button.push_back( ButtonPtr( new Button( ) ) );
 }
 
 bool Shutter::isHitShutter( int detection_idx ) const {

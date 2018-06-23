@@ -17,7 +17,7 @@ PTR( Profiling );
 
 class PhasePlay : public Phase {
 public:
-	PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr _scroll );
+	PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll );
 	virtual ~PhasePlay( );
 
 public:

@@ -5,6 +5,7 @@
 PTR( SceneStageSelect );
 PTR( Keyboard );
 PTR( Drawer );
+PTR( Mouse );
 PTR( Button );
 
 class SceneStageSelect : public Scene {
@@ -22,5 +23,6 @@ private:
 
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;
+	MousePtr _mouse;
 	ButtonPtr _button;
 };
