@@ -95,6 +95,7 @@ protected:
 	void checkCaughtCollider( );
 
 protected:
+	bool _draw_flag;
 	MapPtr _map;
 	DrawerPtr _drawer;
 	DebugPtr _debug;

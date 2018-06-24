@@ -29,7 +29,8 @@ _max_cnt( DEFAULT_MAX_COUNT ),
 _pos( Vector( ) ),
 _scroll( Vector( ) ),
 _show_info_num( 0 ),
-_spy( false ) {
+_spy( false ),
+_draw_flag( true ) {
 	_drawer = Drawer::getTask( );
 	_debug = Debug::getTask( );
 }
@@ -188,6 +189,10 @@ ELEVATOR_POS  Character::getDestination( char id, Vector pos ) const {
 }
 
 void Character::draw( ) {
+	if ( !_draw_flag ) {
+		return;
+	}
+
 	Vector chara_size = Vector( _anim[ _anim_type ].width, _anim[ _anim_type ].height );
 
 	{ // ƒLƒƒƒ‰‚Ì•`‰æ

@@ -17,6 +17,7 @@ enum ELEVATOR_STATE {
 	ELEVATOR_STATE_NONE,
 	ELEVATOR_STATE_WAIT,
 	ELEVATOR_STATE_COME,
+	ELEVATOR_STATE_MOVE,
 	ELEVATOR_STATE_ARRIVE,
 	ELEVATOR_STATE_MAX
 };
@@ -41,6 +42,7 @@ public:
 
 private:
 	void decideDestination( );
+	void resetAnimCount( );
 
 public:
 	char getId( ) const;
