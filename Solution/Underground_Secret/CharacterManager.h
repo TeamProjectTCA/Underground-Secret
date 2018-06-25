@@ -9,6 +9,8 @@ PTR( Map );
 PTR( Infomation );
 PTR( CharaA );
 PTR( CharaDummy );
+PTR( Man1 );
+PTR( Woman2 );
 
 class CharacterManager {
 public:

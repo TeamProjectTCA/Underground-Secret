@@ -3,6 +3,8 @@
 #include "Infomation.h"
 #include "CharaA.h"
 #include "CharaDummy.h"
+#include "Man1.h"
+#include "Woman2.h"
 #include "Random.h"
 
 CharacterManager::CharacterManager( MapPtr map ) :
@@ -40,7 +42,7 @@ void CharacterManager::setChara( int num ) {
 		// óêêîÇ≈ê∂ê¨ÉLÉÉÉâÇÃî‘çÜÇéÊìæ
 		int chara_idx = random->getInt32( 0, CHARA_MAX - 1 );
 
-		CharacterPtr chara = getCharaInstance( ( CHARACTER )1 );
+		CharacterPtr chara = getCharaInstance( ( CHARACTER )chara_idx );
 		// errorèàóù
 		if ( chara == CharacterPtr( ) ) {
 			continue;
@@ -68,6 +70,8 @@ CharacterPtr CharacterManager::getCharaInstance( CHARACTER chara_idx ) {
 	switch ( chara_idx ) {
 	case CHARA_A    : return CharaAPtr    ( new CharaA    ( _map, _info ) );
 	case CHARA_DUMMY: return CharaDummyPtr( new CharaDummy( _map, _info ) );
+	case MAN_1:       return Man1Ptr      ( new Man1      ( _map, _info ) );
+	case WOMAN_2:     return Woman2Ptr    ( new Woman2    ( _map, _info ) );
 	}
 	return CharacterPtr( );
 }
