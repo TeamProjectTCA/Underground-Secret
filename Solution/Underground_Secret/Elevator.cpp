@@ -2,6 +2,7 @@
 #include "const.h"
 #include "Random.h"
 #include "Drawer.h"
+#include "Sound.h"
 
 const char ELEVATOR_IMAGE[ ] = "elevator";
 const float ELEVATOR_ANIM_SPEED = 0.45f;
@@ -94,10 +95,13 @@ void Elevator::updateActiveElevator( ) {
 
 void Elevator::updateElevatorState( ) {
 	int wait = _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME );
+	SoundPtr sound = Sound::getTask( );
+	_sound_handle[ ELEVATOR_SE ] = sound->load( "SoundEffect/ElevatorArrive1.ogg" );
 	if ( wait < ELEVATOR_WAIT_TIME ) {
 		_elevator_state = ELEVATOR_STATE_WAIT;
 	} 
 	if ( ELEVATOR_WAIT_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME ) {
+		sound->play( _sound_handle[ ELEVATOR_SE ] );
 		_elevator_state = ELEVATOR_STATE_COME;
 	}
 	if ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME + ELEVATOR_MOVE_TIME ) {
@@ -105,6 +109,7 @@ void Elevator::updateElevatorState( ) {
 	}
 
 	if ( wait == ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME - 1 ) ) {
+		sound->play( _sound_handle[ ELEVATOR_SE ] ); 
 		_elevator_state = ELEVATOR_STATE_ARRIVE;
 	}
 }
