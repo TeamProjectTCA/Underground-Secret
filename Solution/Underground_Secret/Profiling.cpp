@@ -41,7 +41,7 @@ _board_y( HEIGHT_F ) {
 		( float )button_pos.y - _active_button_height / 2.0f,
 		( float )button_pos.x + _active_button_width / 2.0f,
 		( float )button_pos.y + _active_button_height / 2.0f ) );
-	_button->setPos( button_pos.x, button_pos.y );
+	_button->setPos( ( float )button_pos.x, ( float )button_pos.y );
 }
 
 Profiling::~Profiling( ) {
