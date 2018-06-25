@@ -1,6 +1,7 @@
 #pragma once
 #include "Scene.h"
 #include "smart_ptr.h"
+#include <vector>
 
 PTR( SceneStageSelect );
 PTR( Keyboard );
@@ -19,10 +20,14 @@ public:
 	int getStage( ) const;
 
 private:
+	void createButton( );
+
+private:
 	int _stage;
+	int _back_image;
 
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;
 	MousePtr _mouse;
-	ButtonPtr _button;
+	std::vector< ButtonPtr > _button;
 };

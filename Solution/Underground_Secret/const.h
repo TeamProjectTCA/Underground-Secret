@@ -28,6 +28,7 @@ const double PI = 3.14;
 
 // マップブロックサイズ
 const int BLOCK_SIZE = 16;
+const int STAGE_MAX = 3;
 
 // 情報の数
 const int INFO_MAX = 7;

@@ -6,9 +6,14 @@
 #include "Vector.h"
 #include "Mouse.h"
 
-const Vector BUTTON_POSITION = Vector( WIDTH / 2, HEIGHT / 2 );
-const char BUTTON_NORMAL_IMAGE[ ] = "GameStart";
-const char BUTTON_PUSH_IMAGE  [ ] = "GameStartClick";
+const char BUTTON_STAGE1_IMAGE[ ] = "stage1";
+const char *BUTTON_IMAGE[ STAGE_MAX ] = { BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE };
+const int BUTTON_WIDTH = 256;
+const int BUTTON_HEIGHT = 256;
+const float BUTTON_PITCH = WIDTH / 4;
+const float BUTTON_Y = HEIGHT / 3 * 2;
+
+const char BACK_IMAGE[ ] = "underground_back";
 
 SceneStageSelect::SceneStageSelect( ) {
 	_stage = 1;
@@ -16,18 +21,8 @@ SceneStageSelect::SceneStageSelect( ) {
 	_keyboard = Keyboard::getTask( );
 	_mouse = Mouse::getTask( );
 
-	int button_width  = _drawer->getImageWidth( BUTTON_NORMAL_IMAGE );
-	int button_height = _drawer->getImageHeight( BUTTON_NORMAL_IMAGE );
-	_button = ButtonPtr( new Button( 
-		( float )BUTTON_POSITION.x - button_width  / 2.0f, 
-		( float )BUTTON_POSITION.y - button_height / 2.0f,
-		( float )BUTTON_POSITION.x + button_width  / 2.0f,
-		( float )BUTTON_POSITION.y + button_height / 2.0f ) );
-
-	_button->setPos( ( float )BUTTON_POSITION.x, ( float )BUTTON_POSITION.y );
-
-	_button->setImage( BUTTON_NORMAL_IMAGE );
-	_button->setPushImage( BUTTON_PUSH_IMAGE );
+	_back_image = _drawer->getImage( BACK_IMAGE );
+	createButton( );
 }
 
 SceneStageSelect::~SceneStageSelect( ) {
@@ -39,23 +34,49 @@ void SceneStageSelect::update( ) {
 	}
 
 	Vector mouse_pos = _mouse->getPoint( );
-	if ( _mouse->getClickingLeft( ) ) {
-		_button->click( mouse_pos );
-	} else {
-		if ( _button->isPush( ) ) {
-			setNextScene( SCENE_GAME );
+	for ( int i = 0; i < _button.size( ); i++ ) {
+		if ( _mouse->getClickingLeft( ) ) {
+			_button[ i ]->click( mouse_pos );
+		} else {
+			if ( _button[ i ]->isPush( ) ) {
+				setNextScene( SCENE_GAME );
+			}
+			_button[ i ]->resetState( );
 		}
-		_button->resetState( );
 	}
 
 	draw( );
 }
 
 void SceneStageSelect::draw( ) const {
-	_button->draw( );
+	// ”wŒi
+	_drawer->drawGraph( 0, 0, _back_image, true );
+
+	for ( int i = 0; i < _button.size( ); i++ ) {
+		_button[ i ]->draw( );
+	}
 	_drawer->flip( );
 }
 
 int SceneStageSelect::getStage( ) const {
 	return _stage;
+}
+
+void SceneStageSelect::createButton( ) {
+	for ( int i = 0; i < STAGE_MAX; i++ ) {
+		ButtonPtr button( new Button( ) );
+
+		button->setPos(
+			( float )BUTTON_PITCH * ( i + 1 ) - BUTTON_WIDTH / 2, ( float )BUTTON_Y - BUTTON_HEIGHT / 2,
+			( float )BUTTON_PITCH * ( i + 1 ) + BUTTON_WIDTH / 2, ( float )BUTTON_Y + BUTTON_HEIGHT / 2 );
+
+		button->setCollider(
+			( float )BUTTON_PITCH * ( i + 1 ) - BUTTON_WIDTH / 2, ( float )BUTTON_Y - BUTTON_HEIGHT / 2, 
+			( float )BUTTON_PITCH * ( i + 1 ) + BUTTON_WIDTH / 2, ( float )BUTTON_Y + BUTTON_HEIGHT / 2 );
+
+		button->setImage    ( BUTTON_IMAGE[ i ] );
+		button->setPushImage( BUTTON_IMAGE[ i ] );
+
+		_button.push_back( button );
+	}
 }
