@@ -26,12 +26,12 @@ SceneTitle::SceneTitle( ) {
 	//ƒ{ƒ^ƒ“
 	int button_width = _drawer->getImageWidth( BUTTON_NORMAL_IMAGE );
 	int button_height = _drawer->getImageHeight( BUTTON_NORMAL_IMAGE );
-	_button = ButtonPtr( new Button(
+	_button = ButtonPtr( new Button( 
 		( float )BUTTON_POSITION.x - button_width / 2.0f,
 		( float )BUTTON_POSITION.y - button_height / 2.0f,
-		( float )BUTTON_POSITION.x + button_width / 2.0f,
+	   	( float )BUTTON_POSITION.x + button_width / 2.0f,
 		( float )BUTTON_POSITION.y + button_height / 2.0f ) );
-
+	_button->setPos( BUTTON_POSITION.x, BUTTON_POSITION.y );
 	_button->setImage( BUTTON_NORMAL_IMAGE );
 	_button->setPushImage( BUTTON_PUSH_IMAGE );
 

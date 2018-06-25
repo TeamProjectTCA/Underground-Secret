@@ -7,6 +7,8 @@
 #include <array>
 
 const int DEFAULT_ON_SHUTTER_MAX = 2;
+const int SWITCH_WIDTH = 64;
+const int SWITCH_HEIGHT = 32;
 const int STAGE_ON_SHUTTER_NUM[ ] = { DEFAULT_ON_SHUTTER_MAX };
 const char SHUTTER_OPEN_NORMAL_IMAGE[ ] = "button_on";
 const char SHUTTER_OPEN_PUSH_IMAGE[ ] = "button_on";
@@ -45,8 +47,6 @@ void Shutter::draw( ) {
 	const int RATE = ( _shutter_height - MIN ) / MOVECOUNT_MAX;
 	const int SHUTTER_MARGIN_RIGHT = 5;
 	const int SHUTTER_MARGIN_UP = 5;
-	const int SWITCH_WIDTH = _drawer->getImageWidth( SHUTTER_OPEN_NORMAL_IMAGE );
-	const int SWITCH_HEIGHT = _drawer->getImageHeight( SHUTTER_OPEN_NORMAL_IMAGE );
 
 
 	for ( int i = 0; i < SHUTTER_MAX; i++ ) {
@@ -91,7 +91,7 @@ void Shutter::draw( ) {
 		x += ( float )( _scroll.x - _end_scroll.x );
 		y += ( float )( _scroll.y - _end_scroll.y );
 
-		float switch_x = x + _shutter_width + SHUTTER_MARGIN_RIGHT + SWITCH_WIDTH / 2.0f;
+		float switch_x = x + _shutter_width / 2.0f;
 		float switch_y = y - SHUTTER_MARGIN_UP - SWITCH_HEIGHT / 2.0f;
 		Vector BUTTON_POSITION = Vector( switch_x, switch_y );
 
@@ -100,7 +100,11 @@ void Shutter::draw( ) {
 			( float )BUTTON_POSITION.y - SWITCH_HEIGHT / 2.0f,
 			( float )BUTTON_POSITION.x + SWITCH_WIDTH / 2.0f,
 			( float )BUTTON_POSITION.y + SWITCH_HEIGHT / 2.0f );
-
+		_button[ i ]->setPos( 
+			( float )BUTTON_POSITION.x - SWITCH_WIDTH / 2.0f,
+			( float )BUTTON_POSITION.y - SWITCH_HEIGHT / 2.0f,
+			( float )BUTTON_POSITION.x + SWITCH_WIDTH / 2.0f,
+			( float )BUTTON_POSITION.y + SWITCH_HEIGHT / 2.0f );
 
 		_drawer->drawRectGraph( x, y, 0, ly, _shutter_width, ry, _shutter_handle, true );
 		_button[ i ]->draw( );
