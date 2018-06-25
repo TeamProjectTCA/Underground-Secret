@@ -41,6 +41,7 @@ _board_y( HEIGHT_F ) {
 		( float )button_pos.y - _active_button_height / 2.0f,
 		( float )button_pos.x + _active_button_width / 2.0f,
 		( float )button_pos.y + _active_button_height / 2.0f ) );
+	_button->setPos( button_pos.x, button_pos.y );
 }
 
 Profiling::~Profiling( ) {
@@ -59,11 +60,11 @@ void Profiling::draw( ) const {
 
 void Profiling::drawActiveButton( ) const {
 	if ( _active ) {
-		_button->setImage( PROFILING_BUTTON );
-		_button->setPushImage( PROFILING_BUTTON );
-	} else {
 		_button->setImage( PROFILING_BACK_BUTTON );
 		_button->setPushImage( PROFILING_BACK_BUTTON );
+	} else {
+		_button->setImage( PROFILING_BUTTON );
+		_button->setPushImage( PROFILING_BUTTON );
 	}
 
 	_button->draw( );
