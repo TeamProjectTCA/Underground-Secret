@@ -47,8 +47,8 @@ void Button::setCollider( float lx, float ly, float rx, float ry ) {
 }
 
 void Button::setPos( float x, float y, float x2, float y2 ) {
-	x = x;
-	y = y;
+	_x = x;
+	_y = y;
 	if ( x2 != -1 && y2 != -1 ) {
 		_x2 = x2;
 		_y2 = y2;
