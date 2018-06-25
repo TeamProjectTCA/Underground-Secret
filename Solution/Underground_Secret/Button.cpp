@@ -6,6 +6,10 @@ _lx( lx ),
 _ly( ly ),
 _rx( rx ),
 _ry( ry ),
+_x ( 0 ),
+_y ( 0 ),
+_x2( -1 ),
+_y2( -1 ),
 _state( Button::BUTTON_STATE_NORMAL ) {
 	_drawer = Drawer::getTask( );
 }
@@ -22,7 +26,11 @@ void Button::draw( ) const {
 		handle = _push_handle;
 	}
 
-	_drawer->drawRotaGraph( _rx - ( _rx - _lx ) / 2, _ry - ( _ry - _ly ) / 2, 1, 0, handle, true );
+	if ( _x2 == -1.0f || _y2 == -1.0f ) {
+		_drawer->drawRotaGraph( _x, _y, 1, 0, handle, true );
+	} else {
+		_drawer->drawExtendGraph( _x, _y, _x2, _y2, handle, true );
+	}
 
 	// debug
 	//_drawer->drawCircle( _lx, _ly, 30, 0xff0000, true );
@@ -31,11 +39,20 @@ void Button::draw( ) const {
 	//_drawer->drawCircle( _rx, _ry, 30, 0xff0000, true );
 }
 
-void Button::setPos( float lx, float ly, float rx, float ry ) {
+void Button::setCollider( float lx, float ly, float rx, float ry ) {
 	_lx = lx;
 	_ly = ly;
 	_rx = rx;
 	_ry = ry;
+}
+
+void Button::setPos( float x, float y, float x2, float y2 ) {
+	x = x;
+	y = y;
+	if ( x2 != -1 && y2 != -1 ) {
+		_x2 = x2;
+		_y2 = y2;
+	}
 }
 
 void Button::setImage( const char* filepath ) {

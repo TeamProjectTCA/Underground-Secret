@@ -95,10 +95,11 @@ void Shutter::draw( ) {
 		float switch_y = y - SHUTTER_MARGIN_UP - SWITCH_HEIGHT / 2.0f;
 		Vector BUTTON_POSITION = Vector( switch_x, switch_y );
 
-		_button[ i ]->setPos( ( float )BUTTON_POSITION.x - SWITCH_WIDTH / 2.0f,
-			                  ( float )BUTTON_POSITION.y - SWITCH_HEIGHT / 2.0f,
-			                  ( float )BUTTON_POSITION.x + SWITCH_WIDTH / 2.0f,
-			                  ( float )BUTTON_POSITION.y + SWITCH_HEIGHT / 2.0f );
+		_button[ i ]->setCollider( 
+			( float )BUTTON_POSITION.x - SWITCH_WIDTH / 2.0f,
+			( float )BUTTON_POSITION.y - SWITCH_HEIGHT / 2.0f,
+			( float )BUTTON_POSITION.x + SWITCH_WIDTH / 2.0f,
+			( float )BUTTON_POSITION.y + SWITCH_HEIGHT / 2.0f );
 
 
 		_drawer->drawRectGraph( x, y, 0, ly, _shutter_width, ry, _shutter_handle, true );
