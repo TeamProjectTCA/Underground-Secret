@@ -28,7 +28,7 @@ _wait_ani_time( 0 ),
 _wait_time( 0 ) {
 	_random = Random::getTask( );
 
-	addAnim( Character::ANIM_WALK, "CharaDummy_Walk", 2 );
+	addAnim( Character::ANIM_WALK, "woman1_walk", 14 );
 	addAnim( Character::ANIM_RIDE, "CharaDummy_Ride", 2 );
 	addAnim( Character::ANIM_WAIT, "CharaDummy_Wait", 2 );
 	addAnim( Character::ANIM_WAIT_ELEVATOR, "CharaDummy_WaitElevator", 2 );

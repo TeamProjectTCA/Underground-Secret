@@ -22,12 +22,14 @@ const unsigned int WHITE   = 0xffffff;
 
 // フレーム数
 const int FPS = 60;
+const int ANIM_WALK_FRAME = 2;
 
 // 円周率
 const double PI = 3.14; 
 
 // マップブロックサイズ
 const int BLOCK_SIZE = 16;
+const int STAGE_MAX = 3;
 
 // 情報の数
 const int INFO_MAX = 7;

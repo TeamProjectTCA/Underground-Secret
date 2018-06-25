@@ -30,7 +30,8 @@ _pos( Vector( ) ),
 _scroll( Vector( ) ),
 _show_info_num( 0 ),
 _spy( false ),
-_draw_flag( true ) {
+_draw_flag( true ),
+_move_dir( MOVE_DIR_RIGHT ) {
 	_drawer = Drawer::getTask( );
 	_debug = Debug::getTask( );
 }
@@ -86,7 +87,13 @@ void Character::addShowInfoNum( ) {
 }
 
 void Character::move( Vector move ) {
+	Vector past = _pos;
 	_pos += move;
+	if ( ( _pos - past ).x < 0 ) {
+		_move_dir = MOVE_DIR_LEFT;
+	} else {
+		_move_dir = MOVE_DIR_RIGHT;
+	}
 }
 
 bool Character::isLooking( Vector pos ) const {
@@ -208,13 +215,14 @@ void Character::draw( ) {
 			_sx = ( ( _anim_cnt / _anim_change_time ) % _anim[ _anim_type ].frame ) * _anim[ _anim_type ].width;
 		}
 
+		bool flip = ( _move_dir == MOVE_DIR_RIGHT ? true : false );
 		Vector pos = Vector( _pos.x - _anim[ _anim_type ].width / 2, _pos.y - _anim[ _anim_type ].height );
 		_drawer->drawRectGraph( 
 			( float )( pos.x + _scroll.x ), ( float )( pos.y + _scroll.y ),
 			_sx, 0,
 			_anim[ _anim_type ].width, _anim[ _anim_type ].height, 
 			_anim[ _anim_type ].handle,
-			true, false );
+			true, flip );
 	}
 
 	{ // èÓïÒÇÃï\é¶
