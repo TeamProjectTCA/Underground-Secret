@@ -226,11 +226,17 @@ bool Shutter::isHitShutter( int detection_idx ) const {
 	}
 
 	// ”»’è‚·‚é
+	const int PITCH = 3;
 	size = ( int )active_idx.size( );
 	for ( int i = 0; i < size; i++ ) {
 		int shutter_last_idx = ( int )_shutter[ active_idx[ i ] ].size( ) - 1;
-		if ( _shutter[ active_idx[ i ] ][ shutter_last_idx ] == detection_idx ) {
-			return true;
+		int idx = _shutter[ active_idx[ i ] ][ shutter_last_idx ];
+
+		for ( int j = 0; j < PITCH; j++ ) {
+			idx += j;
+			if ( idx == detection_idx ) {
+				return true;
+			}
 		}
 	}
 
