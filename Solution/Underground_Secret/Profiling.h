@@ -9,6 +9,7 @@ PTR( Profiling );
 PTR( Mouse );
 PTR( Sound );
 PTR( Drawer );
+PTR( Button );
 
 class Profiling {
 public:
@@ -48,5 +49,6 @@ private:
 	MousePtr _mouse;
 	SoundPtr _sound;
 	DrawerPtr _drawer;
+	ButtonPtr _button;
 };
 

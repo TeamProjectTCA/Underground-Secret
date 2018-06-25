@@ -25,6 +25,9 @@ _scroll( scroll ) {
 	_sound = Sound::getTask( );
 	_time_count = TIME_LIMIT * FPS;
 
+	//タイムボード
+	_time_board_handle = _drawer->getImage( "time_board" );
+
 	//BGM
 	_sound_handle[ GAME_BGM ] = _sound->load( "GameBGM/gamebgm.ogg" );
 	_sound->play( _sound_handle[ GAME_BGM ], true, true );
@@ -92,7 +95,40 @@ void PhasePlay::draw( ) const {
 }
 
 void PhasePlay::drawTime( ) const {
-	_drawer->drawBox( TIME_BOX_X, TIME_BOX_Y, TIME_BOX_X + TIME_BOX_WIDTH, TIME_BOX_Y + TIME_BOX_HEIGHT, BLUE, true );
-	_drawer->drawString( TIME_STRING_X1, TIME_STRING_Y1, "クリアまであと", RED );
-	_drawer->drawString( TIME_STRING_X2, TIME_STRING_Y2, std::to_string( _time_count / FPS ) + "秒", RED );
+	short int tmp = _time_count / FPS;
+	const float NUM_WIDTH = 32;
+	const float NUM_HEIGHT = 32;
+	const float NUM_X1 = 65;
+	const float NUM_X2 = 52;
+	const float NUM_X3 = 40;
+	const float NUM_Y = 40;
+	const float NUM_MARGIN = 25;
+	std::string index = std::to_string( tmp );
+
+	std::vector< int > number;
+	std::vector< int > frame;
+	short int length = ( short int )index.length( );
+
+	for ( int i = 0; i < length; i++ ) {
+		short int handle_idx = tmp % 10;
+		number.push_back( _drawer->getImage( std::to_string( handle_idx ) ) );
+		frame.push_back( _drawer->getImage( std::to_string( handle_idx ) + "frame" ) );
+		tmp /= 10;
+	}
+
+	_drawer->drawGraph( TIME_BOX_X, TIME_BOX_Y, _time_board_handle, true );
+	for ( int i = 0; i < length; i++ ) {
+		if ( length == 3 ) {
+			_drawer->drawExtendGraph( NUM_X3 + i * NUM_MARGIN, NUM_Y, NUM_X3 + i * NUM_MARGIN + NUM_WIDTH, NUM_Y + NUM_HEIGHT, number[ length - i - 1 ], true );
+			_drawer->drawExtendGraph( NUM_X3 + i * NUM_MARGIN, NUM_Y, NUM_X3 + i * NUM_MARGIN + NUM_WIDTH, NUM_Y + NUM_HEIGHT, frame[ length - i - 1 ], true );
+		}
+		if ( length == 2 ) {
+			_drawer->drawExtendGraph( NUM_X2 + i * NUM_MARGIN, NUM_Y, NUM_X2 + i * NUM_MARGIN + NUM_WIDTH, NUM_Y + NUM_HEIGHT, number[ length - i - 1 ], true );
+			_drawer->drawExtendGraph( NUM_X2 + i * NUM_MARGIN, NUM_Y, NUM_X2 + i * NUM_MARGIN + NUM_WIDTH, NUM_Y + NUM_HEIGHT, frame[ length - i - 1 ], true );
+		}
+		if ( length == 1 ) {
+			_drawer->drawExtendGraph( NUM_X1, NUM_Y, NUM_X1 + NUM_WIDTH, NUM_Y + NUM_HEIGHT, number[ length - i - 1 ], true );
+			_drawer->drawExtendGraph( NUM_X1, NUM_Y, NUM_X1 + NUM_WIDTH, NUM_Y + NUM_HEIGHT, frame[ length - i - 1 ], true );
+		}
+	}
 }

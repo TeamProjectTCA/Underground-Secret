@@ -8,10 +8,10 @@
 
 const int DEFAULT_ON_SHUTTER_MAX = 2;
 const int STAGE_ON_SHUTTER_NUM[ ] = { DEFAULT_ON_SHUTTER_MAX };
-const char SHUTTER_OPEN_NORMAL_IMAGE[ ] = "ShutterOpenNormal";
-const char SHUTTER_OPEN_PUSH_IMAGE[ ] = "ShutterOpenPush";
-const char SHUTTER_CLOSE_NORMAL_IMAGE[ ] = "ShutterCloseNormal";
-const char SHUTTER_CLOSE_PUSH_IMAGE[ ] = "ShutterClosePush";
+const char SHUTTER_OPEN_NORMAL_IMAGE[ ] = "button_on";
+const char SHUTTER_OPEN_PUSH_IMAGE[ ] = "button_on";
+const char SHUTTER_CLOSE_NORMAL_IMAGE[ ] = "button_off";
+const char SHUTTER_CLOSE_PUSH_IMAGE[ ] = "button_off";
 
 const int MOVECOUNT_MAX = 60;
 

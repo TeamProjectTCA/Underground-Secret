@@ -9,7 +9,7 @@
 const Vector BUTTON_POSITION = Vector( WIDTH / 2, HEIGHT / 5 * 4 );
 const char BUTTON_NORMAL_IMAGE[ ] = "GameStart";
 const char BUTTON_PUSH_IMAGE[ ] = "GameStartClick";
-const char BACKGROUND_IMAGE[ ] = "back_001";
+const char BACKGROUND_IMAGE[ ] = "underground_back";
 const char TITLE_IMAGE[ ] = "title";
 
 SceneTitle::SceneTitle( ) {
@@ -71,9 +71,8 @@ void SceneTitle::update( ) {
 }
 
 void SceneTitle::draw( ) const {
-	_drawer->drawRotaGraph( WIDTH / 2, HEIGHT / 2, 1, 0, _background_handle, true ); //”wŒi
+	_drawer->drawExtendGraph( 0, 0, WIDTH, HEIGHT, _background_handle, true ); //”wŒi
 	_drawer->drawRotaGraph( WIDTH / 2, HEIGHT / 3, 1, 0, _title_handle, true ); //ƒ^ƒCƒgƒ‹‰æ‘œ
-	_drawer->drawString( 10, 10, "SceneTitle", 0xff0000 );
 	_button->draw( ); //ƒ{ƒ^ƒ“
 	_drawer->flip( );
 }

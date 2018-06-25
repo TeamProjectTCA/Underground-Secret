@@ -3,14 +3,17 @@
 #include "Drawer.h"
 #include "const.h"
 #include "sound.h"
+#include "button.h"
 
-const int ACTIVE_BUTTON_X = ( WIDTH / 5 ) * 4;
+const int ACTIVE_BUTTON_X = 1024;
 const int ACTIVE_BUTTON_Y = 0;
 const float INITIAL_VELOCITY = -22; // 初速度
 const float ACCELERATION = 0.4f;
 const float TOTAL_TIME = 1.1f; //ボードが出現から止まるまでの時間（秒）
 const float NONACTIVE_BOARD_Y = HEIGHT;
 const int BOARD_EXIT_SPEED = 50;
+const char PROFILING_BUTTON[ ] = "Profiling";
+const char PROFILING_BACK_BUTTON[ ] = "back";
 
 Profiling::Profiling( std::vector< std::string > &profiling ) :
 _profiling( profiling ),
@@ -30,6 +33,14 @@ _board_y( HEIGHT_F ) {
 
 	//SE
 	_sound_handle[ BOARD_MOVE ] = _sound->load( "/SoundEffect/BoardMove.ogg" );
+
+	//ボタン
+	Vector button_pos = Vector( WIDTH - _active_button_width / 2.0f, _active_button_height / 2.0f );
+	_button = ButtonPtr( new Button(
+		( float )button_pos.x - _active_button_width / 2.0f,
+		( float )button_pos.y - _active_button_height / 2.0f,
+		( float )button_pos.x + _active_button_width / 2.0f,
+		( float )button_pos.y + _active_button_height / 2.0f ) );
 }
 
 Profiling::~Profiling( ) {
@@ -47,12 +58,15 @@ void Profiling::draw( ) const {
 }
 
 void Profiling::drawActiveButton( ) const {
-	int handle = _active_button_handle;
 	if ( _active ) {
-		handle = _back_button;
+		_button->setImage( PROFILING_BUTTON );
+		_button->setPushImage( PROFILING_BUTTON );
+	} else {
+		_button->setImage( PROFILING_BACK_BUTTON );
+		_button->setPushImage( PROFILING_BACK_BUTTON );
 	}
 
-	_drawer->drawGraph( ACTIVE_BUTTON_X, ACTIVE_BUTTON_Y, handle, true );
+	_button->draw( );
 }
 
 void Profiling::drawBoard( ) const {
@@ -72,9 +86,7 @@ void Profiling::drawProfiling( ) const {
 }
 
 void Profiling::calcActiveButton( ) {
-	if ( !_mouse->isClickDownLeft( ) ) {
-		return;
-	}
+	
 	//ボードが出現、退出の途中にボタンを無効化にする
 	if (_board_y != HEIGHT && !_active) {
 		return;
@@ -82,12 +94,16 @@ void Profiling::calcActiveButton( ) {
 	if (_board_count != FPS * TOTAL_TIME && _active) {
 		return;
 	}
-	Vector mouse = _mouse->getPoint( );
 
-	if ( ACTIVE_BUTTON_X <= mouse.x && mouse.x <= ACTIVE_BUTTON_X + _active_button_width &&
-		 ACTIVE_BUTTON_Y <= mouse.y && mouse.y <= ACTIVE_BUTTON_Y + _active_button_height ) {
-		_sound->play( _sound_handle[ BOARD_MOVE ] );
-		_active = !_active;
+	Vector mouse_pos = _mouse->getPoint( );
+	if ( _mouse->getClickingLeft( ) ) {
+		_button->click( mouse_pos );
+	} else {
+		if ( _button->isPush( ) ) {
+			_sound->play( _sound_handle[ BOARD_MOVE ] );
+			_active = !_active;
+		}
+		_button->resetState( );
 	}
 }
 

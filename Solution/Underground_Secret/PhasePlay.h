@@ -36,6 +36,7 @@ private:
 
 	int _time_count;
 	int _chara_handle;
+	int _time_board_handle;
 
 	std::unordered_map< SOUND, int > _sound_handle;
 
