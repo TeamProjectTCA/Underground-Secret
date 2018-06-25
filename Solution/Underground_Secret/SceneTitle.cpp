@@ -71,7 +71,7 @@ void SceneTitle::update( ) {
 }
 
 void SceneTitle::draw( ) const {
-	_drawer->drawExtendGraph( 0, 0, WIDTH, HEIGHT, _background_handle, true ); //”wŒi
+	_drawer->drawExtendGraph( 0, 0, WIDTH_F, HEIGHT_F, _background_handle, true ); //”wŒi
 	_drawer->drawRotaGraph( WIDTH / 2, HEIGHT / 3, 1, 0, _title_handle, true ); //ƒ^ƒCƒgƒ‹‰æ‘œ
 	_button->draw( ); //ƒ{ƒ^ƒ“
 	_drawer->flip( );

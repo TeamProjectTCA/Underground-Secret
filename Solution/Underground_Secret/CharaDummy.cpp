@@ -202,6 +202,7 @@ void CharaDummy::checkElevator( ) {
 	ELEVATOR_STATE state = getElevatorState( id, getPos( ) );
 	ELEVATOR_POS active_elevator = getActiveElevator( id, getPos( ) );
 	ELEVATOR_POS destination = getDestination( id, getPos( ) );
+	_draw_flag = true;
 
 	switch ( state ) {
 	case ELEVATOR_STATE_WAIT:
@@ -235,7 +236,7 @@ void CharaDummy::checkElevator( ) {
 
 			setAnim( Character::ANIM_WAIT_ELEVATOR );
 		}
-		return;
+		break;
 
 	case ELEVATOR_STATE_COME:
 	{
@@ -243,7 +244,16 @@ void CharaDummy::checkElevator( ) {
 		if ( anim != Character::ANIM_RIDE && anim == Character::ANIM_WAIT_ELEVATOR ) {
 			setAnim( Character::ANIM_RIDE );
 		}
-		return;
+		break;
+	}
+
+	case ELEVATOR_STATE_MOVE:
+	{
+		Character::ANIM_TYPE anim = getAnimType( );
+		if ( anim == Character::ANIM_RIDE ) {
+			_draw_flag = false;
+		}
+		break;
 	}
 
 	case ELEVATOR_STATE_ARRIVE:
@@ -253,7 +263,7 @@ void CharaDummy::checkElevator( ) {
 		setElevatorPos( id );
 		setAnim( Character::ANIM_WALK );
 		_ride_elevator = true;
-		return;
+		break;
 
 	default:
 		break;

@@ -24,6 +24,8 @@ SceneStageSelect::SceneStageSelect( ) {
 		( float )BUTTON_POSITION.x + button_width  / 2.0f,
 		( float )BUTTON_POSITION.y + button_height / 2.0f ) );
 
+	_button->setPos( ( float )BUTTON_POSITION.x, ( float )BUTTON_POSITION.y );
+
 	_button->setImage( BUTTON_NORMAL_IMAGE );
 	_button->setPushImage( BUTTON_PUSH_IMAGE );
 }

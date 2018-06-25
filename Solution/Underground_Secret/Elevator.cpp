@@ -4,11 +4,14 @@
 #include "Drawer.h"
 
 const char ELEVATOR_IMAGE[ ] = "elevator";
-const float ELEVATOR_ANIM_SPEED = 0.25f;
+const float ELEVATOR_ANIM_SPEED = 0.45f;
+const int ELEVATOR_ANIMFRAME_MAX = 80;
 
-const int ELEVATOR_TOTAL_TIME = FPS * 12;
+const int ELEVATOR_TOTAL_TIME = FPS * 13;
 const int ELEVATOR_RIDE_TIME = FPS;
-const int ELEVATOR_WAIT_TIME = ELEVATOR_TOTAL_TIME / 3 - ELEVATOR_RIDE_TIME; // エレベーター受付時間
+const int ELEVATOR_MOVE_TIME = FPS;
+const int ELEVATOR_ANIM_TIME = ELEVATOR_RIDE_TIME + ELEVATOR_MOVE_TIME;
+const int ELEVATOR_WAIT_TIME = ELEVATOR_TOTAL_TIME / 3 - ELEVATOR_ANIM_TIME; // エレベーター受付時間
 
 Elevator::Elevator( const int col, const char id ) :
 _col( col ),
@@ -57,7 +60,15 @@ void Elevator::draw( ) const {
 
 		if ( i == ( int )_active_elevator ) {
 			if ( _elevator_state == ELEVATOR_STATE_COME ) {
-				float move = _elevator_anim[ i ] * ELEVATOR_ANIM_SPEED;
+				float move = _elevator_anim[ ( int )_active_elevator ] * ELEVATOR_ANIM_SPEED;
+				draw_lx -= move;
+				draw_rx += move;
+			}
+		}
+
+		if ( i == ( int )_destination ) {
+			if ( _elevator_state == ELEVATOR_STATE_MOVE ) {
+				float move = _elevator_anim[ ( int )_destination ] * ELEVATOR_ANIM_SPEED;
 				draw_lx -= move;
 				draw_rx += move;
 			}
@@ -69,37 +80,46 @@ void Elevator::draw( ) const {
 }
 
 void Elevator::updateActiveElevator( ) {
-	if ( _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME ) == 0 ) {
+	if ( _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME ) == 0 ) {
 
 		if ( _data.size( ) < ELEVATOR_POS_MAX ) {
 			_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ( int )_data.size( ) );
 		} else {
 			_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ELEVATOR_POS_MAX );
 		}
-		_elevator_anim[ ( int )_active_elevator ] = 0;
 		decideDestination( );
+		resetAnimCount( );
 	}
 }
 
 void Elevator::updateElevatorState( ) {
-	int wait = _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME );
+	int wait = _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME );
 	if ( wait < ELEVATOR_WAIT_TIME ) {
 		_elevator_state = ELEVATOR_STATE_WAIT;
 	} 
 	if ( ELEVATOR_WAIT_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME ) {
 		_elevator_state = ELEVATOR_STATE_COME;
 	}
-	if ( wait == ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME - 1 ) ) {
+	if ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME + ELEVATOR_MOVE_TIME ) {
+		_elevator_state = ELEVATOR_STATE_MOVE;
+	}
+
+	if ( wait == ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME - 1 ) ) {
 		_elevator_state = ELEVATOR_STATE_ARRIVE;
 	}
 }
 
 void Elevator::updateElevatorAnim( ) {
 	for ( int i = 0; i < _elevator_anim.size( ); i++ ) {
-		if ( i != ( int )_active_elevator ) {
-			continue;
+		if ( _elevator_anim[ i ] < ELEVATOR_ANIMFRAME_MAX ) {
+			if ( i == ( int )_active_elevator && _elevator_state == ELEVATOR_STATE_COME ) {
+				_elevator_anim[ i ]++;
+			}
+
+			if ( i == ( int )_destination && _elevator_state == ELEVATOR_STATE_MOVE ) {
+				_elevator_anim[ i ]++;
+			}
 		}
-		_elevator_anim[ i ]++;
 	}
 }
 
@@ -143,6 +163,12 @@ void Elevator::decideDestination( ) {
 	}
 	if ( size < ELEVATOR_POS_MAX && _active_elevator < size ) {
 		_destination = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % size );
+	}
+}
+
+void Elevator::resetAnimCount( ) {
+	for ( int i = 0; i < _elevator_anim.size( ); i++ ) {
+		_elevator_anim[ i ] = 0;
 	}
 }
 

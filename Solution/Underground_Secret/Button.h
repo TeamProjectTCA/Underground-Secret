@@ -22,7 +22,8 @@ public:
 	void draw( ) const;
 
 public:
-	void setPos( float lx, float ly, float rx, float ry );
+	void setCollider( float lx, float ly, float rx, float ry );
+	void setPos( float x, float y, float x2 = -1.0f, float y2 = -1.0f );
 	void setImage( const char* filepath );
 	void setPushImage( const char* filepath );
 	
@@ -45,6 +46,14 @@ public:
 private:
 	int _handle;
 	int _push_handle;
+
+	// •`‰æ—p‚Ì•Ï”
+	float _x;
+	float _y;
+	float _x2;
+	float _y2;
+
+	// “–‚½‚è”»’è—p‚Ì•Ï”
 	float _lx;
 	float _ly;
 	float _rx;
