@@ -154,8 +154,11 @@ void CharaDummy::checkCollider( ) {
 
 	// 進行予想値がシャッター
 	if ( data == IDENTIFICATION_SHUTTER ) {
-		_return_move = true;
-		_hit_shutter = true;
+		// 自分のいる位置もシャッターであれば進行する(埋まるのを回避)
+		if ( getMapData( getPos( ) ) != IDENTIFICATION_SHUTTER ) {
+			_return_move = true;
+			_hit_shutter = true;
+		}
 	}
 
 	// 進行予測値が当たり判定であったら

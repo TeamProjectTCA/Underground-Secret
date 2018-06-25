@@ -5,7 +5,6 @@
 PTR( Button );
 PTR( Drawer );
 
-
 class Button {
 private:
 	enum BUTTON_STATE {
@@ -19,13 +18,18 @@ public:
 	virtual ~Button( );
 
 public:
-	void draw( ) const;
+	void draw( bool transflag = true ) const;
 
 public:
 	void setCollider( float lx, float ly, float rx, float ry );
-	void setPos( float x, float y, float x2 = -1.0f, float y2 = -1.0f );
+	void setPos( float x1, float y1, float x2 = -1.0f, float y2 = -1.0f );
 	void setImage( const char* filepath );
 	void setPushImage( const char* filepath );
+
+public:
+	Vector getColliderLeft( ) const;
+	Vector getColliderRight( ) const;
+	Vector getPosCenter( ) const;
 	
 public:
 	inline void click( Vector mouse ) {
@@ -48,8 +52,8 @@ private:
 	int _push_handle;
 
 	// •`‰æ—p‚Ì•Ï”
-	float _x;
-	float _y;
+	float _x1;
+	float _y1;
 	float _x2;
 	float _y2;
 

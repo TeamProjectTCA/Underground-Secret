@@ -237,8 +237,8 @@ bool Shutter::isHitShutter( int detection_idx ) const {
 		int idx = _shutter[ active_idx[ i ] ][ shutter_last_idx ];
 
 		for ( int j = 0; j < PITCH; j++ ) {
-			idx += j;
-			if ( idx == detection_idx ) {
+			int check = idx + j;
+			if ( check == detection_idx ) {
 				return true;
 			}
 		}

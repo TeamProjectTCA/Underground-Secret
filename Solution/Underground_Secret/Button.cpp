@@ -6,8 +6,8 @@ _lx( lx ),
 _ly( ly ),
 _rx( rx ),
 _ry( ry ),
-_x ( 0 ),
-_y ( 0 ),
+_x1( 0 ),
+_y1( 0 ),
 _x2( -1 ),
 _y2( -1 ),
 _state( Button::BUTTON_STATE_NORMAL ) {
@@ -17,7 +17,7 @@ _state( Button::BUTTON_STATE_NORMAL ) {
 Button::~Button( ) {
 }
 
-void Button::draw( ) const {
+void Button::draw( bool transflag ) const {
 	int handle = -1;
 	if ( _state == Button::BUTTON_STATE_NORMAL ) {
 		handle = _handle;
@@ -27,9 +27,9 @@ void Button::draw( ) const {
 	}
 
 	if ( _x2 == -1.0f || _y2 == -1.0f ) {
-		_drawer->drawRotaGraph( _x, _y, 1, 0, handle, true );
+		_drawer->drawRotaGraph( _x1, _y1, 1, 0, handle, transflag );
 	} else {
-		_drawer->drawExtendGraph( _x, _y, _x2, _y2, handle, true );
+		_drawer->drawExtendGraph( _x1, _y1, _x2, _y2, handle, transflag );
 	}
 
 	// debug
@@ -46,9 +46,9 @@ void Button::setCollider( float lx, float ly, float rx, float ry ) {
 	_ry = ry;
 }
 
-void Button::setPos( float x, float y, float x2, float y2 ) {
-	_x = x;
-	_y = y;
+void Button::setPos( float x1, float y1, float x2, float y2 ) {
+	_x1 = x1;
+	_y1 = y1;
 	if ( x2 != -1 && y2 != -1 ) {
 		_x2 = x2;
 		_y2 = y2;
@@ -61,4 +61,19 @@ void Button::setImage( const char* filepath ) {
 
 void Button::setPushImage( const char* filepath ) {
 	_push_handle = _drawer->getImage( filepath );
+}
+
+Vector Button::getColliderLeft( ) const {
+	return Vector( _lx, _ly );
+}
+
+Vector Button::getColliderRight( ) const {
+	return Vector( _rx, _ry );
+}
+
+Vector Button::getPosCenter( ) const {
+	if ( _x2 != -1 && _y2 != -1 ) {
+		return Vector( ( _x2 - _x1 ) / 2, ( _y2 - _y1 ) / 2 );
+	}
+	return Vector( _x1, _y1 );
 }

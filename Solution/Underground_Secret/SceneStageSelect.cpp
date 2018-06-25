@@ -6,14 +6,22 @@
 #include "Vector.h"
 #include "Mouse.h"
 
-const char BUTTON_STAGE1_IMAGE[ ] = "stage1";
-const char *BUTTON_IMAGE[ STAGE_MAX ] = { BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE };
+const float BUTTON_Y = HEIGHT / 4 * 2.5;
+const float BUTTON_PITCH = WIDTH / 4;
 const int BUTTON_WIDTH = 256;
 const int BUTTON_HEIGHT = 256;
-const float BUTTON_PITCH = WIDTH / 4;
-const float BUTTON_Y = HEIGHT / 3 * 2;
+const float STAGE_STRING_Y = HEIGHT / 4;
+const float STAGE_STRING_HEIGHT = 128;
+
+const char BUTTON_STAGE1_IMAGE[ ] = "stage1";
+const char *BUTTON_IMAGE[ STAGE_MAX ] = { BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE };
 
 const char BACK_IMAGE[ ] = "underground_back";
+const char BUTTON_FRAME_IMAGE[ ] = "stagebutton_frame";
+const char STAGE1_STRING_IMAGE[ ] = "stage1_string";
+const char STAGE2_STRING_IMAGE[ ] = "stage2_string";
+const char STAGE3_STRING_IMAGE[ ] = "stage3_string";
+const char *STAGE_STRING_IMAGE[ STAGE_MAX ] = { STAGE1_STRING_IMAGE, STAGE2_STRING_IMAGE, STAGE3_STRING_IMAGE };
 
 SceneStageSelect::SceneStageSelect( ) {
 	_stage = 1;
@@ -22,6 +30,7 @@ SceneStageSelect::SceneStageSelect( ) {
 	_mouse = Mouse::getTask( );
 
 	_back_image = _drawer->getImage( BACK_IMAGE );
+	_buttonframe_image = _drawer->getImage( BUTTON_FRAME_IMAGE );
 	createButton( );
 }
 
@@ -52,8 +61,24 @@ void SceneStageSelect::draw( ) const {
 	// ”wŒi
 	_drawer->drawGraph( 0, 0, _back_image, true );
 
+	const int FRAME_GAP = 20;
 	for ( int i = 0; i < _button.size( ); i++ ) {
 		_button[ i ]->draw( );
+
+		// frame
+		Vector left = _button[ i ]->getColliderLeft( );
+		Vector right = _button[ i ]->getColliderRight( );
+		_drawer->drawExtendGraph( 
+			( float )left.x  - FRAME_GAP, ( float )left.y  - FRAME_GAP, 
+			( float )right.x + FRAME_GAP, ( float )right.y + FRAME_GAP, 
+			_buttonframe_image, true );
+
+		// string
+		int handle = _drawer->getImage( STAGE_STRING_IMAGE[ i ] );
+		_drawer->drawExtendGraph(
+			( float )left.x , STAGE_STRING_Y,
+			( float )right.x, STAGE_STRING_Y + STAGE_STRING_HEIGHT,
+			handle, true );
 	}
 	_drawer->flip( );
 }

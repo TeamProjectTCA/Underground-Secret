@@ -25,6 +25,7 @@ private:
 private:
 	int _stage;
 	int _back_image;
+	int _buttonframe_image;
 
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;

@@ -41,7 +41,7 @@ _board_y( HEIGHT_F ) {
 		( float )button_pos.y - _active_button_height / 2.0f,
 		( float )button_pos.x + _active_button_width / 2.0f,
 		( float )button_pos.y + _active_button_height / 2.0f ) );
-	_button->setPos( button_pos.x, button_pos.y );
+	_button->setPos( ( float )button_pos.x, ( float )button_pos.y );
 }
 
 Profiling::~Profiling( ) {
@@ -67,7 +67,7 @@ void Profiling::drawActiveButton( ) const {
 		_button->setPushImage( PROFILING_BUTTON );
 	}
 
-	_button->draw( );
+	_button->draw( false );
 }
 
 void Profiling::drawBoard( ) const {
@@ -89,10 +89,10 @@ void Profiling::drawProfiling( ) const {
 void Profiling::calcActiveButton( ) {
 	
 	//ボードが出現、退出の途中にボタンを無効化にする
-	if (_board_y != HEIGHT && !_active) {
+	if ( _board_y != HEIGHT && !_active ) {
 		return;
 	}
-	if (_board_count != FPS * TOTAL_TIME && _active) {
+	if ( _board_count != FPS * TOTAL_TIME && _active ) {
 		return;
 	}
 
