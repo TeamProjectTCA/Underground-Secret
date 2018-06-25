@@ -22,6 +22,7 @@ const unsigned int WHITE   = 0xffffff;
 
 // ƒtƒŒ[ƒ€”
 const int FPS = 60;
+const int ANIM_WALK_FRAME = 2;
 
 // ‰~ü—¦
 const double PI = 3.14; 

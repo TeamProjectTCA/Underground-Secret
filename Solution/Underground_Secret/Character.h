@@ -30,6 +30,11 @@ public:
 	};
 
 private:
+	enum MOVE_DIR {
+		MOVE_DIR_RIGHT,
+		MOVE_DIR_LEFT
+	};
+
 	struct Animation {
 		int handle;
 		int frame;
@@ -112,4 +117,5 @@ private:
 	ANIM_TYPE _anim_type;
 	std::vector< std::string > _info;
 	int _show_info_num;
+	MOVE_DIR _move_dir;
 };

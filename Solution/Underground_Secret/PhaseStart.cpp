@@ -17,7 +17,7 @@ _count( 0 ) {
 	ite = _chara.begin( );
 	for ( ite; ite != _chara.end( ); ite++ ) {
 		( *ite )->setFixedpoint( PHASE_START );
-		( *ite )->setAnimTime( FPS / 4 );
+		( *ite )->setAnimTime( ANIM_WALK_FRAME );
 	}
 
 	_endpoint = _map->getFixedpointBeta( PHASE_START );
@@ -55,7 +55,7 @@ void PhaseStart::update( ) {
 		// アニメーションと位置を設定
 		_run_chara->setFixedpoint( PHASE_PLAY );
 		_run_chara->setAnim( Character::ANIM_WALK );
-		_run_chara->setAnimTime( FPS / 2 );
+		_run_chara->setAnimTime( ANIM_WALK_FRAME );
 
 		// 次の演出キャラに切り替える
 		_run_idx++;
