@@ -43,6 +43,9 @@ void Elevator::update( ) {
 
 	// elevator anim ‚ÌXV
 	updateElevatorAnim( );
+
+	//SE
+	playSoundEffect( );
 }
 
 void Elevator::draw( ) const {
@@ -95,13 +98,10 @@ void Elevator::updateActiveElevator( ) {
 
 void Elevator::updateElevatorState( ) {
 	int wait = _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME );
-	SoundPtr sound = Sound::getTask( );
-	_sound_handle[ ELEVATOR_SE ] = sound->load( "SoundEffect/ElevatorArrive1.ogg" );
 	if ( wait < ELEVATOR_WAIT_TIME ) {
 		_elevator_state = ELEVATOR_STATE_WAIT;
 	} 
 	if ( ELEVATOR_WAIT_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME ) {
-		sound->play( _sound_handle[ ELEVATOR_SE ] );
 		_elevator_state = ELEVATOR_STATE_COME;
 	}
 	if ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME + ELEVATOR_MOVE_TIME ) {
@@ -109,7 +109,6 @@ void Elevator::updateElevatorState( ) {
 	}
 
 	if ( wait == ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME - 1 ) ) {
-		sound->play( _sound_handle[ ELEVATOR_SE ] ); 
 		_elevator_state = ELEVATOR_STATE_ARRIVE;
 	}
 }
@@ -174,6 +173,41 @@ void Elevator::decideDestination( ) {
 void Elevator::resetAnimCount( ) {
 	for ( int i = 0; i < _elevator_anim.size( ); i++ ) {
 		_elevator_anim[ i ] = 0;
+	}
+}
+
+void Elevator::playSoundEffect( ) {
+	for ( int i = 0; i < _elevator_anim.size( ); i++ ) {
+		int x = ( _data[ i ] % _col ) * BLOCK_SIZE + ( int )_scroll.x;
+		int y = ( _data[ i ] / _col ) * BLOCK_SIZE + ( int )_scroll.y;
+
+		DrawerPtr drawer = Drawer::getTask( );
+		SoundPtr sound = Sound::getTask( );
+		int height = drawer->getImageHeight( ELEVATOR_IMAGE );
+		
+		float elevator_cx = ( float )( x + BLOCK_SIZE / 2 );
+		float elevator_cy = ( float )( y - height / 2 );
+		_sound_handle[ ELEVATOR_COME_SE ] = sound->load( "SoundEffect/ElevatorArrive1.ogg" );
+		_sound_handle[ ELEVATOR_ARRIVE_SE ] = sound->load( "SoundEffect/ElevatorArrive2.ogg" );
+
+		if ( i == ( int )_active_elevator ) {
+			if ( _elevator_state == ELEVATOR_STATE_COME ) {
+				if ( 0 < elevator_cx && elevator_cx < WIDTH &&
+					 0 < elevator_cy && elevator_cy < HEIGHT ) {
+					sound->play( _sound_handle[ ELEVATOR_COME_SE ] );
+				}
+			}
+		}
+
+		if ( i == ( int )_destination ) {
+			if ( _elevator_state == ELEVATOR_STATE_MOVE ) {
+				if ( 0 < elevator_cx && elevator_cx < WIDTH &&
+					 0 < elevator_cy && elevator_cy < HEIGHT ) {
+					sound->play( _sound_handle[ ELEVATOR_ARRIVE_SE ] );
+				}
+			}
+		}
+	    //debug
 	}
 }
 

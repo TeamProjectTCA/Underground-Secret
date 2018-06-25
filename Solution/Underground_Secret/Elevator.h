@@ -45,6 +45,7 @@ public:
 private:
 	void decideDestination( );
 	void resetAnimCount( );
+	void playSoundEffect( );
 
 public:
 	char getId( ) const;
