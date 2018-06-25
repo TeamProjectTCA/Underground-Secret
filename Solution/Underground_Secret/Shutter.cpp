@@ -58,26 +58,26 @@ void Shutter::draw( ) {
 		switch ( state ) {
 			case SHUTTER_STATE_ACTIVE:
 				ry = _shutter_height;
-				_button[ i ]->setImage( SHUTTER_CLOSE_NORMAL_IMAGE );
-				_button[ i ]->setPushImage( SHUTTER_CLOSE_PUSH_IMAGE );
+				_button[ i ]->setImage( SHUTTER_OPEN_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_OPEN_PUSH_IMAGE );
 				break;
 
 			case SHUTTER_STATE_NONACTIVE:
 				ry = MIN;
-				_button[ i ]->setImage( SHUTTER_OPEN_NORMAL_IMAGE );
-				_button[ i ]->setPushImage( SHUTTER_OPEN_PUSH_IMAGE );
+				_button[ i ]->setImage( SHUTTER_CLOSE_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_CLOSE_PUSH_IMAGE );
 				break;
 
 			case SHUTTER_STATE_OPEN:
 				ry = ( MOVECOUNT_MAX - _move_cnt ) * RATE + MIN;
-				_button[ i ]->setImage( SHUTTER_OPEN_NORMAL_IMAGE );
-				_button[ i ]->setPushImage( SHUTTER_OPEN_PUSH_IMAGE );
+				_button[ i ]->setImage( SHUTTER_CLOSE_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_CLOSE_PUSH_IMAGE );
 				break;
 
 			case SHUTTER_STATE_CLOSE:
 				ry = _move_cnt * RATE + MIN;
-				_button[ i ]->setImage( SHUTTER_OPEN_NORMAL_IMAGE );
-				_button[ i ]->setPushImage( SHUTTER_OPEN_PUSH_IMAGE );
+				_button[ i ]->setImage( SHUTTER_CLOSE_NORMAL_IMAGE );
+				_button[ i ]->setPushImage( SHUTTER_CLOSE_PUSH_IMAGE );
 				break;
 		}
 

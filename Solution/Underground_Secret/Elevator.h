@@ -1,8 +1,10 @@
 #pragma once
 #include "smart_ptr.h"
 #include "Vector.h"
+#include "const.h"
 #include <string>
 #include <vector>
+#include <unordered_map>
 
 PTR( Elevator );
 
@@ -56,6 +58,7 @@ public:
 private:
 	const int _col;
 	const char _id;
+	int _count;
 	ELEVATOR_POS _next_input_pos;
 	std::vector< int > _data;
 	std::vector< int > _elevator_anim;
@@ -63,6 +66,7 @@ private:
 	ELEVATOR_POS _active_elevator;
 	ELEVATOR_POS _destination;
 	ELEVATOR_STATE _elevator_state;
-	int _count;
+	std::unordered_map< SOUND, int > _sound_handle;
+
 };
 
