@@ -9,7 +9,7 @@
 #include "Scroll.h"
 #include "Debug.h"
 
-const int ONE_STAGE_CHARACTER_NUM = 5;
+const int ONE_STAGE_CHARACTER_NUM = 1;
 
 SceneGame::SceneGame( int stage ) :
 _stage( stage ) {
@@ -96,7 +96,7 @@ void SceneGame::changePhase( ) {
 		break;
 
 	case PHASE_END:
-		_run_phase = PhaseEndPtr( new PhaseEnd( _char_manager->getChara( ), _map ) );
+		_run_phase = PhaseEndPtr( new PhaseEnd( _char_manager->getChara( ), _map, _run_phase->getResult( ) ) );
 		break;
 
 	case PHASE_RETURN_TITLE:
@@ -107,4 +107,3 @@ void SceneGame::changePhase( ) {
 		break;
 	}
 }
-

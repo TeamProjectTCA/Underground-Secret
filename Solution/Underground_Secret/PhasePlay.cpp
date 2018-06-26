@@ -16,7 +16,7 @@ const float TIME_STRING_Y1 = 20;
 const float TIME_STRING_X2 = 60;
 const float TIME_STRING_Y2 = 50;
 
-const int TIME_LIMIT = 60;
+const int TIME_LIMIT = 10;
 
 PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll ) :
 _chara( chara ),
@@ -32,9 +32,6 @@ _scroll( scroll ) {
 	_sound_handle[ GAME_BGM ] = _sound->load( "GameBGM/gamebgm.ogg" );
 	_sound->play( _sound_handle[ GAME_BGM ], true, true );
 
-	//SE
-	_sound_handle[ WIN_SE ] = _sound->load( "SoundEffect/win.ogg" );
-	_sound_handle[ LOSE_SE ] = _sound->load( "SoundEffect/lose.ogg" );
 
 	std::list< CharacterPtr >::iterator ite;
 	ite = _chara.begin( );
@@ -62,15 +59,14 @@ void PhasePlay::update( ) {
 
 	_time_count--;
 
+	_sound->stop( _sound_handle[ GAME_BGM ] );
 	if ( isInvasion( ) ) {
-		_sound->stop( _sound_handle[ GAME_BGM ] );
-		_sound->play( _sound_handle[ LOSE_SE ] );
+		setResult( LOSE );
 		setPhase( PHASE_END );
 	}
 
 	if ( isClear( ) ) {
-		_sound->stop( _sound_handle[ GAME_BGM ] );
-		_sound->play( _sound_handle[ WIN_SE ] );
+		setResult( WIN );
 		setPhase( PHASE_END );
 	}
 }

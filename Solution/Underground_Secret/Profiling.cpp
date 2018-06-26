@@ -12,7 +12,8 @@ const float ACCELERATION = 0.4f;
 const float TOTAL_TIME = 1.1f; //ボードが出現から止まるまでの時間（秒）
 const float NONACTIVE_BOARD_Y = HEIGHT;
 const int BOARD_EXIT_SPEED = 50;
-const char PROFILING_BUTTON[ ] = "Profiling";
+const char PROFILING_BUTTON[ ] = "profiling";
+const char PROFILING_BUTTON_PUSH[ ] = "profiling_push";
 const char PROFILING_BACK_BUTTON[ ] = "back";
 
 Profiling::Profiling( std::vector< std::string > &profiling ) :
@@ -23,10 +24,8 @@ _board_y( HEIGHT_F ) {
 	_sound = Sound::getTask( );
 	_drawer = Drawer::getTask( );
 
-	_active_button_handle = _drawer->getImage( "Profiling" );
-	_active_button_width = _drawer->getImageWidth( "Profiling" );
-	_active_button_height = _drawer->getImageHeight( "Profiling" );
-	_back_button = _drawer->getImage( "back" );
+	_active_button_width = _drawer->getImageWidth( PROFILING_BUTTON );
+	_active_button_height = _drawer->getImageHeight( PROFILING_BUTTON );
 	_board_handle = _drawer->getImage( "ProfilingBoard" );
 	_board_width = _drawer->getImageWidth( "ProfilingBoard" );
 	_board_height = _drawer->getImageHeight( "ProfilingBoard" );
@@ -64,7 +63,7 @@ void Profiling::drawActiveButton( ) const {
 		_button->setPushImage( PROFILING_BACK_BUTTON );
 	} else {
 		_button->setImage( PROFILING_BUTTON );
-		_button->setPushImage( PROFILING_BUTTON );
+		_button->setPushImage( PROFILING_BUTTON_PUSH );
 	}
 
 	_button->draw( false );

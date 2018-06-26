@@ -11,9 +11,9 @@ const int SWITCH_WIDTH = 64;
 const int SWITCH_HEIGHT = 32;
 const int STAGE_ON_SHUTTER_NUM[ ] = { DEFAULT_ON_SHUTTER_MAX };
 const char SHUTTER_OPEN_NORMAL_IMAGE[ ] = "button_on";
-const char SHUTTER_OPEN_PUSH_IMAGE[ ] = "button_on";
+const char SHUTTER_OPEN_PUSH_IMAGE[ ] = "button_on_push";
 const char SHUTTER_CLOSE_NORMAL_IMAGE[ ] = "button_off";
-const char SHUTTER_CLOSE_PUSH_IMAGE[ ] = "button_off";
+const char SHUTTER_CLOSE_PUSH_IMAGE[ ] = "button_off_push";
 
 const int MOVECOUNT_MAX = 60;
 

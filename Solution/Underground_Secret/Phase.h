@@ -12,6 +12,12 @@ enum PHASE {
 	PHASE_CONTINUE,
 };
 
+enum RESULT {
+	NONE,
+	WIN,
+	LOSE,
+};
+
 class Phase {
 public:
 	Phase( );
@@ -22,8 +28,11 @@ public:
 	virtual void draw( ) const;
 	virtual void setPhase( PHASE phase );
 	virtual PHASE getPhase( ) const;
+	virtual void setResult( RESULT result );
+	virtual RESULT getResult( ) const;
 
 private:
 	PHASE _phase;
+	RESULT _result;
 };
 

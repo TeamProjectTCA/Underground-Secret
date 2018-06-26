@@ -2,6 +2,7 @@
 #include "Character.h"
 #include "Map.h"
 #include "Scroll.h"
+#include "Sound.h"
 #include "const.h"
 
 const float MOVE_FRAME = FPS * 3;
@@ -12,9 +13,21 @@ const float SE_ADJUST_TIME = FPS * 2;
 const double MAP_SCROLL_SPEED_RATE = 0.7;
 const double CHARA_SCROLL_SPEED_RATE = 1 - MAP_SCROLL_SPEED_RATE;
 
-PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map ) :
+PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map, RESULT result ) :
 _map( map ),
-_count( 0 ) {
+_count( 0 ),
+_result( result ){
+	//SE
+	_sound = Sound::getTask( );
+	_sound_handle[ WIN_SE ] = _sound->load( "SoundEffect/win.ogg" );
+	_sound_handle[ LOSE_SE ] = _sound->load( "SoundEffect/lose.ogg" );
+	if ( _result == LOSE ) {
+		_sound->play( _sound_handle[ LOSE_SE ] );
+	}
+	if ( _result == WIN ) {
+		_sound->play( _sound_handle[ WIN_SE ] );
+	}
+	
 	std::list< CharacterPtr >::iterator ite;
 	ite = chara.begin( );
 	for ( ite; ite != chara.end( ); ite++ ) {
@@ -67,6 +80,7 @@ void PhaseEnd::update( ) {
 	if ( _count == MOVE_FRAME + PERFORMANCE_TIME + SE_ADJUST_TIME ) {
 		setPhase( PHASE_RETURN_TITLE );
 	}
+	
 }
 
 void PhaseEnd::draw( ) const {
