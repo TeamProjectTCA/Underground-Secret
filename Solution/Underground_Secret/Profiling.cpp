@@ -14,7 +14,8 @@ const float NONACTIVE_BOARD_Y = HEIGHT;
 const int BOARD_EXIT_SPEED = 50;
 const char PROFILING_BUTTON[ ] = "Profiling";
 const char PROFILING_BUTTON_PUSH[ ] = "Profiling_push";
-const char PROFILING_BACK_BUTTON[ ] = "back";
+const char PROFILING_BACK_BUTTON[ ] = "Profiling_off";
+const char PROFILING_BACK_BUTTON_PUSH[ ] = "Profiling_off_push";
 
 Profiling::Profiling( std::vector< std::string > &profiling ) :
 _profiling( profiling ),
@@ -60,7 +61,7 @@ void Profiling::draw( ) const {
 void Profiling::drawActiveButton( ) const {
 	if ( _active ) {
 		_button->setImage( PROFILING_BACK_BUTTON );
-		_button->setPushImage( PROFILING_BACK_BUTTON );
+		_button->setPushImage( PROFILING_BACK_BUTTON_PUSH );
 	} else {
 		_button->setImage( PROFILING_BUTTON );
 		_button->setPushImage( PROFILING_BUTTON_PUSH );

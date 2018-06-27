@@ -12,6 +12,7 @@ const float SE_ADJUST_TIME = FPS * 2;
 
 const double MAP_SCROLL_SPEED_RATE = 0.7;
 const double CHARA_SCROLL_SPEED_RATE = 1 - MAP_SCROLL_SPEED_RATE;
+Vector CENTRAL = Vector( WIDTH_F / 2, HEIGHT_F / 2 );
 
 PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map, RESULT result ) :
 _map( map ),
@@ -21,12 +22,6 @@ _result( result ){
 	_sound = Sound::getTask( );
 	_sound_handle[ WIN_SE ] = _sound->load( "SoundEffect/win.ogg" );
 	_sound_handle[ LOSE_SE ] = _sound->load( "SoundEffect/lose.ogg" );
-	if ( _result == LOSE ) {
-		_sound->play( _sound_handle[ LOSE_SE ] );
-	}
-	if ( _result == WIN ) {
-		_sound->play( _sound_handle[ WIN_SE ] );
-	}
 	
 	std::list< CharacterPtr >::iterator ite;
 	ite = chara.begin( );
@@ -36,14 +31,22 @@ _result( result ){
 		}
 	}
 	_spy = ( *ite );
-	_spy->setFixedpoint( PHASE_END );
-	_spy->setAnimTime( FPS );
-	_endpoint = _map->getFixedpointBeta( PHASE_END );
+
+	if ( _result == LOSE ) {
+		_sound->play( _sound_handle[ LOSE_SE ] );
+		_spy->setFixedpoint( PHASE_END );
+		_spy->setAnimTime( FPS );
+		_endpoint = _map->getFixedpointBeta( PHASE_END );
+		const float SPEED = ( float )( _endpoint - _spy->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
+		_move = ( _endpoint - _spy->getPos( ) ).normalize( ) * SPEED;
+	}
+	if ( _result == WIN ) {
+		_sound->play( _sound_handle[ WIN_SE ] );
+	}
+
 	_scroll = _map->getScrollData( ); 
-	const float SPEED = ( float )( _endpoint - _spy->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
-	_move = ( _endpoint - _spy->getPos( ) ).normalize( ) * SPEED;
-	const float FOCUS_SPEED = ( float )( ( Vector( WIDTH_F / 2, HEIGHT_F / 2 ) - _scroll - _spy->getPos( ) ).getLength( ) * ( 1 / FOCUS_FRAME ) );
-	_focus_move = ( Vector( WIDTH_F / 2, HEIGHT_F / 2 ) - _scroll - _spy->getPos( ) ).normalize( ) * FOCUS_SPEED;
+	const float FOCUS_SPEED = ( float )( ( CENTRAL - _scroll - _spy->getPos( ) ).getLength( ) * ( 1 / FOCUS_FRAME ) );
+	_focus_move = ( CENTRAL - _scroll - _spy->getPos( ) ).normalize( ) * FOCUS_SPEED;
 }
 
 PhaseEnd::~PhaseEnd( ) {
@@ -59,7 +62,7 @@ void PhaseEnd::update( ) {
 	}
 
 	_count++;
-	// ’è“_‚Ü‚ÅˆÚ“®
+	//’è“_‚Ü‚ÅˆÚ“®
 	if ( _count < MOVE_FRAME ) {
 		if ( _map->getMapPos( ).x > 0 ||
 			 _map->getMapPos( ).x < WIDTH - _map->getCol( ) * BLOCK_SIZE ||
