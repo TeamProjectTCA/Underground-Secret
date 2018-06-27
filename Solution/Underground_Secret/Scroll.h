@@ -18,6 +18,9 @@ public:
 	void setRow( const int row );
 
 public:
+	void setScroll( Vector vec );
+
+public:
 	Vector getScroll( ) const;
 
 private:

@@ -8,6 +8,7 @@
 #include "PhaseEnd.h"
 #include "Scroll.h"
 #include "Debug.h"
+#include "SpecialScroll.h"
 
 const int ONE_STAGE_CHARACTER_NUM = 1;
 
@@ -88,7 +89,7 @@ void SceneGame::updatePhaseEnd( ) {
 void SceneGame::changePhase( ) {
 	switch ( _phase ) {
 	case PHASE_START:
-		_run_phase = PhaseStartPtr( new PhaseStart( _char_manager->getChara( ), _map ) );
+		_run_phase = PhaseStartPtr( new PhaseStart( _char_manager->getChara( ), _map, SpecialScrollPtr( new SpecialScroll( _scroll ) ) ) );
 		break;
 
 	case PHASE_PLAY:

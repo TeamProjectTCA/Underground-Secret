@@ -9,10 +9,11 @@ PTR( PhaseStart );
 PTR( Character );
 PTR( Keyboard );
 PTR( Map );
+PTR( SpecialScroll );
 
 class PhaseStart : public Phase {
 public:
-	PhaseStart( std::list< CharacterPtr > &chara, MapPtr map );
+	PhaseStart( std::list< CharacterPtr > &chara, MapPtr map, SpecialScrollPtr scroll );
 	virtual ~PhaseStart( );
 
 public:
@@ -33,5 +34,6 @@ private:
 	CharacterPtr _run_chara;
 	KeyboardPtr _keyboard;
 	MapPtr _map;
+	SpecialScrollPtr _scroll;
 };
 

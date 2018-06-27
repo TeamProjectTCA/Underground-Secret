@@ -55,6 +55,10 @@ void Scroll::setRow( const int row ) {
 	_row = row;
 }
 
+void Scroll::setScroll( Vector vec ) {
+	_scroll += vec;
+}
+
 Vector Scroll::getScroll( ) const {
 	return _scroll;
 }

@@ -59,6 +59,7 @@ private:
 	int _col;
 	bool _debug_mode;
 	std::string _data;
+	Vector _start_scroll;
 	Vector _end_scroll;
 	Vector _fixedpoint_alpha_start;
 	Vector _fixedpoint_alpha_play;

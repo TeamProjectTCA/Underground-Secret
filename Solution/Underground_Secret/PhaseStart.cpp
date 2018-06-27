@@ -3,14 +3,16 @@
 #include "Keyboard.h"
 #include "Map.h"
 #include "const.h"
+#include "SpecialScroll.h"
 
 const float MOVE_FRAME = FPS * 2;
 const int PERFORMANCE_TIME = FPS * 2;
 
-PhaseStart::PhaseStart( std::list< CharacterPtr > &chara, MapPtr map ) :
+PhaseStart::PhaseStart( std::list< CharacterPtr > &chara, MapPtr map, SpecialScrollPtr scroll ) :
 _chara( chara ),
 _map( map ),
-_count( 0 ) {
+_count( 0 ),
+_scroll( scroll ) {
 	_keyboard = Keyboard::getTask( );
 
 	std::list< CharacterPtr >::iterator ite;
@@ -26,6 +28,9 @@ _count( 0 ) {
 
 	const float SPEED = ( float )( _endpoint - _run_chara->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
 	_move = ( _endpoint - _run_chara->getPos( ) ).normalize( ) * SPEED;
+
+	Vector start_pos = _map->getFixedpointAlpha( PHASE_START );
+	_scroll->setScroll( Vector( -start_pos.x, 0 ) );
 }
 
 PhaseStart::~PhaseStart( ) {
@@ -43,6 +48,7 @@ void PhaseStart::update( ) {
 	// 移動
 	if ( _count < MOVE_FRAME ) {
 		_run_chara->move( _move );
+		_run_chara->setScroll( );
 	}
 
 	// オープンアニメーションをセット
