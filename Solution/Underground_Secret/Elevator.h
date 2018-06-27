@@ -7,6 +7,7 @@
 #include <unordered_map>
 
 PTR( Elevator );
+PTR( Drawer );
 
 enum ELEVATOR_POS {
 	ELEVATOR_POS_UP,
@@ -68,6 +69,8 @@ private:
 	ELEVATOR_POS _destination;
 	ELEVATOR_STATE _elevator_state;
 	std::unordered_map< SOUND, int > _sound_handle;
+	int _back_image;
 
+	DrawerPtr _drawer;
 };
 

@@ -16,7 +16,7 @@ const float TIME_STRING_Y1 = 20;
 const float TIME_STRING_X2 = 60;
 const float TIME_STRING_Y2 = 50;
 
-const int TIME_LIMIT = 10;
+const int TIME_LIMIT = 60;
 
 PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll ) :
 _chara( chara ),

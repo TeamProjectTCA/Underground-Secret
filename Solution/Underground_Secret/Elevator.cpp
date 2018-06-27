@@ -5,14 +5,16 @@
 #include "Sound.h"
 
 const char ELEVATOR_IMAGE[ ] = "elevator";
-const float ELEVATOR_ANIM_SPEED = 0.45f;
-const int ELEVATOR_ANIMFRAME_MAX = 80;
+const char ELEVATOR_BACK_IMAGE[ ] = "elevator_back";
+const float ELEVATOR_ANIM_OPEN = 30;
 
-const int ELEVATOR_TOTAL_TIME = FPS * 13;
+const int ELEVATOR_TOTAL_TIME = FPS * 20;
 const int ELEVATOR_RIDE_TIME = FPS;
 const int ELEVATOR_MOVE_TIME = FPS;
 const int ELEVATOR_ANIM_TIME = ELEVATOR_RIDE_TIME + ELEVATOR_MOVE_TIME;
 const int ELEVATOR_WAIT_TIME = ELEVATOR_TOTAL_TIME / 3 - ELEVATOR_ANIM_TIME; // エレベーター受付時間
+const int ELEVATOR_ANIMFRAME_MAX = ELEVATOR_RIDE_TIME;
+const int ONE_ELEVATOR_TOTAL_TIME = ELEVATOR_TOTAL_TIME / 3;
 
 Elevator::Elevator( const int col, const char id ) :
 _col( col ),
@@ -26,6 +28,9 @@ _destination( ELEVATOR_POS_UP ) {
 	_count = ( start * ( ELEVATOR_WAIT_TIME ) ) % ELEVATOR_TOTAL_TIME;
 	_active_elevator = ( ELEVATOR_POS )( start % ELEVATOR_POS_MAX );
 	decideDestination( );
+
+	_drawer = Drawer::getTask( );
+	_back_image = _drawer->getImage( ELEVATOR_BACK_IMAGE );
 }
 
 Elevator::~Elevator( ) {
@@ -53,38 +58,39 @@ void Elevator::draw( ) const {
 		int x = ( _data[ i ] % _col ) * BLOCK_SIZE + ( int )_scroll.x;
 		int y = ( _data[ i ] / _col ) * BLOCK_SIZE + ( int )_scroll.y;
 
-		DrawerPtr drawer = Drawer::getTask( );
-		int width  = drawer->getImageWidth ( ELEVATOR_IMAGE );
-		int height = drawer->getImageHeight( ELEVATOR_IMAGE );
+		int width  = _drawer->getImageWidth ( ELEVATOR_IMAGE );
+		int height = _drawer->getImageHeight( ELEVATOR_IMAGE );
 
-		float draw_lx = ( float )( x - width + BLOCK_SIZE / 2 );
-		float draw_rx = ( float )( x + BLOCK_SIZE / 2 );
-		float draw_y = ( float )( y - height );
-		int handle = drawer->getImage( ELEVATOR_IMAGE );
+		float draw_x = ( float )( x + BLOCK_SIZE / 2 );
+		float draw_y = ( float )( y - height + BLOCK_SIZE );
+		float draw_lx = draw_x - width;
+		float draw_rx = draw_x;
+		int handle = _drawer->getImage( ELEVATOR_IMAGE );
 
 		if ( i == ( int )_active_elevator ) {
 			if ( _elevator_state == ELEVATOR_STATE_COME ) {
-				float move = _elevator_anim[ ( int )_active_elevator ] * ELEVATOR_ANIM_SPEED;
+				float move = ( float )sin( ( PI / ELEVATOR_ANIMFRAME_MAX ) * _elevator_anim[ ( int )_active_elevator ] ) * ELEVATOR_ANIM_OPEN;
 				draw_lx -= move;
 				draw_rx += move;
 			}
 		}
 
 		if ( i == ( int )_destination ) {
-			if ( _elevator_state == ELEVATOR_STATE_MOVE ) {
-				float move = _elevator_anim[ ( int )_destination ] * ELEVATOR_ANIM_SPEED;
+			if ( _elevator_state == ELEVATOR_STATE_MOVE || _elevator_state == ELEVATOR_STATE_ARRIVE ) {
+				float move = ( float )sin( ( PI / ELEVATOR_ANIMFRAME_MAX ) * _elevator_anim[ ( int )_destination ] ) * ELEVATOR_ANIM_OPEN;
 				draw_lx -= move;
 				draw_rx += move;
 			}
 		}
 
-		drawer->drawGraph( draw_lx, draw_y, handle, true );
-		drawer->drawGraph( draw_rx, draw_y, handle, true );
+		_drawer->drawGraph( draw_x - width, draw_y, _back_image, true );
+		_drawer->drawGraph( draw_lx, draw_y, handle, true );
+		_drawer->drawGraph( draw_rx, draw_y, handle, true );
 	}
 }
 
 void Elevator::updateActiveElevator( ) {
-	if ( _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME ) == 0 ) {
+	if ( _count % ( ONE_ELEVATOR_TOTAL_TIME ) == 0 ) {
 
 		if ( _data.size( ) < ELEVATOR_POS_MAX ) {
 			_active_elevator = ( ELEVATOR_POS )( ( _active_elevator + 1 ) % ( int )_data.size( ) );
@@ -97,18 +103,18 @@ void Elevator::updateActiveElevator( ) {
 }
 
 void Elevator::updateElevatorState( ) {
-	int wait = _count % ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME );
+	int wait = _count % ( ONE_ELEVATOR_TOTAL_TIME );
 	if ( wait < ELEVATOR_WAIT_TIME ) {
 		_elevator_state = ELEVATOR_STATE_WAIT;
 	} 
-	if ( ELEVATOR_WAIT_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME ) {
+	if ( ELEVATOR_WAIT_TIME < wait ) {
 		_elevator_state = ELEVATOR_STATE_COME;
 	}
-	if ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME < wait && wait < ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME + ELEVATOR_MOVE_TIME ) {
+	if ( ELEVATOR_WAIT_TIME + ELEVATOR_RIDE_TIME < wait ) {
 		_elevator_state = ELEVATOR_STATE_MOVE;
 	}
 
-	if ( wait == ( ELEVATOR_WAIT_TIME + ELEVATOR_ANIM_TIME - 1 ) ) {
+	if ( ONE_ELEVATOR_TOTAL_TIME - ELEVATOR_MOVE_TIME / 2 < wait ) {
 		_elevator_state = ELEVATOR_STATE_ARRIVE;
 	}
 }
@@ -120,7 +126,7 @@ void Elevator::updateElevatorAnim( ) {
 				_elevator_anim[ i ]++;
 			}
 
-			if ( i == ( int )_destination && _elevator_state == ELEVATOR_STATE_MOVE ) {
+			if ( i == ( int )_destination && ( _elevator_state == ELEVATOR_STATE_MOVE || _elevator_state == ELEVATOR_STATE_ARRIVE ) ) {
 				_elevator_anim[ i ]++;
 			}
 		}
