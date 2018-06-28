@@ -221,7 +221,7 @@ void Map::draw( ) const {
 
 void Map::loadMap( ) {
 	FILE *fp;
-	errno_t file_open = fopen_s( &fp, ( path + std::to_string( _stage ) + "/collision_data.col" ).c_str( ), "r" );
+	errno_t file_open = fopen_s( &fp, ( path + std::to_string( _stage ) + "/stage" + std::to_string( _stage ) + ".col" ).c_str( ), "r" );
 	assert( file_open == 0 );
 
 	int col = 0;

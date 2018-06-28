@@ -8,7 +8,8 @@
 const float MOVE_FRAME = FPS * 3;
 const float FOCUS_FRAME = FPS * 1;
 const float PERFORMANCE_TIME = FPS * 2;
-const float SE_ADJUST_TIME = FPS * 2;
+const float WIN_SE_ADJUST_TIME = FPS * 4;
+const float LOSE_SE_ADJUST_TIME = FPS * 2;
 
 const double MAP_SCROLL_SPEED_RATE = 0.7;
 const double CHARA_SCROLL_SPEED_RATE = 1 - MAP_SCROLL_SPEED_RATE;
@@ -32,17 +33,17 @@ _result( result ){
 	}
 	_spy = ( *ite );
 
-	if ( _result == LOSE ) {
+	if ( _result == WIN ) {
 		_sound->play( _sound_handle[ LOSE_SE ] );
-		_spy->setFixedpoint( PHASE_END );
-		_spy->setAnimTime( FPS );
 		_endpoint = _map->getFixedpointBeta( PHASE_END );
+		_spy->setFixedpoint( PHASE_END );
 		const float SPEED = ( float )( _endpoint - _spy->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
 		_move = ( _endpoint - _spy->getPos( ) ).normalize( ) * SPEED;
-	}
-	if ( _result == WIN ) {
+	} else {
 		_sound->play( _sound_handle[ WIN_SE ] );
 	}
+	
+	_spy->setAnimTime( FPS );
 
 	_scroll = _map->getScrollData( ); 
 	const float FOCUS_SPEED = ( float )( ( CENTRAL - _scroll - _spy->getPos( ) ).getLength( ) * ( 1 / FOCUS_FRAME ) );
@@ -54,35 +55,44 @@ PhaseEnd::~PhaseEnd( ) {
 
 void PhaseEnd::update( ) {
 	_focus_count++;
-	if ( _focus_count <= FOCUS_FRAME ) {
+	if ( _focus_count < FOCUS_FRAME ) {
 		_spy->move( _focus_move );
 		_map->endScroll( _focus_move * -1 );
 		
 		return;
 	}
-
-	_count++;
-	//定点まで移動
-	if ( _count < MOVE_FRAME ) {
-		if ( _map->getMapPos( ).x > 0 ||
-			 _map->getMapPos( ).x < WIDTH - _map->getCol( ) * BLOCK_SIZE ||
-			 _map->getMapPos( ).y < HEIGHT - _map->getRow( ) * BLOCK_SIZE ) {
-			_spy->move( _move );
-		} else {
-			_map->endScroll( _move * MAP_SCROLL_SPEED_RATE );
-			_spy->move( _move * CHARA_SCROLL_SPEED_RATE );
+	if ( _result == WIN ) {
+		_count++;
+		//定点まで移動
+		if ( _count < MOVE_FRAME ) {
+			if ( _map->getMapPos( ).x > 0 ||
+				 _map->getMapPos( ).x < WIDTH - _map->getCol( ) * BLOCK_SIZE ||
+				 _map->getMapPos( ).y < HEIGHT - _map->getRow( ) * BLOCK_SIZE ) {
+				_spy->move( _move );
+			} else {
+				_map->endScroll( _move * MAP_SCROLL_SPEED_RATE );
+				_spy->move( _move * CHARA_SCROLL_SPEED_RATE );
+			}
+			return;
 		}
-		return;
+
+		if ( _count == MOVE_FRAME ) {
+			// アニメーション
+			_spy->setAnim( Character::ANIM_RIDE );
+		}
+		if ( _count == MOVE_FRAME + PERFORMANCE_TIME + LOSE_SE_ADJUST_TIME ) {
+			setPhase( PHASE_RETURN_TITLE );
+		}
+	} else {
+		if ( _focus_count == FOCUS_FRAME ) {
+			// アニメーション
+			_spy->setAnim( Character::ANIM_RIDE );
+		}
+		if ( _focus_count == FOCUS_FRAME + PERFORMANCE_TIME + WIN_SE_ADJUST_TIME ) {
+			setPhase( PHASE_RETURN_TITLE );
+		}
 	}
 
-	if ( _count == MOVE_FRAME ) {
-		// アニメーション
-		_spy->setAnim( Character::ANIM_RIDE );
-	}
-
-	if ( _count == MOVE_FRAME + PERFORMANCE_TIME + SE_ADJUST_TIME ) {
-		setPhase( PHASE_RETURN_TITLE );
-	}
 	
 }
 

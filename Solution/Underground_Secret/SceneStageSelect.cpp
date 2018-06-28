@@ -13,8 +13,10 @@ const int BUTTON_HEIGHT = 256;
 const float STAGE_STRING_Y = HEIGHT / 4;
 const float STAGE_STRING_HEIGHT = 128;
 
-const char BUTTON_STAGE1_IMAGE[ ] = "stage1";
-const char *BUTTON_IMAGE[ STAGE_MAX ] = { BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE, BUTTON_STAGE1_IMAGE };
+const char BUTTON_STAGE1_IMAGE[] = "stage1";
+const char BUTTON_STAGE2_IMAGE[] = "stage2";
+const char BUTTON_STAGE3_IMAGE[] = "stage3";
+const char *BUTTON_IMAGE[ STAGE_MAX ] = { BUTTON_STAGE1_IMAGE, BUTTON_STAGE2_IMAGE, BUTTON_STAGE3_IMAGE };
 
 const char BACK_IMAGE[ ] = "underground_back";
 const char BUTTON_FRAME_IMAGE[ ] = "stagebutton_frame";
@@ -48,6 +50,7 @@ void SceneStageSelect::update( ) {
 			_button[ i ]->click( mouse_pos );
 		} else {
 			if ( _button[ i ]->isPush( ) ) {
+				_stage = i + 1;
 				setNextScene( SCENE_GAME );
 			}
 			_button[ i ]->resetState( );
