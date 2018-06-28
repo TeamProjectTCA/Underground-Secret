@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "const.h"
 #include "SpecialScroll.h"
+#include "SpecialElevator.h"
 
 const float MOVE_FRAME = FPS * 2;
 const int PERFORMANCE_TIME = FPS * 2;
@@ -24,19 +25,25 @@ _scroll( scroll ) {
 		( *ite )->setAnimTime( ANIM_WALK_FRAME );
 	}
 
-	_startpoint = _map->getFixedpointBeta( PHASE_START );
+	Vector start_pos = _map->getFixedpointAlpha( PHASE_START );
+	_entrance_point = _map->getFixedpointBeta( PHASE_START );
 	_playpoint = _map->getFixedpointAlpha( PHASE_PLAY );
+
+	// elevatorの設定
+	_elevator = _map->getSpecialElevatorAlphaPtr( );
+
+	_scroll->setScroll( Vector( -start_pos.x, 0 ) );
 	_run_idx = 0;
 	_run_chara = ( *_chara.begin( ) );
 
-	const float SPEED = ( float )( _startpoint - _run_chara->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
-	_move = ( _startpoint - _run_chara->getPos( ) ).normalize( ) * SPEED;
+	const float SPEED = ( float )( _entrance_point - _run_chara->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
+	_move = ( _entrance_point - _run_chara->getPos( ) ).normalize( ) * SPEED;
 
-	const float FOCUS_SPEED = ( float )( ( _playpoint - _startpoint ).getLength( ) * ( 1 / FOCUS_FRAME ) );
-	_focus_move = ( _playpoint - _startpoint ).normalize( ) * FOCUS_SPEED;
+	const float FOCUS_SPEED = ( float )( ( _playpoint - _entrance_point ).getLength( ) * ( 1 / FOCUS_FRAME ) );
+	_focus_move = ( _playpoint - _entrance_point ).normalize( ) * FOCUS_SPEED;
 
-	Vector start_pos = _map->getFixedpointAlpha( PHASE_START );
-	_scroll->setScroll( Vector( -start_pos.x, 0 ) );
+	_elevator->setActiveAlpha( true );
+	_elevator->setActiveBeta( true );
 }
 
 PhaseStart::~PhaseStart( ) {
@@ -45,6 +52,7 @@ PhaseStart::~PhaseStart( ) {
 void PhaseStart::update( ) {
 	// 全キャラの演出終了で遷移
 	if ( _run_idx >= ( int )_chara.size( ) ) {
+
 		_focus_count++;
 		if ( _focus_count < FOCUS_FRAME ) {
 			_scroll->setScroll( _focus_move * -1 );
@@ -55,6 +63,10 @@ void PhaseStart::update( ) {
 	}
 
 	_count++;
+	if ( FPS / 2 == _count ) {
+		_elevator->setActiveAlpha( false );
+		_elevator->setActiveBeta( false );
+	}
 
 	// 移動
 	if ( _count < MOVE_FRAME ) {
@@ -84,6 +96,7 @@ void PhaseStart::update( ) {
 }
 
 void PhaseStart::draw( ) const {
+	_elevator->draw( );
 	_run_chara->draw( );
 }
 

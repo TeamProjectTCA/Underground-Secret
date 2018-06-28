@@ -10,6 +10,7 @@ PTR( Character );
 PTR( Keyboard );
 PTR( Map );
 PTR( SpecialScroll );
+PTR( SpecialElevator );
 
 class PhaseStart : public Phase {
 public:
@@ -25,7 +26,7 @@ private:
 
 private:
 	std::list< CharacterPtr > _chara;
-	Vector _startpoint;
+	Vector _entrance_point;
 	Vector _playpoint;
 	Vector _move;
 	Vector _focus_move;
@@ -38,5 +39,6 @@ private:
 	KeyboardPtr _keyboard;
 	MapPtr _map;
 	SpecialScrollPtr _scroll;
+	SpecialElevatorPtr _elevator;
 };
 

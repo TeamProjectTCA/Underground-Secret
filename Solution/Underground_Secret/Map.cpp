@@ -7,6 +7,7 @@
 #include "Shutter.h"
 #include "Scroll.h"
 #include "Elevator.h"
+#include "SpecialElevator.h"
 #include <errno.h>
 #include <assert.h>
 
@@ -22,6 +23,8 @@ const unsigned int SHUTTER_COLOR  = WATER;
 const int SHUTTER_MOVECOUNT_MAX = FPS;
 
 std::string path = "Resources/map/stage";
+const char ELEVATOR_ALPHA_IMAGE[ ] = "elevator_start";
+const char ELEVATOR_BETA_IMAGE [ ] = "elevator_goal";
 
 Map::Map( int stage, ScrollConstPtr scroll ) :
 _stage( stage ),
@@ -52,6 +55,14 @@ _scroll( scroll ) {
 	setElevator( );
 
 	_shutter->setCol( _col );
+
+	_special_elevator_alpha = SpecialElevatorPtr( new SpecialElevator( _scroll ) );
+	_special_elevator_beta  = SpecialElevatorPtr( new SpecialElevator( _scroll ) );
+	_special_elevator_alpha->setImage( ELEVATOR_ALPHA_IMAGE );
+	_special_elevator_beta ->setImage( ELEVATOR_BETA_IMAGE  );
+	_special_elevator_alpha->setElevator( getFixedpointBeta( PHASE_START ), getFixedpointAlpha( PHASE_PLAY ) );
+	_special_elevator_beta ->setElevator( getFixedpointAlpha( PHASE_END   ), getFixedpointBeta( PHASE_END   ) );
+
 }
 
 Map::~Map( ) {
@@ -68,6 +79,10 @@ void Map::update( ) {
 		ite->second->setScroll( _scroll->getScroll( ) );
 		ite->second->update( );
 	}
+
+	// special elevator
+	_special_elevator_alpha->update( );
+	_special_elevator_beta->update( );
 
 	// debug
 	_debug_mode = _debug->isDebug( );
@@ -153,6 +168,14 @@ bool Map::isHitShutter( int detection_idx ) const {
 	return _shutter->isHitShutter( detection_idx );
 }
 
+SpecialElevatorPtr Map::getSpecialElevatorAlphaPtr( ) {
+	return _special_elevator_alpha;
+}
+
+SpecialElevatorPtr Map::getSpecialElevatorBetaPtr( ) {
+	return _special_elevator_beta;
+}
+
 char Map::getElevatorId( int idx ) const {
 	char id = getMapData( idx );
 
@@ -204,19 +227,23 @@ ELEVATOR_POS Map::getDestination( char id, int idx ) const {
 }
 
 void Map::draw( ) const {
-	// マップを描画
+	// map
 	Vector scroll = _scroll->getScroll( );
 	_drawer->drawGraph( ( int )( scroll.x ), ( int )( scroll.y ), _map_handle, true );
 
-	// シャッターを描画
+	// shutter
 	_shutter->draw( );
 
-	// エレベーターを描画
+	// elevator
 	std::unordered_map< char, ElevatorPtr >::const_iterator ite;
 	ite = _elevator.begin( );
 	for ( ite; ite != _elevator.end( ); ite++ ) {
 		ite->second->draw( );
 	}
+
+	// special elevator
+	_special_elevator_alpha->draw( );
+	_special_elevator_beta->draw( );
 
 	// debug
 	if ( _debug_mode ) {

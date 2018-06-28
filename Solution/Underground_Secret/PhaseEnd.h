@@ -11,6 +11,7 @@ PTR( Character );
 PTR( Map );
 PTR( Sound );
 PTR( SpecialScroll );
+PTR( SpecialElevator );
 
 class PhaseEnd : public Phase {
 public:
@@ -20,6 +21,10 @@ public:
 public:
 	void update( );
 	void draw( ) const;
+	
+public:
+	void updateLose( );
+	void updateWin( );
 
 private:
 	Vector _endpoint;
@@ -36,5 +41,6 @@ private:
 	CharacterPtr _spy;
 	MapPtr _map;
 	SpecialScrollPtr _end_scroll;
+	SpecialElevatorPtr _elevator;
 };
 

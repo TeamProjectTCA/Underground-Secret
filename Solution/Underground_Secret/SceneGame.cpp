@@ -9,6 +9,7 @@
 #include "Scroll.h"
 #include "Debug.h"
 #include "SpecialScroll.h"
+#include "SpecialElevator.h"
 
 const int ONE_STAGE_CHARACTER_NUM = 1;
 
@@ -94,6 +95,8 @@ void SceneGame::changePhase( ) {
 
 	case PHASE_PLAY:
 		_run_phase = PhasePlayPtr( new PhasePlay( _char_manager->getChara( ), _scroll ) );
+		_map->getSpecialElevatorAlphaPtr( )->setActiveAlpha( true );
+		_map->getSpecialElevatorAlphaPtr( )->setActiveBeta( true );
 		break;
 
 	case PHASE_END:

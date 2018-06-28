@@ -14,6 +14,7 @@ PTR( Keyboard );
 PTR( Shutter );
 PTR( Scroll );
 PTR( Elevator );
+PTR( SpecialElevator );
 
 class Map {
 public:
@@ -39,6 +40,8 @@ public:
 	ELEVATOR_POS getActiveElevator( char id, int idx ) const;
 	ELEVATOR_POS getDestination( char id, int idx ) const;
 	bool isHitShutter( int detection_idx ) const;
+	SpecialElevatorPtr getSpecialElevatorAlphaPtr( );
+	SpecialElevatorPtr getSpecialElevatorBetaPtr( );
 
 private:
 	void loadMap( );
@@ -71,5 +74,7 @@ private:
 	KeyboardPtr _keyboard;
 	ShutterPtr _shutter;
 	ScrollConstPtr _scroll;
+	SpecialElevatorPtr _special_elevator_alpha;
+	SpecialElevatorPtr _special_elevator_beta;
 };
 
