@@ -7,11 +7,13 @@
 
 const float MOVE_FRAME = FPS * 2;
 const int PERFORMANCE_TIME = FPS * 2;
+const float FOCUS_FRAME = FPS * 1;
 
 PhaseStart::PhaseStart( std::list< CharacterPtr > &chara, MapPtr map, SpecialScrollPtr scroll ) :
 _chara( chara ),
 _map( map ),
 _count( 0 ),
+_focus_count( 0 ),
 _scroll( scroll ) {
 	_keyboard = Keyboard::getTask( );
 
@@ -22,12 +24,16 @@ _scroll( scroll ) {
 		( *ite )->setAnimTime( ANIM_WALK_FRAME );
 	}
 
-	_endpoint = _map->getFixedpointBeta( PHASE_START );
+	_startpoint = _map->getFixedpointBeta( PHASE_START );
+	_playpoint = _map->getFixedpointAlpha( PHASE_PLAY );
 	_run_idx = 0;
 	_run_chara = ( *_chara.begin( ) );
 
-	const float SPEED = ( float )( _endpoint - _run_chara->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
-	_move = ( _endpoint - _run_chara->getPos( ) ).normalize( ) * SPEED;
+	const float SPEED = ( float )( _startpoint - _run_chara->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
+	_move = ( _startpoint - _run_chara->getPos( ) ).normalize( ) * SPEED;
+
+	const float FOCUS_SPEED = ( float )( ( _playpoint - _startpoint ).getLength( ) * ( 1 / FOCUS_FRAME ) );
+	_focus_move = ( _playpoint - _startpoint ).normalize( ) * FOCUS_SPEED;
 
 	Vector start_pos = _map->getFixedpointAlpha( PHASE_START );
 	_scroll->setScroll( Vector( -start_pos.x, 0 ) );
@@ -39,6 +45,11 @@ PhaseStart::~PhaseStart( ) {
 void PhaseStart::update( ) {
 	// 全キャラの演出終了で遷移
 	if ( _run_idx >= ( int )_chara.size( ) ) {
+		_focus_count++;
+		if ( _focus_count < FOCUS_FRAME ) {
+			_scroll->setScroll( _focus_move * -1 );
+			return;
+		}
 		setPhase( PHASE_PLAY );
 		return;
 	}

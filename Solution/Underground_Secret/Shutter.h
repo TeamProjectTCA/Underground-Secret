@@ -33,7 +33,6 @@ private:
 public:
 	void setCol( const int col );
 	void setScroll( Vector scroll );
-	void setEndScroll( Vector end_scroll );
 	void addShutter( std::vector< int > shutter );
 
 public:
@@ -48,7 +47,6 @@ private:
 	int _move_cnt;
 	int _active_num;
 	Vector _scroll;
-	Vector _end_scroll;
 	std::vector< std::vector< int > > _shutter;
 	std::vector< SHUTTER_STATE > _shutter_state;
 

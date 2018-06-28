@@ -12,8 +12,9 @@ void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
 	DxSettingPtr setting = DxSetting::getInstance( );
 	setting->changeWindowMode( true );
-	setting->setGraphMode( 1280, 720, 60 );
+	setting->setGraphMode( 1280, 720, 32 );
 	setting->setWindowSize( 1280, 720 );
+	setting->initDxLib( );
 	setting->setDrawScreenBack( );
 
 	DrawerPtr drawer( new Drawer( "Resources/image" ) );

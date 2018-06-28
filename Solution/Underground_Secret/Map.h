@@ -28,6 +28,7 @@ public:
 	Vector getFixedpointAlpha( PHASE phase ) const;
 	Vector getFixedpointBeta( PHASE phase ) const;
 	Vector getElevatorPos( char id ) const;
+	int getElevatorIdx( char id ) const;
 	Vector getScrollData( ) const;
 	Vector getMapPos( ) const;
 	int getCol( ) const;
@@ -38,8 +39,6 @@ public:
 	ELEVATOR_POS getActiveElevator( char id, int idx ) const;
 	ELEVATOR_POS getDestination( char id, int idx ) const;
 	bool isHitShutter( int detection_idx ) const;
-	void endScroll( Vector move );
-	void focusScroll( Vector move );
 
 private:
 	void loadMap( );
@@ -59,8 +58,6 @@ private:
 	int _col;
 	bool _debug_mode;
 	std::string _data;
-	Vector _start_scroll;
-	Vector _end_scroll;
 	Vector _fixedpoint_alpha_start;
 	Vector _fixedpoint_alpha_play;
 	Vector _fixedpoint_alpha_end;

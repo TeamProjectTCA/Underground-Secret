@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Scroll.h"
 #include "Sound.h"
+#include "SpecialScroll.h"\
 #include "const.h"
 
 const float MOVE_FRAME = FPS * 3;
@@ -15,10 +16,11 @@ const double MAP_SCROLL_SPEED_RATE = 0.7;
 const double CHARA_SCROLL_SPEED_RATE = 1 - MAP_SCROLL_SPEED_RATE;
 Vector CENTRAL = Vector( WIDTH_F / 2, HEIGHT_F / 2 );
 
-PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map, RESULT result ) :
+PhaseEnd::PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map, RESULT result, SpecialScrollPtr scroll ) :
 _map( map ),
 _count( 0 ),
-_result( result ){
+_result( result ),
+_end_scroll( scroll ) {
 	//SE
 	_sound = Sound::getTask( );
 	_sound_handle[ WIN_SE ] = _sound->load( "SoundEffect/win.ogg" );
@@ -33,7 +35,7 @@ _result( result ){
 	}
 	_spy = ( *ite );
 
-	if ( _result == WIN ) {
+	if ( _result == LOSE ) {
 		_sound->play( _sound_handle[ LOSE_SE ] );
 		_endpoint = _map->getFixedpointBeta( PHASE_END );
 		_spy->setFixedpoint( PHASE_END );
@@ -57,11 +59,11 @@ void PhaseEnd::update( ) {
 	_focus_count++;
 	if ( _focus_count < FOCUS_FRAME ) {
 		_spy->move( _focus_move );
-		_map->endScroll( _focus_move * -1 );
+		_end_scroll->setScroll( _focus_move );
 		
 		return;
 	}
-	if ( _result == WIN ) {
+	if ( _result == LOSE ) {
 		_count++;
 		//’è“_‚Ü‚ÅˆÚ“®
 		if ( _count < MOVE_FRAME ) {
@@ -70,7 +72,7 @@ void PhaseEnd::update( ) {
 				 _map->getMapPos( ).y < HEIGHT - _map->getRow( ) * BLOCK_SIZE ) {
 				_spy->move( _move );
 			} else {
-				_map->endScroll( _move * MAP_SCROLL_SPEED_RATE );
+				_end_scroll->setScroll( _move * MAP_SCROLL_SPEED_RATE * -1 );
 				_spy->move( _move * CHARA_SCROLL_SPEED_RATE );
 			}
 			return;

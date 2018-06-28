@@ -29,7 +29,6 @@ _active_num( 0 ) {
 	_shutter_height = _drawer->getImageHeight( "shutter" );
 
 	_scroll = Vector( );
-	_end_scroll = Vector( );
 
 }
 
@@ -88,8 +87,8 @@ void Shutter::draw( ) {
 		float y = ( float )( ( _shutter[ i ].front( ) / _col ) * BLOCK_SIZE );
 
 		// ÉXÉNÉçÅ[Éãï™Çë´Ç∑
-		x += ( float )( _scroll.x - _end_scroll.x );
-		y += ( float )( _scroll.y - _end_scroll.y );
+		x += ( float )_scroll.x;
+		y += ( float )_scroll.y;
 
 		float switch_x = x + _shutter_width / 2.0f;
 		float switch_y = y - SHUTTER_MARGIN_UP - SWITCH_HEIGHT / 2.0f;
@@ -204,10 +203,6 @@ void Shutter::setCol( const int col ) {
 
 void Shutter::setScroll( Vector scroll ) {
 	_scroll = scroll;
-}
-
-void Shutter::setEndScroll( Vector end_scroll ) {
-	_end_scroll = end_scroll;
 }
 
 void Shutter::addShutter( std::vector< int > shutter ) {

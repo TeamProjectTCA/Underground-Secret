@@ -36,7 +36,6 @@ _scroll( scroll ) {
 
 	_col = 0;
 	_row = 0;
-	_end_scroll = Vector( );
 	_data = "";
 	_debug_mode = false;
 	_fixedpoint_alpha_start = Vector( );
@@ -60,14 +59,13 @@ Map::~Map( ) {
 
 void Map::update( ) {
 	_shutter->setScroll( _scroll->getScroll( ) );
-	_shutter->setEndScroll( _end_scroll );
 	_shutter->update( );
 
 	// elevator
 	std::unordered_map< char, ElevatorPtr >::iterator ite;
 	ite = _elevator.begin( );
 	for ( ite; ite != _elevator.end( ); ite++ ) {
-		ite->second->setScroll( _scroll->getScroll( ) - _end_scroll );
+		ite->second->setScroll( _scroll->getScroll( ) );
 		ite->second->update( );
 	}
 
@@ -119,12 +117,20 @@ Vector Map::getElevatorPos( char id ) const {
 	);
 }
 
+int Map::getElevatorIdx( char id ) const {
+	if ( _elevator.find( id ) == _elevator.end( ) ) {
+		return -1;
+	}
+	ElevatorPtr elevator = _elevator.find( id )->second;
+	return elevator->getActivePos( );
+}
+
 Vector Map::getScrollData( ) const {
 	return _scroll->getScroll( );
 }
 
 Vector Map::getMapPos( ) const {
-	return Vector( ( int )( getScrollData( ).x - _end_scroll.x ), ( int )( getScrollData( ).y - _end_scroll.y ) );
+	return Vector( ( int )( getScrollData( ).x ), ( int )( getScrollData( ).y ) );
 }
 
 int Map::getCol( ) const {
@@ -174,9 +180,9 @@ ELEVATOR_STATE Map::getElevatorState( char id, int idx ) const {
 	}
 
 	ElevatorPtr elevator = _elevator.find( id )->second;
-	if ( elevator->getElevatorPos( elevator->getActiveElevator( ) ) != idx ) {
-		return ELEVATOR_STATE_NONE;
-	}
+	//if ( elevator->getElevatorPos( elevator->getActiveElevator( ) ) != idx ) {
+	//	return ELEVATOR_STATE_NONE;
+	//}
 
 	return elevator->getElevatorState( );
 }
@@ -200,7 +206,7 @@ ELEVATOR_POS Map::getDestination( char id, int idx ) const {
 void Map::draw( ) const {
 	// マップを描画
 	Vector scroll = _scroll->getScroll( );
-	_drawer->drawGraph( ( int )( scroll.x - _end_scroll.x ), ( int )( scroll.y - _end_scroll.y ), _map_handle, true );
+	_drawer->drawGraph( ( int )( scroll.x ), ( int )( scroll.y ), _map_handle, true );
 
 	// シャッターを描画
 	_shutter->draw( );
@@ -221,7 +227,7 @@ void Map::draw( ) const {
 
 void Map::loadMap( ) {
 	FILE *fp;
-	errno_t file_open = fopen_s( &fp, ( path + std::to_string( _stage ) + "/stage" + std::to_string( _stage ) + ".col" ).c_str( ), "r" );
+	errno_t file_open = fopen_s( &fp, ( path + std::to_string( _stage ) + "/collision_data.col" ).c_str( ), "r" );
 	assert( file_open == 0 );
 
 	int col = 0;
@@ -341,14 +347,6 @@ void Map::inputShutter( std::vector< int > &shutter, int idx ) {
 	inputShutter( shutter, point );
 }
 
-void Map::endScroll( Vector move ) {
-	_end_scroll += move;
-}
-
-void Map::focusScroll( Vector move ) {
-	_end_scroll += move;
-}
-
 void Map::drawCollider( ) const {
 	Vector scroll = _scroll->getScroll( );
 	int range_width_min = ( int )scroll.x / 16 * -1;
@@ -398,10 +396,10 @@ void Map::drawCollider( ) const {
 				color = SHUTTER_COLOR;
 			}
 
-			_drawer->drawBox( ( float )( (     x ) * BLOCK_SIZE + scroll.x - _end_scroll.x ),
-				              ( float )( (     y ) * BLOCK_SIZE + scroll.y - _end_scroll.y ),
-				              ( float )( ( x + 1 ) * BLOCK_SIZE + scroll.x - _end_scroll.x ),
-				              ( float )( ( y + 1 ) * BLOCK_SIZE + scroll.y - _end_scroll.y ),
+			_drawer->drawBox( ( float )( (     x ) * BLOCK_SIZE + scroll.x ),
+				              ( float )( (     y ) * BLOCK_SIZE + scroll.y ),
+				              ( float )( ( x + 1 ) * BLOCK_SIZE + scroll.x ),
+				              ( float )( ( y + 1 ) * BLOCK_SIZE + scroll.y ),
 				              color, true );
 		}
 	}

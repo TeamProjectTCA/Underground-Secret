@@ -187,7 +187,7 @@ void CharaDummy::checkCollider( ) {
 
 void CharaDummy::checkElevator( ) {
 	// アスキーコードを取得
-	char id = getElevatorId( getPos( ) );
+	char id = getElevatorId( );
 
 	// エレベーター以外だったら
 	if ( id == 0x00 ) {
@@ -202,9 +202,9 @@ void CharaDummy::checkElevator( ) {
 	}
 
 	// エレベータの状態を取得
-	ELEVATOR_STATE state = getElevatorState( id, getPos( ) );
-	ELEVATOR_POS active_elevator = getActiveElevator( id, getPos( ) );
-	ELEVATOR_POS destination = getDestination( id, getPos( ) );
+	ELEVATOR_STATE state = getElevatorState( );
+	ELEVATOR_POS active_elevator = getActiveElevator( );
+	ELEVATOR_POS destination = getDestination( );
 	_draw_flag = true;
 
 	switch ( state ) {
@@ -244,6 +244,10 @@ void CharaDummy::checkElevator( ) {
 	case ELEVATOR_STATE_COME:
 	{
 		Character::ANIM_TYPE anim = getAnimType( );
+		if ( !isActiveElevatorPos( ) ) {
+			break;
+		}
+
 		if ( anim != Character::ANIM_RIDE && anim == Character::ANIM_WAIT_ELEVATOR ) {
 			setAnim( Character::ANIM_RIDE );
 		}
@@ -280,3 +284,4 @@ void CharaDummy::returnMove( ) {
 	default: return;
 	}
 }
+

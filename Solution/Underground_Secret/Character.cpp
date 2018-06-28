@@ -167,32 +167,43 @@ int Character::getMapData( Vector pos ) const {
 	return data;
 }
 
-char Character::getElevatorId( Vector pos ) const {
-	Vector position = pos;
+char Character::getElevatorId( ) const {
+	Vector position = _pos;
 	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 	return _map->getElevatorId( idx );
 }
 
-ELEVATOR_STATE Character::getElevatorState( char id, Vector pos ) const {
-	Vector position = pos;
+bool Character::isActiveElevatorPos( ) const {
+	Vector position = _pos;
 	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
-	return _map->getElevatorState( id, idx );
+	int elevator_idx = _map->getElevatorIdx( getElevatorId( ) );
+	if ( idx == elevator_idx ) {
+		return true;
+	}
+	return false;
 }
 
-ELEVATOR_POS Character::getActiveElevator( char id, Vector pos ) const {
-	Vector position = pos;
+ELEVATOR_STATE Character::getElevatorState( ) const {
+	Vector position = _pos;
 	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
-	return _map->getActiveElevator( id, idx );
+	return _map->getElevatorState( getElevatorId( ), idx );
 }
 
-ELEVATOR_POS  Character::getDestination( char id, Vector pos ) const {
-	Vector position = pos;
+ELEVATOR_POS Character::getActiveElevator( ) const {
+	Vector position = _pos;
 	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
-	return _map->getDestination( id, idx );
+	return _map->getActiveElevator( getElevatorId( ), idx );
+}
+
+ELEVATOR_POS  Character::getDestination( ) const {
+	Vector position = _pos;
+	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+	return _map->getDestination( getElevatorId( ), idx );
 }
 
 void Character::draw( ) {

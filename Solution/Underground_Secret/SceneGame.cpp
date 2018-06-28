@@ -97,7 +97,7 @@ void SceneGame::changePhase( ) {
 		break;
 
 	case PHASE_END:
-		_run_phase = PhaseEndPtr( new PhaseEnd( _char_manager->getChara( ), _map, _run_phase->getResult( ) ) );
+		_run_phase = PhaseEndPtr( new PhaseEnd( _char_manager->getChara( ), _map, _run_phase->getResult( ), SpecialScrollPtr( new SpecialScroll( _scroll ) ) ) );
 		break;
 
 	case PHASE_RETURN_TITLE:

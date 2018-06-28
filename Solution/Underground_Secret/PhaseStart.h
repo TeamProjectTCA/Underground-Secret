@@ -25,9 +25,12 @@ private:
 
 private:
 	std::list< CharacterPtr > _chara;
-	Vector _endpoint;
+	Vector _startpoint;
+	Vector _playpoint;
 	Vector _move;
+	Vector _focus_move;
 	int _count;
+	int _focus_count;
 
 	int _run_idx;
 

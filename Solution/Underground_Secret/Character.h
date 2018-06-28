@@ -79,14 +79,17 @@ public:
 	ANIM_TYPE getAnimType( ) const;
 	Vector getPos( ) const;
 	int getMapData( Vector pos ) const;
-	char getElevatorId( Vector pos ) const;
-	ELEVATOR_STATE getElevatorState( char id, Vector pos ) const;
-	ELEVATOR_POS getActiveElevator( char id, Vector pos ) const;
-	ELEVATOR_POS getDestination( char id, Vector pos ) const;
+	bool isActiveElevatorPos( ) const;
+	ELEVATOR_STATE getElevatorState( ) const;
+	ELEVATOR_POS getActiveElevator( ) const;
+	ELEVATOR_POS getDestination( ) const;
 	bool isLooking( Vector pos ) const;
 	bool isEndpoint( Vector pos ) const;
 	bool isSpy( ) const;
 	std::vector< std::string > &getInfo( );
+
+protected:
+	char getElevatorId( ) const;
 
 public:
 	void draw( );

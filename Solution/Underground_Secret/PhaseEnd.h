@@ -10,10 +10,11 @@ PTR( PhaseEnd );
 PTR( Character );
 PTR( Map );
 PTR( Sound );
+PTR( SpecialScroll );
 
 class PhaseEnd : public Phase {
 public:
-	PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map, RESULT result );
+	PhaseEnd( std::list< CharacterPtr > &chara, MapPtr map, RESULT result, SpecialScrollPtr scroll );
 	virtual ~PhaseEnd( );
 
 public:
@@ -34,5 +35,6 @@ private:
 	SoundPtr _sound;
 	CharacterPtr _spy;
 	MapPtr _map;
+	SpecialScrollPtr _end_scroll;
 };
 

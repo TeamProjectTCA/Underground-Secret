@@ -52,6 +52,7 @@ public:
 	char getId( ) const;
 	int getElevatorPos( ELEVATOR_POS pos ) const;
 	int getDestinationPos( ) const;
+	int getActivePos( ) const;
 	ELEVATOR_STATE getElevatorState( ) const;
 	ELEVATOR_POS getActiveElevator( ) const;
 	ELEVATOR_POS getDestination( ) const;
