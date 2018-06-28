@@ -1,5 +1,4 @@
 #include "Manager.h"
-#include "DxSetting.h"
 #include "Drawer.h"
 #include "Sound.h"
 #include "SceneManager.h"
@@ -7,15 +6,12 @@
 #include "Mouse.h"
 #include "Debug.h"
 #include "Random.h"
+#include "const.h"
 
 void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
-	DxSettingPtr setting = DxSetting::getInstance( );
-	setting->changeWindowMode( true );
-	setting->setGraphMode( 1280, 720, 32 );
-	setting->setWindowSize( 1280, 720 );
-	setting->initDxLib( );
-	setting->setDrawScreenBack( );
+	manager->setScreenSize( WIDTH, HEIGHT );
+	manager->setWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT );
 
 	DrawerPtr drawer( new Drawer( "Resources/image" ) );
 	SoundPtr soundplayer( new Sound( "Resources/sound" ) );

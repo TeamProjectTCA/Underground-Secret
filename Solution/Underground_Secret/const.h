@@ -1,8 +1,8 @@
 #pragma once
 
 // スクリーンサイズ
-const int SCREEN_WIDTH = 1920;
-const int SCREEN_HEIGHT = 1080;
+const int WINDOW_WIDTH = 1920;
+const int WINDOW_HEIGHT = 1080;
 
 // 解像度
 const int WIDTH = 1280;

@@ -3,7 +3,7 @@
 #include "Map.h"
 #include "Scroll.h"
 #include "Sound.h"
-#include "SpecialScroll.h"\
+#include "SpecialScroll.h"
 #include "const.h"
 
 const float MOVE_FRAME = FPS * 3;
