@@ -15,15 +15,9 @@ _chara( chara ),
 _map( map ),
 _count( 0 ),
 _focus_count( 0 ),
-_scroll( scroll ) {
+_scroll( scroll ),
+_run_idx( 0 ) {
 	_keyboard = Keyboard::getTask( );
-
-	std::list< CharacterPtr >::iterator ite;
-	ite = _chara.begin( );
-	for ( ite; ite != _chara.end( ); ite++ ) {
-		( *ite )->setFixedpoint( PHASE_START );
-		( *ite )->setAnimTime( ANIM_WALK_FRAME );
-	}
 
 	Vector start_pos = _map->getFixedpointAlpha( PHASE_START );
 	_entrance_point = _map->getFixedpointBeta( PHASE_START );
@@ -33,8 +27,7 @@ _scroll( scroll ) {
 	_elevator = _map->getSpecialElevatorAlphaPtr( );
 
 	_scroll->setScroll( Vector( -start_pos.x, 0 ) );
-	_run_idx = 0;
-	_run_chara = ( *_chara.begin( ) );
+	changeRunCharacter( );
 
 	const float SPEED = ( float )( _entrance_point - _run_chara->getPos( ) ).getLength( ) * ( 1 / MOVE_FRAME );
 	_move = ( _entrance_point - _run_chara->getPos( ) ).normalize( ) * SPEED;
@@ -112,4 +105,7 @@ void PhaseStart::changeRunCharacter( ) {
 	}
 
 	_run_chara = ( *ite );
+	_run_chara->setFixedpoint( PHASE_START );
+	_run_chara->setAnimTime( ANIM_WALK_FRAME );
+	_run_chara->setScroll( );
 }

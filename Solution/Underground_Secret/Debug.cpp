@@ -30,7 +30,10 @@ void Debug::initialize( ) {
 
 void Debug::update( ) {
 	clearLog( );
-	if ( _keyboard->getKeyDown( "SPACE" ) ) {
+
+	if ( _keyboard->getKeyDown( "D" ) &&
+		 _keyboard->getKeyDown( "B" ) &&
+		 _keyboard->getKeyDown( "G" ) ) {
 		_debug = !_debug;
 	}
 }

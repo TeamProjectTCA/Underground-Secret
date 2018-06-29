@@ -42,10 +42,6 @@ SceneStageSelect::~SceneStageSelect( ) {
 }
 
 void SceneStageSelect::update( ) {
-	if ( _keyboard->getKeyDown( "z" ) ) {
-		setNextScene( SCENE_GAME );
-	}
-
 	Vector mouse_pos = _mouse->getPoint( );
 	for ( int i = 0; i < _button.size( ); i++ ) {
 		if ( _mouse->getClickingLeft( ) ) {
