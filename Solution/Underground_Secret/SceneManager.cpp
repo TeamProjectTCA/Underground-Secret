@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "Manager.h"
 #include "SceneTitle.h"
+#include "SceneManual.h"
 #include "SceneGame.h"
 #include "SceneStageSelect.h"
 
@@ -43,6 +44,10 @@ void SceneManager::changeScene( ) {
 
 	case SCENE_STAGESELECT:
 		_scene = SceneStageSelectPtr( new SceneStageSelect( ) );
+		break;
+
+	case SCENE_MANUAL:
+		_scene = SceneManualPtr( new SceneManual( ) );
 		break;
 
 	case SCENE_GAME:

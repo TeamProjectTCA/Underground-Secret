@@ -50,7 +50,9 @@ SceneTitle::SceneTitle( ) {
 
 	//BGM
 	_sound_handle[ TITLE_BGM ] = _sound->load( "TitleBGM/titlebgm.ogg" );
-	_sound->play( _sound_handle[ TITLE_BGM ], true, true );
+	if ( !_sound->isPlaying( _sound_handle[ TITLE_BGM ] ) ) {
+		_sound->play( _sound_handle[ TITLE_BGM ], true, true );
+	}
 
 	//SE
 	_sound_handle[ BUTTON_SE ] = _sound->load( "SoundEffect/button.ogg" );
@@ -82,8 +84,8 @@ void SceneTitle::update( ) {
 		_manual_button->click( mouse_pos );
 	} else {
 		if ( _manual_button->isPush( ) ) {
-			_sound->stop( _sound_handle[ TITLE_BGM ] );
 			_sound->play( _sound_handle[ BUTTON_SE ] );
+			setNextScene( SCENE_MANUAL );
 		}
 		_manual_button->resetState( );
 	}
