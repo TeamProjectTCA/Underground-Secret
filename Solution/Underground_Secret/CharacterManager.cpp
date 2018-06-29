@@ -1,7 +1,6 @@
 #include "CharacterManager.h"
 #include "Map.h"
 #include "Infomation.h"
-#include "CharaDummy.h"
 #include "CharaMan1.h"
 #include "CharaMan2.h"
 #include "CharaMan3.h"
@@ -71,8 +70,6 @@ std::list< CharacterPtr > CharacterManager::getChara( ) {
 
 CharacterPtr CharacterManager::getCharaInstance( CHARACTER chara_idx ) {
 	switch ( chara_idx ) {
-
-	case CHARA_DUMMY : return CharaDummyPtr( new CharaDummy( _map, _info ) );
 	case CHARA_MAN1  : return CharaMan1Ptr      ( new CharaMan1      ( _map, _info ) );
 	case CHARA_MAN2  : return CharaMan2Ptr      ( new CharaMan2      ( _map, _info ) );
 	case CHARA_MAN3  : return CharaMan3Ptr      ( new CharaMan3      ( _map, _info ) );

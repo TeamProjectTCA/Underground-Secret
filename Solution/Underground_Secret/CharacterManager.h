@@ -7,7 +7,6 @@ PTR( CharacterManager );
 PTR( Character );
 PTR( Map );
 PTR( Infomation );
-PTR( CharaDummy );
 PTR( CharaMan1 );
 PTR( CharaWoman2 );
 

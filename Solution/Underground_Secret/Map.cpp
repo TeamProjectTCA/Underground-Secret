@@ -60,7 +60,7 @@ _scroll( scroll ) {
 	_special_elevator_alpha->setImage( ELEVATOR_ALPHA_IMAGE );
 	_special_elevator_beta ->setImage( ELEVATOR_BETA_IMAGE  );
 	_special_elevator_alpha->setElevator( getFixedpointBeta( PHASE_START ), getFixedpointAlpha( PHASE_PLAY ) );
-	_special_elevator_beta ->setElevator( getFixedpointAlpha( PHASE_END   ), getFixedpointBeta( PHASE_END   ) );
+	_special_elevator_beta ->setElevator( getFixedpointAlpha( PHASE_END  ), getFixedpointBeta( PHASE_END   ) );
 
 }
 

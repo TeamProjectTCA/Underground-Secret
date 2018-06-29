@@ -2,7 +2,6 @@
 #include "LoadCSV.h"
 #include "Random.h"
 
-const char CHARACTER_DUMMY[ ]  = "Chara_Dummy";
 const char CHARACTER_MAN1[ ]   = "man1";
 const char CHARACTER_MAN2[ ]   = "man2";
 const char CHARACTER_MAN3[ ]   = "man3";
@@ -16,7 +15,6 @@ Infomation::Infomation( ) {
 	// csv‚©‚çî•ñ‚ğ‚·‚×‚Äæ“¾
 	_csv = LoadCSVPtr( new LoadCSV( "Resources/CharacterData/" ) );
 	std::unordered_map< CHARACTER, std::vector< CsvData > > data;
-	_csv->read( data[ CHARA_DUMMY ] , CHARACTER_DUMMY );
 	_csv->read( data[ CHARA_MAN1 ]  , CHARACTER_MAN1 );
 	_csv->read( data[ CHARA_MAN2 ]  , CHARACTER_MAN2 );
 	_csv->read( data[ CHARA_MAN3 ]  , CHARACTER_MAN3 );
