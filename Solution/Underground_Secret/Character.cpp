@@ -18,6 +18,8 @@ const int CHANGE_ASCIICODE = 'a' - 'A';
 
 const int FONT_SIZE = 20;
 
+const char INFO_IMAGE[ ] = "person_hint";
+
 Character::Character( MapPtr map, std::vector< std::string > info ) :
 _map( map ),
 _info( info ),
@@ -241,11 +243,19 @@ void Character::draw( ) {
 			return;
 		}
 
-		Vector info = _pos - ( Vector( -chara_size.x * 0.5, chara_size.y ) ) + _scroll;
+		Vector info = _pos - ( Vector( -chara_size.x * 0.25, chara_size.y ) ) + _scroll;
 
+		int handle = _drawer->getImage( INFO_IMAGE );
+		int image_height = _drawer->getImageHeight( INFO_IMAGE );
+		const int IMAGE_GAP_Y = image_height - 30;
+		const float FONT_GAP_X  = _drawer->getImageWidth( INFO_IMAGE ) * 0.3f;
+		const float FONT_GAP_Y  = image_height * 0.25f;
+		_drawer->setGraphAlpha( 100 );
 		for ( int i = 0; i < _show_info_num; i++ ) {
-			_drawer->drawString( ( float )info.x, ( float )info.y + i * FONT_SIZE, _info[ i ].c_str( ), BLUE );
+			_drawer->drawGraph ( ( float )info.x, ( float )info.y + i * IMAGE_GAP_Y             , handle, true );
+			_drawer->drawString( ( float )info.x + FONT_GAP_X, ( float )info.y + i * IMAGE_GAP_Y + FONT_GAP_Y, _info[ i ].c_str( ), BLUE );
 		}
+		_drawer->setGraphAlpha( 0 );
 	}
 }
 

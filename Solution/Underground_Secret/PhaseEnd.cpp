@@ -50,8 +50,6 @@ _end_scroll( scroll ) {
 
 	// special elevator
 	_elevator = _map->getSpecialElevatorBetaPtr( );
-	_elevator->setActiveAlpha( true );
-	_elevator->setActiveBeta ( true );
 
 	// scroll
 	_scroll = _map->getScrollData( ); 
@@ -84,9 +82,12 @@ void PhaseEnd::draw( ) const {
 void PhaseEnd::updateLose( ) {
 	_count++;
 
-	if ( FPS / 2 == _count ) {
+	if ( FPS / 2 < _count ) {
 		_elevator->setActiveAlpha( false );
 		_elevator->setActiveBeta ( false );
+	} else {
+		_elevator->setActiveAlpha( true );
+		_elevator->setActiveBeta ( true );
 	}
 
 	//’è“_‚Ü‚ÅˆÚ“®

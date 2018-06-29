@@ -433,10 +433,19 @@ void Map::drawCollider( ) const {
 }
 
 void Map::drawTable( ) const {
+	Vector scroll = _scroll->getScroll( );
 	for ( int i = 1; i < HEIGHT / BLOCK_SIZE; i++ ) {
-		_drawer->drawLine( ( float )0, ( float )i * BLOCK_SIZE, ( float )WIDTH, ( float )i * BLOCK_SIZE, GRAY );
+		float sx = 0.0f;
+		float sy = ( float )( i * BLOCK_SIZE );
+		float ex = WIDTH_F;
+		float ey = sy;
+		_drawer->drawLine( sx, sy, ex, ey, GRAY );
 	}
 	for ( int i = 1; i < WIDTH / BLOCK_SIZE; i++ ) {
-		_drawer->drawLine( ( float )i * BLOCK_SIZE, ( float )0, ( float )i * BLOCK_SIZE, ( float )HEIGHT, GRAY );
+		float sx = ( float )( i * BLOCK_SIZE );
+		float sy = 0.0f;
+		float ex = sx;
+		float ey = HEIGHT_F;
+		_drawer->drawLine( sx, sy, ex, ey, GRAY );
 	}
 }
