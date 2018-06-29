@@ -70,6 +70,8 @@ public:
 	void setScroll( );
 	void setSpy( bool spy );
 	void addShowInfoNum( );
+	void setMoveFlag( bool flag );
+	void setDrawFlag( bool flag );
 
 public:
 	// à⁄ìÆèàóù
@@ -83,6 +85,7 @@ public:
 	ELEVATOR_STATE getElevatorState( ) const;
 	ELEVATOR_POS getActiveElevator( ) const;
 	ELEVATOR_POS getDestination( ) const;
+	ELEVATOR_POS getElevatorPos( ) const;
 	bool isLooking( Vector pos ) const;
 	bool isEndpoint( Vector pos ) const;
 	bool isSpy( ) const;
@@ -104,6 +107,7 @@ protected:
 
 protected:
 	bool _draw_flag;
+	bool _move_flag;
 	MapPtr _map;
 	DrawerPtr _drawer;
 	DebugPtr _debug;

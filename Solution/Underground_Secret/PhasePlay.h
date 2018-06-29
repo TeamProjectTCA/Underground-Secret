@@ -37,6 +37,8 @@ private:
 	int _time_count;
 	int _chara_handle;
 	int _time_board_handle;
+	int _gameover_count;
+	bool _countdown;
 
 	std::unordered_map< SOUND, int > _sound_handle;
 

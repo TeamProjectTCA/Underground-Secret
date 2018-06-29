@@ -7,7 +7,7 @@
 
 const int MOVE_RATE_X = 4;
 const int MOVE_RATE_Y = BLOCK_SIZE;
-const int INFO_SHOWTIME = FPS * 5;
+const int INFO_SHOWTIME = FPS * 10;
 const int CHECK_WAIT_TIME = FPS * 3;
 const float WAIT_PROBABILITY = 0.35f;
 const float RIDE_PROBABILITY = 0.3f;
@@ -45,15 +45,17 @@ CharaMan3::~CharaMan3( ) {
 void CharaMan3::update( ) {
 	setScroll( );
 
-	if ( getAnimType( ) == Character::ANIM_WALK ) {
-		walk( );
-		fall( );
-		checkCaughtCollider( );
-	}
+	if ( _move_flag ) {
+		if ( getAnimType( ) == Character::ANIM_WALK ) {
+			walk( );
+			fall( );
+			checkCaughtCollider( );
+		}
 
-	if ( getAnimType( ) == Character::ANIM_WAIT ) {
-		//立ち止まる
-		wait( );
+		if ( getAnimType( ) == Character::ANIM_WAIT ) {
+			//立ち止まる
+			wait( );
+		}
 	}
 
 	// エレベーター
@@ -200,44 +202,16 @@ void CharaMan3::checkElevator( ) {
 		return;
 	}
 
+
 	// エレベータの状態を取得
 	ELEVATOR_STATE state = getElevatorState( );
 	ELEVATOR_POS active_elevator = getActiveElevator( );
 	ELEVATOR_POS destination = getDestination( );
+	ELEVATOR_POS elevator_pos = getElevatorPos( );
 	_draw_flag = true;
 
 	switch ( state ) {
-		case ELEVATOR_STATE_WAIT:
-			if ( getAnimType( ) != Character::ANIM_WAIT_ELEVATOR ) {
-				// 連続で判定するのを防ぐ
-				if ( _judged_probability ) {
-					return;
-				}
-
-				if ( active_elevator == ELEVATOR_POS_UP ||
-					( active_elevator == ELEVATOR_POS_CENTER && destination == ELEVATOR_POS_DOWN ) ) {
-					_elevator_down = true;
-				} else {
-					_elevator_down = false;
-				}
-
-				//エレベーターに乗る確率判定
-				_ride_probability = RIDE_PROBABILITY;
-				if ( _hit_shutter ) {
-					_ride_probability += RIDE_PROBABILITY * HIT_SHUTTER_SCALE;
-				}
-
-				if ( isSpy( ) && _elevator_down ) {
-					_ride_probability += RIDE_PROBABILITY * DOWN_SCALE;
-				}
-
-				_judged_probability = true;
-				if ( _random->getRealOne( ) > _ride_probability ) {
-					return;
-				}
-
-				setAnim( Character::ANIM_WAIT_ELEVATOR );
-			}
+		case ELEVATOR_STATE_NONE:
 			break;
 
 		case ELEVATOR_STATE_COME:
@@ -272,6 +246,36 @@ void CharaMan3::checkElevator( ) {
 			break;
 
 		default:
+			if ( getAnimType( ) != Character::ANIM_WAIT_ELEVATOR ) {
+				// 連続で判定するのを防ぐ
+				if ( _judged_probability ) {
+					return;
+				}
+
+				if ( elevator_pos == ELEVATOR_POS_UP ||
+				   ( elevator_pos == ELEVATOR_POS_CENTER && destination == ELEVATOR_POS_DOWN ) ) {
+					_elevator_down = true;
+				} else {
+					_elevator_down = false;
+				}
+
+				//エレベーターに乗る確率判定
+				_ride_probability = RIDE_PROBABILITY;
+				if ( _hit_shutter ) {
+					_ride_probability += RIDE_PROBABILITY * HIT_SHUTTER_SCALE;
+				}
+
+				if ( isSpy( ) && _elevator_down ) {
+					_ride_probability += RIDE_PROBABILITY * DOWN_SCALE;
+				}
+
+				_judged_probability = true;
+				if ( _random->getRealOne( ) > _ride_probability ) {
+					return;
+				}
+
+				setAnim( Character::ANIM_WAIT_ELEVATOR );
+			}
 			break;
 	}
 }

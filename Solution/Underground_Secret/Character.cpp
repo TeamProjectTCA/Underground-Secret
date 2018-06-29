@@ -33,7 +33,8 @@ _scroll( Vector( ) ),
 _show_info_num( 0 ),
 _spy( false ),
 _draw_flag( true ),
-_move_dir( MOVE_DIR_RIGHT ) {
+_move_dir( MOVE_DIR_RIGHT ),
+_move_flag( true ) {
 	_drawer = Drawer::getTask( );
 	_debug = Debug::getTask( );
 }
@@ -88,7 +89,18 @@ void Character::addShowInfoNum( ) {
 	}
 }
 
+void Character::setMoveFlag( bool flag ) {
+	_move_flag = flag;
+}
+
+void Character::setDrawFlag( bool flag ) {
+	_draw_flag = flag;
+}
+
 void Character::move( Vector move ) {
+	if ( !_move_flag ) {
+		return;
+	}
 	Vector past = _pos;
 	_pos += move;
 	if ( ( _pos - past ).x < 0 ) {
@@ -201,11 +213,18 @@ ELEVATOR_POS Character::getActiveElevator( ) const {
 	return _map->getActiveElevator( getElevatorId( ), idx );
 }
 
-ELEVATOR_POS  Character::getDestination( ) const {
+ELEVATOR_POS Character::getDestination( ) const {
 	Vector position = _pos;
 	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 	return _map->getDestination( getElevatorId( ), idx );
+}
+
+ELEVATOR_POS Character::getElevatorPos( ) const {
+	Vector position = _pos;
+	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+	return _map->getElevatorPos( getElevatorId( ), idx );
 }
 
 void Character::draw( ) {

@@ -5,6 +5,7 @@
 #include "const.h"
 #include "Scroll.h"
 #include "Profiling.h"
+#include "Random.h"
 #include <string>
 
 const float TIME_BOX_X = 10;
@@ -20,7 +21,8 @@ const int TIME_LIMIT = 300;
 
 PhasePlay::PhasePlay( std::list< CharacterPtr > &chara, ScrollPtr scroll ) :
 _chara( chara ),
-_scroll( scroll ) {
+_scroll( scroll ),
+_countdown( false ) {
 	_drawer = Drawer::getTask( );
 	_sound = Sound::getTask( );
 	_time_count = TIME_LIMIT * FPS;
@@ -43,6 +45,8 @@ _scroll( scroll ) {
 	_spy = ( *ite );
 
 	_profiling = ProfilingPtr( new Profiling( _spy->getInfo( ) ) );
+
+	_gameover_count = Random::getTask( )->getInt32( ( unsigned long )FPS, ( unsigned long )FPS * 10 );
 }
 
 PhasePlay::~PhasePlay( ) {
@@ -60,6 +64,17 @@ void PhasePlay::update( ) {
 	_time_count--;
 
 	_sound->stop( _sound_handle[ GAME_BGM ] );
+
+	if ( _spy->getMapData( _spy->getPos( ) ) == IDENTIFICATION_ENDPOINT && !_countdown ) {
+		_countdown = true;
+		_spy->setMoveFlag( false );
+		_spy->setAnim( Character::ANIM_WAIT_ELEVATOR );
+	}
+
+	if ( _countdown ) {
+		_gameover_count--;
+	}
+
 	if ( isInvasion( ) ) {
 		setResult( LOSE );
 		setPhase( PHASE_END );
@@ -72,14 +87,15 @@ void PhasePlay::update( ) {
 }
 
 bool PhasePlay::isClear( ) const {
-	if ( _time_count <= 0 ) {
+	if ( _time_count < 1 ) {
 		return true;
 	}
 	return false;
 }
 
 bool PhasePlay::isInvasion( ) const {
-	if ( _spy->getMapData( _spy->getPos( ) ) == IDENTIFICATION_ENDPOINT ) {
+	if ( _gameover_count < 1 ) {
+		_sound->play( _sound->load( "SoundEffect/ElevatorArrive1.ogg" ), false, true );
 		return true;
 	}
 	return false;

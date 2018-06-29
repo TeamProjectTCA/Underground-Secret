@@ -39,6 +39,7 @@ public:
 	ELEVATOR_STATE getElevatorState( char id, int idx ) const;
 	ELEVATOR_POS getActiveElevator( char id, int idx ) const;
 	ELEVATOR_POS getDestination( char id, int idx ) const;
+	ELEVATOR_POS getElevatorPos( char id, int idx ) const;
 	bool isHitShutter( int detection_idx ) const;
 	SpecialElevatorPtr getSpecialElevatorAlphaPtr( );
 	SpecialElevatorPtr getSpecialElevatorBetaPtr( );
