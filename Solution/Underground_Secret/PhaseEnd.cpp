@@ -46,7 +46,8 @@ _end_scroll( scroll ) {
 		_sound->play( _sound_handle[ WIN_SE ] );
 	}
 	
-	_spy->setAnimTime( FPS );
+	_spy->setAnimTime( 2 );
+	_spy->setMoveFlag( true );
 
 	// special elevator
 	_elevator = _map->getSpecialElevatorBetaPtr( );
@@ -55,6 +56,8 @@ _end_scroll( scroll ) {
 	_scroll = _map->getScrollData( ); 
 	const float FOCUS_SPEED = ( float )( ( CENTRAL - _scroll - _spy->getPos( ) ).getLength( ) * ( 1 / FOCUS_FRAME ) );
 	_focus_move = ( CENTRAL - _scroll - _spy->getPos( ) ).normalize( ) * FOCUS_SPEED;
+
+	_spy->setDrawFlag( false );
 }
 
 PhaseEnd::~PhaseEnd( ) {
@@ -92,9 +95,10 @@ void PhaseEnd::updateLose( ) {
 
 	//定点まで移動
 	if ( _count < MOVE_FRAME ) {
-		if ( _map->getMapPos( ).x > 0 ||
-			 _map->getMapPos( ).x < WIDTH - _map->getCol( ) * BLOCK_SIZE ||
-			 _map->getMapPos( ).y < HEIGHT - _map->getRow( ) * BLOCK_SIZE ) {
+		Vector pos = _map->getMapPos( );
+		if ( pos.x > 0 ||
+			 pos.x < WIDTH  - _map->getCol( ) * BLOCK_SIZE ||
+			 pos.y < HEIGHT - _map->getRow( ) * BLOCK_SIZE ) {
 			_spy->move( _move );
 		} else {
 			_end_scroll->setScroll( _move * MAP_SCROLL_SPEED_RATE * -1 );
@@ -103,10 +107,7 @@ void PhaseEnd::updateLose( ) {
 		return;
 	}
 
-	if ( _count == MOVE_FRAME ) {
-		// アニメーション
-		_spy->setAnim( Character::ANIM_RIDE );
-	}
+	_spy->setDrawFlag( true );
 	if ( _count == MOVE_FRAME + PERFORMANCE_TIME + LOSE_SE_ADJUST_TIME ) {
 		setPhase( PHASE_RETURN_TITLE );
 	}

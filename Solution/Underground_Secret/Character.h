@@ -70,6 +70,8 @@ public:
 	void setScroll( );
 	void setSpy( bool spy );
 	void addShowInfoNum( );
+	void setMoveFlag( bool flag );
+	void setDrawFlag( bool flag );
 
 public:
 	// ˆÚ“®ˆ—
@@ -104,6 +106,7 @@ protected:
 
 protected:
 	bool _draw_flag;
+	bool _move_flag;
 	MapPtr _map;
 	DrawerPtr _drawer;
 	DebugPtr _debug;

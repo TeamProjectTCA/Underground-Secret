@@ -33,7 +33,8 @@ _scroll( Vector( ) ),
 _show_info_num( 0 ),
 _spy( false ),
 _draw_flag( true ),
-_move_dir( MOVE_DIR_RIGHT ) {
+_move_dir( MOVE_DIR_RIGHT ),
+_move_flag( true ) {
 	_drawer = Drawer::getTask( );
 	_debug = Debug::getTask( );
 }
@@ -88,7 +89,18 @@ void Character::addShowInfoNum( ) {
 	}
 }
 
+void Character::setMoveFlag( bool flag ) {
+	_move_flag = flag;
+}
+
+void Character::setDrawFlag( bool flag ) {
+	_draw_flag = flag;
+}
+
 void Character::move( Vector move ) {
+	if ( !_move_flag ) {
+		return;
+	}
 	Vector past = _pos;
 	_pos += move;
 	if ( ( _pos - past ).x < 0 ) {
