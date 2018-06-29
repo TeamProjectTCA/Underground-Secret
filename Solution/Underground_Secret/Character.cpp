@@ -213,11 +213,18 @@ ELEVATOR_POS Character::getActiveElevator( ) const {
 	return _map->getActiveElevator( getElevatorId( ), idx );
 }
 
-ELEVATOR_POS  Character::getDestination( ) const {
+ELEVATOR_POS Character::getDestination( ) const {
 	Vector position = _pos;
 	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
 	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
 	return _map->getDestination( getElevatorId( ), idx );
+}
+
+ELEVATOR_POS Character::getElevatorPos( ) const {
+	Vector position = _pos;
+	position.y -= 1; //‚Ò‚Á‚½‚è‚É‚È‚Á‚Ä‚µ‚Ü‚¤‚Ì‚ð–h‚®
+	int idx = ( int )( position.x / BLOCK_SIZE ) + ( int )( position.y / BLOCK_SIZE ) * _map->getCol( );
+	return _map->getElevatorPos( getElevatorId( ), idx );
 }
 
 void Character::draw( ) {

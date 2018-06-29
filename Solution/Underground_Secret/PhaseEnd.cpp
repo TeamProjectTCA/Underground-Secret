@@ -56,8 +56,6 @@ _end_scroll( scroll ) {
 	_scroll = _map->getScrollData( ); 
 	const float FOCUS_SPEED = ( float )( ( CENTRAL - _scroll - _spy->getPos( ) ).getLength( ) * ( 1 / FOCUS_FRAME ) );
 	_focus_move = ( CENTRAL - _scroll - _spy->getPos( ) ).normalize( ) * FOCUS_SPEED;
-
-	_spy->setDrawFlag( false );
 }
 
 PhaseEnd::~PhaseEnd( ) {
@@ -72,6 +70,7 @@ void PhaseEnd::update( ) {
 	}
 
 	if ( _result == LOSE ) {
+		_spy->setDrawFlag( false );
 		updateLose( );
 	} else {
 		updateWin( );

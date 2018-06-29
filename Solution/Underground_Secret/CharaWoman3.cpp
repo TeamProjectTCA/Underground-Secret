@@ -202,10 +202,12 @@ void CharaWoman3::checkElevator( ) {
 		return;
 	}
 
+
 	// エレベータの状態を取得
 	ELEVATOR_STATE state = getElevatorState( );
 	ELEVATOR_POS active_elevator = getActiveElevator( );
 	ELEVATOR_POS destination = getDestination( );
+	ELEVATOR_POS elevator_pos = getElevatorPos( );
 	_draw_flag = true;
 
 	switch ( state ) {
@@ -250,8 +252,8 @@ void CharaWoman3::checkElevator( ) {
 					return;
 				}
 
-				if ( active_elevator == ELEVATOR_POS_UP ||
-					( active_elevator == ELEVATOR_POS_CENTER && destination == ELEVATOR_POS_DOWN ) ) {
+				if ( elevator_pos == ELEVATOR_POS_UP ||
+				   ( elevator_pos == ELEVATOR_POS_CENTER && destination == ELEVATOR_POS_DOWN ) ) {
 					_elevator_down = true;
 				} else {
 					_elevator_down = false;

@@ -229,9 +229,17 @@ ELEVATOR_POS Elevator::getActiveElevator( ) const {
 	return _active_elevator;
 }
 
-
 ELEVATOR_POS Elevator::getDestination( ) const {
 	return _destination;
+}
+
+ELEVATOR_POS Elevator::getElevatorPos( int idx ) const {
+	for ( int i = 0; i < _data.size( ); i++ ) {
+		if ( idx == _data[ i ] ) {
+			return ( ELEVATOR_POS )i;
+		}
+	}
+	return ELEVATOR_POS( );
 }
 
 int Elevator::getElevatorPos( ELEVATOR_POS pos ) const {

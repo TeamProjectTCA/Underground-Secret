@@ -209,8 +209,16 @@ ELEVATOR_STATE Map::getElevatorState( char id, int idx ) const {
 	return elevator->getElevatorState( );
 }
 
+ELEVATOR_POS Map::getElevatorPos( char id, int idx ) const {
+	if ( getElevatorState( id, idx ) == ELEVATOR_STATE_NONE ) {
+		return ELEVATOR_POS( );
+	}
+	ElevatorPtr elevator = _elevator.find( id )->second;
+	return elevator->getElevatorPos( idx );
+}
+
 ELEVATOR_POS Map::getActiveElevator( char id, int idx ) const {
-	if ( getElevatorState( id, idx ) != ELEVATOR_STATE_NONE ) {
+	if ( getElevatorState( id, idx ) == ELEVATOR_STATE_NONE ) {
 		return ELEVATOR_POS( );
 	}
 	ElevatorPtr elevator = _elevator.find( id )->second;
@@ -218,7 +226,7 @@ ELEVATOR_POS Map::getActiveElevator( char id, int idx ) const {
 }
 
 ELEVATOR_POS Map::getDestination( char id, int idx ) const {
-	if ( getElevatorState( id, idx ) != ELEVATOR_STATE_NONE ) {
+	if ( getElevatorState( id, idx ) == ELEVATOR_STATE_NONE ) {
 		return ELEVATOR_POS( );
 	}
 	ElevatorPtr elevator = _elevator.find( id )->second;

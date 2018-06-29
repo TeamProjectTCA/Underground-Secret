@@ -85,6 +85,7 @@ public:
 	ELEVATOR_STATE getElevatorState( ) const;
 	ELEVATOR_POS getActiveElevator( ) const;
 	ELEVATOR_POS getDestination( ) const;
+	ELEVATOR_POS getElevatorPos( ) const;
 	bool isLooking( Vector pos ) const;
 	bool isEndpoint( Vector pos ) const;
 	bool isSpy( ) const;
