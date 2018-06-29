@@ -72,7 +72,7 @@ void SceneTitle::update( ) {
 
 void SceneTitle::draw( ) const {
 	_drawer->drawExtendGraph( 0, 0, WIDTH_F, HEIGHT_F, _background_handle, true ); //背景
-	_drawer->drawRotaGraph( WIDTH / 2, HEIGHT / 3, 1, 0, _title_handle, true ); //タイトル画像
+	_drawer->drawRotaGraph( WIDTH / 2, HEIGHT / 7 * 2, 1, 0, _title_handle, true ); //タイトル画像
 	_button->draw( ); //ボタン
 	_drawer->flip( );
 }

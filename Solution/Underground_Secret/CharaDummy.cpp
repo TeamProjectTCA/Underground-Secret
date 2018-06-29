@@ -13,6 +13,7 @@ const float WAIT_PROBABILITY = 0.2f;
 const float RIDE_PROBABILITY = 0.3f;
 const float DOWN_SCALE = 0.5f;
 const float HIT_SHUTTER_SCALE = 1.0f;
+const int WAIT_TIME = 2;
 
 CharaDummy::CharaDummy( MapPtr map, InfomationPtr info ) :
 Character( map, info->getInfo( CHARA_DUMMY ) ),
@@ -24,8 +25,7 @@ _elevator_down( false ),
 _judged_probability( false ),
 _looking_time( 0 ),
 _wait_count( 0 ),
-_wait_ani_time( 0 ),
-_wait_time( 0 ) {
+_wait_ani_time( 0 ) {
 	_random = Random::getTask( );
 
 	addAnim( Character::ANIM_WALK, "woman1_walk", 14 );
@@ -81,7 +81,6 @@ void CharaDummy::walk( ) {
 	if ( _wait_count >= CHECK_WAIT_TIME ) {
 		if ( _random->getRealOne( ) <= WAIT_PROBABILITY ) {
 			setAnim( Character::ANIM_WAIT );
-			_wait_time = _random->getInt32( 2, 4 );
 		}
 		_wait_count = 0;
 	}
@@ -96,7 +95,7 @@ void CharaDummy::wait( ) {
 	_wait_ani_time++;
 
 	//2~4•bŒo‚Á‚½‚çWalk‚É–ß‚é
-	if ( _wait_ani_time >= _wait_time * FPS ) {
+	if ( _wait_ani_time >= WAIT_TIME * FPS ) {
 		setAnim( Character::ANIM_WALK );
 		_wait_ani_time = 0;
 	}

@@ -1,7 +1,6 @@
 #include "Map.h"
 #include "Drawer.h"
 #include "Keyboard.h"
-#include "CharaA.h"
 #include "const.h"
 #include "Debug.h"
 #include "Shutter.h"
