@@ -15,8 +15,9 @@ public:
 	virtual ~Infomation( );
 
 private:
-	void convCsvdataToInfodata( std::vector< std::string > &input, CHARACTER chara, std::vector< std::string > &data );
-	void setUseInfo( CHARACTER chara, std::vector< std::string > &data );
+	int getItemNum( std::string tag );
+	void inputInfoController( std::vector< std::string > &info, std::vector< std::string > item, int get_item_num );
+	std::string getItem( std::vector< std::string > &item );
 
 public:
 	std::vector< std::string > &getInfo( CHARACTER chara );

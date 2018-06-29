@@ -41,7 +41,7 @@ void CharacterManager::setChara( int num ) {
 		// óêêîÇ≈ê∂ê¨ÉLÉÉÉâÇÃî‘çÜÇéÊìæ
 		int chara_idx = random->getInt32( 0, CHARA_MAX - 1 );
 
-		CharacterPtr chara = getCharaInstance( ( CHARACTER )1 );
+		CharacterPtr chara = getCharaInstance( ( CHARACTER )chara_idx );
 		// errorèàóù
 		if ( chara == CharacterPtr( ) ) {
 			continue;
@@ -67,9 +67,14 @@ std::list< CharacterPtr > CharacterManager::getChara( ) {
 
 CharacterPtr CharacterManager::getCharaInstance( CHARACTER chara_idx ) {
 	switch ( chara_idx ) {
-	case CHARA_DUMMY: return CharaDummyPtr( new CharaDummy( _map, _info ) );
-	case MAN_1:       return Man1Ptr      ( new Man1      ( _map, _info ) );
-	case WOMAN_2:     return Woman2Ptr    ( new Woman2    ( _map, _info ) );
+
+	case CHARA_DUMMY : return CharaDummyPtr( new CharaDummy( _map, _info ) );
+	case CHARA_MAN1  : return Man1Ptr      ( new Man1      ( _map, _info ) );
+	case CHARA_MAN2  : return Man1Ptr      ( new Man1      ( _map, _info ) );
+	case CHARA_MAN3  : return Man1Ptr      ( new Man1      ( _map, _info ) );
+	case CHARA_WOMAN1: return Woman2Ptr    ( new Woman2    ( _map, _info ) );
+	case CHARA_WOMAN2: return Woman2Ptr    ( new Woman2    ( _map, _info ) );
+	case CHARA_WOMAN3: return Woman2Ptr    ( new Woman2    ( _map, _info ) );
 	}
 	return CharacterPtr( );
 }

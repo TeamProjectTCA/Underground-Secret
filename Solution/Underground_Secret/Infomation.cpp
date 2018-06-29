@@ -2,65 +2,78 @@
 #include "LoadCSV.h"
 #include "Random.h"
 
+const char CHARACTER_DUMMY[ ]  = "Chara_Dummy";
+const char CHARACTER_MAN1[ ]   = "man1";
+const char CHARACTER_MAN2[ ]   = "man2";
+const char CHARACTER_MAN3[ ]   = "man3";
+const char CHARACTER_WOMAN1[ ] = "woman1";
+const char CHARACTER_WOMAN2[ ] = "woman2";
+const char CHARACTER_WOMAN3[ ] = "woman3";
+
 Infomation::Infomation( ) {
 	_rand = Random::getTask( );
 
 	// csvから情報をすべて取得
 	_csv = LoadCSVPtr( new LoadCSV( "Resources/CharacterData/" ) );
 	std::unordered_map< CHARACTER, std::vector< CsvData > > data;
-	//_csv->read( data[ CHARA_A ]    , "Chara_A" );
-	_csv->read( data[ CHARA_DUMMY ], "Chara_Dummy" );
+	_csv->read( data[ CHARA_DUMMY ] , CHARACTER_DUMMY );
+	_csv->read( data[ CHARA_MAN1 ]  , CHARACTER_MAN1 );
+	_csv->read( data[ CHARA_MAN2 ]  , CHARACTER_MAN2 );
+	_csv->read( data[ CHARA_MAN3 ]  , CHARACTER_MAN3 );
+	_csv->read( data[ CHARA_WOMAN1 ], CHARACTER_WOMAN1 );
+	_csv->read( data[ CHARA_WOMAN2 ], CHARACTER_WOMAN2 );
+	_csv->read( data[ CHARA_WOMAN3 ], CHARACTER_WOMAN3 );
 
-	// csvから取り出した情報をキャラごとにひとまとめにしていく
-	std::unordered_map< CHARACTER, std::vector< std::string > > all_info;
 	for ( int i = 0; i < CHARA_MAX; i++ ) {
 		CHARACTER chara = ( CHARACTER )i;
 		if ( data.find( chara ) == data.end( ) ) {
 			continue;
 		}
-
-		int size = ( int )data[ chara ].size( );
-		for ( int j = 0; j < size; j++ ) {
-			convCsvdataToInfodata( all_info[ chara ], chara, data[ chara ][ j ].values );
+		
+		for ( int j = 0; j < data[ chara ].size( ); j++ ) {
+			inputInfoController( _info[ chara ], data[ chara ][ j ].values, getItemNum( data[ chara ][ j ].tag ) );
 		}
-	}
-
-	// 全ての情報から特定数だけ取得する
-	std::unordered_map< CHARACTER, std::vector< std::string > >::iterator ite;
-	ite = all_info.begin( );
-	for ( ite; ite != all_info.end( ); ite++ ) {
-		setUseInfo( ite->first, ite->second );
 	}
 }
 
 Infomation::~Infomation( ) {
 }
 
-void Infomation::convCsvdataToInfodata( std::vector< std::string > &input, CHARACTER chara, std::vector< std::string > &data ) {
-	int size = ( int )data.size( );
-	for ( int i = 0; i < size; i++ ) {
-		input.push_back( data[ i ] );
+int Infomation::getItemNum( std::string tag ) {
+	int num = 1;
+
+	if ( tag == "CLOTHES" ) {
+		num = 1;
 	}
+	if ( tag == "ACCESSORY" ) {
+		num = 2;
+	}
+	if ( tag == "PERSONALITY" ) {
+		num = 1;
+	}
+	if ( tag == "OTHER" ) {
+		num = 1;
+	}
+
+	return num;
 }
 
-void Infomation::setUseInfo( CHARACTER chara, std::vector< std::string > &data ) {
-	int size = ( int )data.size( );
-
-	for ( int i = 0; i < size; i++ ) {
-		// 乱数を取得
-		int num = _rand->getInt32( 0, size - 1 );
-
-		// 入力
-		_info[ chara ].push_back( data[ num ] );
-
-		// 同じものが選択されないようにする
-		_rand->setIgnore( ( unsigned long )num );
-
-		if ( INFO_MAX == i + 1 ) {
-			break;
-		}
+void Infomation::inputInfoController( std::vector< std::string > &info, std::vector< std::string > item, int get_item_num ) {
+	for ( int i = 0; i < get_item_num; i++ ) {
+		info.push_back( getItem( item ) );
 	}
 	_rand->resetIgnore( );
+}
+
+std::string Infomation::getItem( std::vector< std::string > &item ) {
+	int idx = _rand->getInt32( 0, ( int )item.size( ) - 1 );
+	if ( idx >= item.size( ) ) {
+		return "";
+	}
+
+	_rand->setIgnore( ( unsigned long )idx );
+	std::string get_item = item[ idx ];
+	return get_item;
 }
 
 std::vector< std::string > &Infomation::getInfo( CHARACTER chara ) {

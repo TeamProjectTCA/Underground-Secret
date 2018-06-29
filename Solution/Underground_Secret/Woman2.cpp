@@ -16,7 +16,7 @@ const float HIT_SHUTTER_SCALE = 1.0f;
 const int WAIT_TIME = 2;
 
 Woman2::Woman2( MapPtr map, InfomationPtr info ) :
-	Character( map, info->getInfo( CHARA_DUMMY ) ),
+	Character( map, info->getInfo( CHARA_WOMAN2 ) ),
 	_ride_elevator( false ),
 	_ride_probability( RIDE_PROBABILITY ),
 	_return_move( false ),
