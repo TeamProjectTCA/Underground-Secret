@@ -2,15 +2,15 @@
 #include "Character.h"
 #include "Vector.h"
 
-PTR( Woman2 );
+PTR( CharaMan3 );
 PTR( Map );
 PTR( Infomation );
 PTR( Random );
 
-class Woman2 : public Character {
+class CharaMan3 : public Character {
 public:
-	Woman2( MapPtr map, InfomationPtr info );
-	virtual ~Woman2( );
+	CharaMan3( MapPtr map, InfomationPtr info );
+	virtual ~CharaMan3( );
 
 public:
 	void update( );

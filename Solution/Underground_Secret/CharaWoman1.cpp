@@ -1,22 +1,22 @@
-#include "Woman2.h"
+#include "CharaWoman1.h"
 #include "Drawer.h"
 #include "const.h"
 #include "Debug.h"
 #include "Infomation.h"
 #include "Random.h"
 
-const int MOVE_RATE_X = 2;
+const int MOVE_RATE_X = 3;
 const int MOVE_RATE_Y = BLOCK_SIZE;
 const int INFO_SHOWTIME = FPS * 5;
 const int CHECK_WAIT_TIME = FPS * 3;
-const float WAIT_PROBABILITY = 0.25f;
+const float WAIT_PROBABILITY = 0.2f;
 const float RIDE_PROBABILITY = 0.3f;
 const float DOWN_SCALE = 0.5f;
 const float HIT_SHUTTER_SCALE = 1.0f;
 const int WAIT_TIME = 2;
 
-Woman2::Woman2( MapPtr map, InfomationPtr info ) :
-	Character( map, info->getInfo( CHARA_WOMAN2 ) ),
+CharaWoman1::CharaWoman1( MapPtr map, InfomationPtr info ) :
+	Character( map, info->getInfo( CHARA_WOMAN1 ) ),
 	_ride_elevator( false ),
 	_ride_probability( RIDE_PROBABILITY ),
 	_return_move( false ),
@@ -28,10 +28,10 @@ Woman2::Woman2( MapPtr map, InfomationPtr info ) :
 	_wait_ani_time( 0 ) {
 	_random = Random::getTask( );
 
-	addAnim( Character::ANIM_WALK, "woman2_walk", 14 );
-	addAnim( Character::ANIM_RIDE, "woman2_WaitElevator", 10 );
-	addAnim( Character::ANIM_WAIT, "woman2_wait", 10 );
-	addAnim( Character::ANIM_WAIT_ELEVATOR, "woman2_WaitElevator", 10 );
+	addAnim( Character::ANIM_WALK, "woman1_walk", 14 );
+	addAnim( Character::ANIM_RIDE, "woman1_WaitElevator", 10 );
+	addAnim( Character::ANIM_WAIT, "woman1_wait", 10 );
+	addAnim( Character::ANIM_WAIT_ELEVATOR, "woman1_WaitElevator", 10 );
 	setAnim( Character::ANIM_WALK );
 
 	_dir = ( _random->getInt32( 0, 1 ) ? MOVE_RIGHT : MOVE_LEFT );
@@ -39,10 +39,10 @@ Woman2::Woman2( MapPtr map, InfomationPtr info ) :
 	setDistance( );
 }
 
-Woman2::~Woman2( ) {
+CharaWoman1::~CharaWoman1( ) {
 }
 
-void Woman2::update( ) {
+void CharaWoman1::update( ) {
 	setScroll( );
 
 	if ( getAnimType( ) == Character::ANIM_WALK ) {
@@ -71,7 +71,7 @@ void Woman2::update( ) {
 	}
 }
 
-void Woman2::walk( ) {
+void CharaWoman1::walk( ) {
 	if ( _dir == MOVE_DOWN ) {
 		return;
 	}
@@ -91,7 +91,7 @@ void Woman2::walk( ) {
 	checkCollider( );
 }
 
-void Woman2::wait( ) {
+void CharaWoman1::wait( ) {
 	_wait_ani_time++;
 
 	//2~4秒経ったらWalkに戻る
@@ -100,7 +100,7 @@ void Woman2::wait( ) {
 		_wait_ani_time = 0;
 	}
 }
-void Woman2::fall( ) {
+void CharaWoman1::fall( ) {
 	MOVE_DIRECTION past = _dir;
 	_dir = MOVE_DOWN;
 
@@ -128,7 +128,7 @@ void Woman2::fall( ) {
 	setFallPos( getPos( ) + _distance );
 }
 
-void Woman2::setDistance( ) {
+void CharaWoman1::setDistance( ) {
 	switch ( _dir ) {
 		case MOVE_RIGHT: _distance = Vector( MOVE_RATE_X, 0 ); break;
 		case MOVE_LEFT: _distance = Vector( -MOVE_RATE_X, 0 ); break;
@@ -136,13 +136,13 @@ void Woman2::setDistance( ) {
 	}
 }
 
-void Woman2::countLooking( ) {
+void CharaWoman1::countLooking( ) {
 	if ( isLooking( getPos( ) ) ) {
 		_looking_time++;
 	}
 }
 
-void Woman2::checkCollider( ) {
+void CharaWoman1::checkCollider( ) {
 	// アスキーコードを取得
 	int data = getMapData( getPos( ) + _distance );
 
@@ -184,7 +184,7 @@ void Woman2::checkCollider( ) {
 	move( _distance );
 }
 
-void Woman2::checkElevator( ) {
+void CharaWoman1::checkElevator( ) {
 	// アスキーコードを取得
 	char id = getElevatorId( );
 
@@ -276,10 +276,11 @@ void Woman2::checkElevator( ) {
 	}
 }
 
-void Woman2::returnMove( ) {
+void CharaWoman1::returnMove( ) {
 	switch ( _dir ) {
 		case MOVE_RIGHT: _dir = MOVE_LEFT; break;
 		case MOVE_LEFT: _dir = MOVE_RIGHT; break;
 		default: return;
 	}
 }
+

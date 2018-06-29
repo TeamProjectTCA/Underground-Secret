@@ -8,8 +8,8 @@ PTR( Character );
 PTR( Map );
 PTR( Infomation );
 PTR( CharaDummy );
-PTR( Man1 );
-PTR( Woman2 );
+PTR( CharaMan1 );
+PTR( CharaWoman2 );
 
 class CharacterManager {
 public:
