@@ -6,11 +6,11 @@
 #include "Vector.h"
 #include "Mouse.h"
 
-const float BUTTON_Y = HEIGHT / 4 * 2.5;
+const float BUTTON_Y = HEIGHT / 4 * 3;
 const float BUTTON_PITCH = WIDTH / 4;
 const int BUTTON_WIDTH = 256;
 const int BUTTON_HEIGHT = 256;
-const float STAGE_STRING_Y = HEIGHT / 4;
+const float STAGE_STRING_Y = HEIGHT / 4 * 1.5;
 const float STAGE_STRING_HEIGHT = 128;
 
 const char BUTTON_STAGE1_IMAGE[] = "stage1";
@@ -24,6 +24,8 @@ const char STAGE1_STRING_IMAGE[ ] = "stage1_string";
 const char STAGE2_STRING_IMAGE[ ] = "stage2_string";
 const char STAGE3_STRING_IMAGE[ ] = "stage3_string";
 const char *STAGE_STRING_IMAGE[ STAGE_MAX ] = { STAGE1_STRING_IMAGE, STAGE2_STRING_IMAGE, STAGE3_STRING_IMAGE };
+
+const char LOG_IMAGE[ ] = "stageselect";
 
 SceneStageSelect::SceneStageSelect( ) {
 	_stage = 1;
@@ -63,6 +65,15 @@ void SceneStageSelect::update( ) {
 void SceneStageSelect::draw( ) const {
 	// ”wŒi
 	_drawer->drawGraph( 0, 0, _back_image, true );
+
+	// log
+	int log = _drawer->getImage( LOG_IMAGE );
+	float log_height = ( float )_drawer->getImageHeight( LOG_IMAGE );
+	float lx = WIDTH / 4.0f;
+	float ly = HEIGHT / 5.0f - log_height / 2.0f;
+	float rx = WIDTH / 4.0f * 3.0f;
+	float ry = HEIGHT / 5.0f + log_height / 2.0f;
+	_drawer->drawExtendGraph( lx, ly, rx, ry, log, true );
 
 	const int FRAME_GAP = 20;
 	for ( int i = 0; i < _button.size( ); i++ ) {

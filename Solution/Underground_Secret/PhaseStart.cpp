@@ -7,7 +7,7 @@
 #include "SpecialElevator.h"
 
 const float MOVE_FRAME = FPS * 2;
-const int PERFORMANCE_TIME = FPS * 2;
+const int PERFORMANCE_TIME = FPS;
 const float FOCUS_FRAME = FPS * 1;
 
 PhaseStart::PhaseStart( std::list< CharacterPtr > &chara, MapPtr map, SpecialScrollPtr scroll ) :
