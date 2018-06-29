@@ -5,11 +5,11 @@
 #include "Infomation.h"
 #include "Random.h"
 
-const int MOVE_RATE_X = 3;
+const int MOVE_RATE_X = 2;
 const int MOVE_RATE_Y = BLOCK_SIZE;
 const int INFO_SHOWTIME = FPS * 5;
 const int CHECK_WAIT_TIME = FPS * 3;
-const float WAIT_PROBABILITY = 0.2f;
+const float WAIT_PROBABILITY = 0.25f;
 const float RIDE_PROBABILITY = 0.3f;
 const float DOWN_SCALE = 0.5f;
 const float HIT_SHUTTER_SCALE = 1.0f;
@@ -29,9 +29,9 @@ Woman2::Woman2( MapPtr map, InfomationPtr info ) :
 	_random = Random::getTask( );
 
 	addAnim( Character::ANIM_WALK, "woman2_walk", 14 );
-	addAnim( Character::ANIM_RIDE, "CharaDummy_Ride", 2 );
-	addAnim( Character::ANIM_WAIT, "CharaDummy_Wait", 2 );
-	addAnim( Character::ANIM_WAIT_ELEVATOR, "CharaDummy_WaitElevator", 2 );
+	addAnim( Character::ANIM_RIDE, "woman2_WaitElevator", 10 );
+	addAnim( Character::ANIM_WAIT, "woman2_wait", 10 );
+	addAnim( Character::ANIM_WAIT_ELEVATOR, "woman2_WaitElevator", 10 );
 	setAnim( Character::ANIM_WALK );
 
 	_dir = ( _random->getInt32( 0, 1 ) ? MOVE_RIGHT : MOVE_LEFT );

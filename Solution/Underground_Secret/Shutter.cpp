@@ -43,9 +43,9 @@ void Shutter::update( ) {
 void Shutter::draw( ) {
 	const int SHUTTER_MAX = ( int )_shutter.size( );
 	const int MIN = BLOCK_SIZE;
-	const int RATE = ( _shutter_height - MIN ) / MOVECOUNT_MAX;
 	const int SHUTTER_MARGIN_RIGHT = 5;
 	const int SHUTTER_MARGIN_UP = 5;
+	const float RATE = ( _shutter_height - MIN ) / ( float )MOVECOUNT_MAX;
 
 
 	for ( int i = 0; i < SHUTTER_MAX; i++ ) {
@@ -68,13 +68,13 @@ void Shutter::draw( ) {
 				break;
 
 			case SHUTTER_STATE_OPEN:
-				ry = ( MOVECOUNT_MAX - _move_cnt ) * RATE + MIN;
+				ry = ( int )( ( MOVECOUNT_MAX - _move_cnt ) * RATE + MIN );
 				_button[ i ]->setImage( SHUTTER_CLOSE_NORMAL_IMAGE );
 				_button[ i ]->setPushImage( SHUTTER_CLOSE_PUSH_IMAGE );
 				break;
 
 			case SHUTTER_STATE_CLOSE:
-				ry = _move_cnt * RATE + MIN;
+				ry = ( int )( _move_cnt * RATE + MIN );
 				_button[ i ]->setImage( SHUTTER_CLOSE_NORMAL_IMAGE );
 				_button[ i ]->setPushImage( SHUTTER_CLOSE_PUSH_IMAGE );
 				break;
