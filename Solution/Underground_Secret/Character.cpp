@@ -248,7 +248,7 @@ void Character::draw( ) {
 		int handle = _drawer->getImage( INFO_IMAGE );
 		int image_height = _drawer->getImageHeight( INFO_IMAGE );
 		const int IMAGE_GAP_Y = image_height - 30;
-		const float FONT_GAP_X  = _drawer->getImageWidth( INFO_IMAGE ) * 0.3f;
+		const float FONT_GAP_X  = _drawer->getImageWidth( INFO_IMAGE ) * 0.25f;
 		const float FONT_GAP_Y  = image_height * 0.35f;
 		_drawer->setGraphAlpha( 100 );
 		for ( int i = 0; i < _show_info_num; i++ ) {

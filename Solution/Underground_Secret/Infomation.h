@@ -15,15 +15,27 @@ public:
 	virtual ~Infomation( );
 
 private:
-	int getItemNum( std::string tag );
+	int getItemNum( std::string tag ) const;
 	void inputInfoController( std::vector< std::string > &info, std::vector< std::string > item, int get_item_num );
 	std::string getItem( std::vector< std::string > &item );
+	std::vector< std::string > createInfo( CHARACTER chara );
 
 public:
-	std::vector< std::string > &getInfo( CHARACTER chara );
+	std::vector< std::string > getInfo( CHARACTER chara );
 
 private:
-	std::unordered_map< CHARACTER, std::vector< std::string > > _info;
+	struct Values {
+		std::string tag;
+		std::vector< std::string > value;
+	};
+
+	struct Info {
+		CHARACTER chara;
+		std::vector< Values > value;
+	};
+
+	// ƒLƒƒƒ‰ > tag > value
+	std::vector< Info > _info;
 
 	LoadCSVPtr _csv;
 	RandomPtr _rand;

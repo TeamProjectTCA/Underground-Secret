@@ -29,17 +29,26 @@ Infomation::Infomation( ) {
 		if ( data.find( chara ) == data.end( ) ) {
 			continue;
 		}
-		
+
+		Info info = Info( );
+		info.chara = chara;
+
 		for ( int j = 0; j < data[ chara ].size( ); j++ ) {
-			inputInfoController( _info[ chara ], data[ chara ][ j ].values, getItemNum( data[ chara ][ j ].tag ) );
+			Values value = Values( );
+			value.tag  = data[ chara ][ j ].tag;
+			value.value = data[ chara ][ j ].values;
+
+			info.value.push_back( value );
 		}
+
+		_info.push_back( info );
 	}
 }
 
 Infomation::~Infomation( ) {
 }
 
-int Infomation::getItemNum( std::string tag ) {
+int Infomation::getItemNum( std::string tag ) const {
 	int num = 1;
 
 	if ( tag == "CLOTHES" ) {
@@ -76,6 +85,25 @@ std::string Infomation::getItem( std::vector< std::string > &item ) {
 	return get_item;
 }
 
-std::vector< std::string > &Infomation::getInfo( CHARACTER chara ) {
-	return _info[ chara ];
+std::vector< std::string > Infomation::createInfo( CHARACTER chara ) {
+	std::vector< std::string > info;
+
+	int info_idx = -1;
+	for ( int i = 0; i < _info.size( ); i++ ) {
+		if ( _info[ i ].chara == chara ) {
+			info_idx = i;
+			break;
+		}
+	}
+
+	for ( int i = 0; i < _info[ info_idx ].value.size( ); i++ ) {
+		inputInfoController( info, _info[ info_idx ].value[ i ].value, getItemNum( _info[ info_idx ].value[ i ].tag ) );
+	}
+
+	return info;
+}
+
+
+std::vector< std::string > Infomation::getInfo( CHARACTER chara ) {
+	return createInfo( chara );
 }
