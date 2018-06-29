@@ -9,7 +9,6 @@
 const int DEFAULT_ON_SHUTTER_MAX = 2;
 const int SWITCH_WIDTH = 64;
 const int SWITCH_HEIGHT = 32;
-const int STAGE_ON_SHUTTER_NUM[ ] = { DEFAULT_ON_SHUTTER_MAX };
 const char SHUTTER_OPEN_NORMAL_IMAGE[ ] = "button_on";
 const char SHUTTER_OPEN_PUSH_IMAGE[ ] = "button_on_push";
 const char SHUTTER_CLOSE_NORMAL_IMAGE[ ] = "button_off";
@@ -19,7 +18,7 @@ const int MOVECOUNT_MAX = 60;
 
 Shutter::Shutter( int stage ) :
 _col( 1 ),
-ON_SHUTTER_MAX( STAGE_ON_SHUTTER_NUM[ stage - 1 ] ),
+ON_SHUTTER_MAX( DEFAULT_ON_SHUTTER_MAX + stage - 1 ),
 _active_num( 0 ) {
 	_drawer = Drawer::getTask( );
 	_mouse = Mouse::getTask( );
