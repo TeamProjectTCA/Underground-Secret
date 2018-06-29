@@ -6,9 +6,12 @@
 #include "Button.h"
 #include "const.h"
 
-const Vector BUTTON_POSITION = Vector( WIDTH / 2, HEIGHT / 5 * 4 );
-const char BUTTON_NORMAL_IMAGE[ ] = "GameStart";
-const char BUTTON_PUSH_IMAGE[ ] = "GameStartClick";
+const Vector START_BUTTON_POSITION = Vector( WIDTH / 2, HEIGHT / 5 * 3 );
+const Vector MANUAL_BUTTON_POSITION = Vector( WIDTH / 2, HEIGHT / 5 * 4 );
+const char START_NORMAL_IMAGE[ ] = "GameStart";
+const char START_PUSH_IMAGE[ ] = "GameStartClick";
+const char MANUAL_NORMAL_IMAGE[ ] = "Manual";
+const char MANUAL_PUSH_IMAGE[ ] = "ManualClick";
 const char BACKGROUND_IMAGE[ ] = "underground_back";
 const char TITLE_IMAGE[ ] = "title";
 
@@ -17,23 +20,33 @@ SceneTitle::SceneTitle( ) {
 	_sound = Sound::getTask( );
 	_keyboard = Keyboard::getTask( );
 	_mouse = Mouse::getTask( );
-	_background_handle = _drawer->getImage( BACKGROUND_IMAGE );
-	_title_handle = _drawer->getImage( TITLE_IMAGE );
+	_background_image = _drawer->getImage( BACKGROUND_IMAGE );
+	_title_image = _drawer->getImage( TITLE_IMAGE );
 
 	_cur_hand = LoadCursor( NULL, IDC_HAND );
-	_startbutton = BoxObject( );
 
 	//ƒ{ƒ^ƒ“
-	int button_width = _drawer->getImageWidth( BUTTON_NORMAL_IMAGE );
-	int button_height = _drawer->getImageHeight( BUTTON_NORMAL_IMAGE );
-	_button = ButtonPtr( new Button( 
-		( float )BUTTON_POSITION.x - button_width / 2.0f,
-		( float )BUTTON_POSITION.y - button_height / 2.0f,
-	   	( float )BUTTON_POSITION.x + button_width / 2.0f,
-		( float )BUTTON_POSITION.y + button_height / 2.0f ) );
-	_button->setPos( ( float )BUTTON_POSITION.x, ( float )BUTTON_POSITION.y );
-	_button->setImage( BUTTON_NORMAL_IMAGE );
-	_button->setPushImage( BUTTON_PUSH_IMAGE );
+	int start_button_width = _drawer->getImageWidth( START_NORMAL_IMAGE );
+	int start_button_height = _drawer->getImageHeight( START_NORMAL_IMAGE );
+	_start_button = ButtonPtr( new Button(
+		( float )START_BUTTON_POSITION.x - start_button_width / 2.0f,
+		( float )START_BUTTON_POSITION.y - start_button_height / 2.0f,
+		( float )START_BUTTON_POSITION.x + start_button_width / 2.0f,
+		( float )START_BUTTON_POSITION.y + start_button_height / 2.0f ) );
+	_start_button->setPos( ( float )START_BUTTON_POSITION.x, ( float )START_BUTTON_POSITION.y );
+	_start_button->setImage( START_NORMAL_IMAGE );
+	_start_button->setPushImage( START_PUSH_IMAGE ); 
+
+	int manual_button_width = _drawer->getImageWidth( MANUAL_NORMAL_IMAGE );
+	int manual_button_height = _drawer->getImageHeight( MANUAL_NORMAL_IMAGE );
+	_manual_button = ButtonPtr( new Button(
+		( float )MANUAL_BUTTON_POSITION.x - manual_button_width / 2.0f,
+		( float )MANUAL_BUTTON_POSITION.y - manual_button_height / 2.0f,
+		( float )MANUAL_BUTTON_POSITION.x + manual_button_width / 2.0f,
+		( float )MANUAL_BUTTON_POSITION.y + manual_button_height / 2.0f ) );
+	_manual_button->setPos( ( float )MANUAL_BUTTON_POSITION.x, ( float )MANUAL_BUTTON_POSITION.y );
+	_manual_button->setImage( MANUAL_NORMAL_IMAGE );
+	_manual_button->setPushImage( MANUAL_PUSH_IMAGE );
 
 	//BGM
 	_sound_handle[ TITLE_BGM ] = _sound->load( "TitleBGM/titlebgm.ogg" );
@@ -56,23 +69,32 @@ void SceneTitle::finalize( ) {
 void SceneTitle::update( ) {
 	Vector mouse_pos = _mouse->getPoint( );
 	if ( _mouse->getClickingLeft( ) ) {
-		_button->click( mouse_pos );
+		_start_button->click( mouse_pos );
 	} else {
-		if ( _button->isPush( ) ) {
+		if ( _start_button->isPush( ) ) {
 			_sound->stop( _sound_handle[ TITLE_BGM ] );
 			_sound->play( _sound_handle[ BUTTON_SE ] );
 			setNextScene( SCENE_STAGESELECT );
 		}
-		_button->resetState( );
+		_start_button->resetState( );
 	}
-
+	if ( _mouse->getClickingLeft( ) ) {
+		_manual_button->click( mouse_pos );
+	} else {
+		if ( _manual_button->isPush( ) ) {
+			_sound->stop( _sound_handle[ TITLE_BGM ] );
+			_sound->play( _sound_handle[ BUTTON_SE ] );
+		}
+		_manual_button->resetState( );
+	}
 	draw( );
 
 }
 
 void SceneTitle::draw( ) const {
-	_drawer->drawExtendGraph( 0, 0, WIDTH_F, HEIGHT_F, _background_handle, true ); //”wŒi
-	_drawer->drawRotaGraph( WIDTH / 2, HEIGHT / 7 * 2, 1, 0, _title_handle, true ); //ƒ^ƒCƒgƒ‹‰æ‘œ
-	_button->draw( ); //ƒ{ƒ^ƒ“
+	_drawer->drawExtendGraph( 0, 0, WIDTH_F, HEIGHT_F, _background_image, true ); //”wŒi
+	_drawer->drawRotaGraph( WIDTH / 2, HEIGHT / 7 * 2, 1, 0, _title_image, true ); //ƒ^ƒCƒgƒ‹‰æ‘œ
+	_start_button->draw( ); 
+	_manual_button->draw( );
 	_drawer->flip( );
 }

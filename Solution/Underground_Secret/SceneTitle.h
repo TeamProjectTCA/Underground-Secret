@@ -43,8 +43,8 @@ private:
 	bool _startbutton_clicking;
 	HCURSOR _cur_hand;
 
-	int _background_handle;
-	int _title_handle;
+	int _background_image;
+	int _title_image;
 
 	std::unordered_map< SOUND, int > _sound_handle;
 
@@ -57,6 +57,7 @@ private:
 	SoundPtr _sound;
 	MousePtr _mouse;
 	KeyboardPtr _keyboard;
-	ButtonPtr _button;
+	ButtonPtr _start_button;
+	ButtonPtr _manual_button;
 };
 
