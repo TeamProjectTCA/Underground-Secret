@@ -29,9 +29,9 @@ CharaWoman1::CharaWoman1( MapPtr map, InfomationPtr info ) :
 	_random = Random::getTask( );
 
 	addAnim( Character::ANIM_WALK, "woman1_walk", 14 );
-	addAnim( Character::ANIM_RIDE, "woman1_WaitElevator", 10 );
+	addAnim( Character::ANIM_RIDE, "woman1_wait", 10 );
 	addAnim( Character::ANIM_WAIT, "woman1_wait", 10 );
-	addAnim( Character::ANIM_WAIT_ELEVATOR, "woman1_WaitElevator", 10 );
+	addAnim( Character::ANIM_WAIT_ELEVATOR, "woman1_wait", 10 );
 	setAnim( Character::ANIM_WALK );
 
 	_dir = ( _random->getInt32( 0, 1 ) ? MOVE_RIGHT : MOVE_LEFT );
