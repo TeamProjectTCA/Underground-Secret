@@ -30,5 +30,6 @@ private:
 	KeyboardPtr _keyboard;
 	DrawerPtr _drawer;
 	MousePtr _mouse;
-	std::vector< ButtonPtr > _button;
+	std::vector< ButtonPtr > _stage_button;
+	ButtonPtr _return_button;
 };

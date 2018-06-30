@@ -6,20 +6,29 @@
 #include "Vector.h"
 #include "Mouse.h"
 
-const float BUTTON_Y = HEIGHT / 4 * 3;
-const float BUTTON_PITCH = WIDTH / 4;
-const int BUTTON_WIDTH = 256;
-const int BUTTON_HEIGHT = 256;
-const float STAGE_STRING_Y = HEIGHT / 4 * 1.5;
-const float STAGE_STRING_HEIGHT = 128;
+const float LOG_PITCH = 230;
 
-const char BUTTON_STAGE1_IMAGE[] = "stage1";
-const char BUTTON_STAGE2_IMAGE[] = "stage2";
-const char BUTTON_STAGE3_IMAGE[] = "stage3";
+const float BUTTON_STAGE_Y = HEIGHT / 4 * 2.5;
+const float BUTTON_STAGE_PITCH = WIDTH / 4;
+const int BUTTON_STAGE_WIDTH = 256;
+const int BUTTON_STAGE_HEIGHT = 256;
+const float STAGE_STRING_PITCH = 128;
+const float STAGE_STRING_Y = BUTTON_STAGE_Y - STAGE_STRING_PITCH - BUTTON_STAGE_HEIGHT / 2.0f;
+
+const char BUTTON_RETURN_IMAGE     [ ] = "Return";
+const char BUTTON_RETURNCLICK_IMAGE[ ] = "ReturnClick";
+const float BUTTON_RETURN_WIDTH  = WIDTH_F / 4.0f * 1.5f;
+const float BUTTON_RETURN_HEIGHT =  64;
+const float BUTTON_RETURN_X = WIDTH_F / 2.0f;
+const float BUTTON_RETURN_Y = HEIGHT_F - BUTTON_RETURN_HEIGHT;
+
+const char BUTTON_STAGE1_IMAGE     [ ] = "stage1";
+const char BUTTON_STAGE2_IMAGE     [ ] = "stage2";
+const char BUTTON_STAGE3_IMAGE     [ ] = "stage3";
 const char *BUTTON_IMAGE[ STAGE_MAX ] = { BUTTON_STAGE1_IMAGE, BUTTON_STAGE2_IMAGE, BUTTON_STAGE3_IMAGE };
 
 const char BACK_IMAGE[ ] = "underground_back";
-const char BUTTON_FRAME_IMAGE[ ] = "stagebutton_frame";
+const char BUTTON_FRAME_IMAGE [ ] = "stagebutton_frame";
 const char STAGE1_STRING_IMAGE[ ] = "stage1_string";
 const char STAGE2_STRING_IMAGE[ ] = "stage2_string";
 const char STAGE3_STRING_IMAGE[ ] = "stage3_string";
@@ -42,17 +51,28 @@ SceneStageSelect::~SceneStageSelect( ) {
 }
 
 void SceneStageSelect::update( ) {
-	Vector mouse_pos = _mouse->getPoint( );
-	for ( int i = 0; i < _button.size( ); i++ ) {
-		if ( _mouse->getClickingLeft( ) ) {
-			_button[ i ]->click( mouse_pos );
+	// stage button
+	bool mouse_click = ( _mouse->getClickingLeft( ) > 0 ? true : false );
+	for ( int i = 0; i < _stage_button.size( ); i++ ) {
+		if ( mouse_click ) {
+			_stage_button[ i ]->click( _mouse->getPoint( ) );
 		} else {
-			if ( _button[ i ]->isPush( ) ) {
+			if ( _stage_button[ i ]->isPush( ) ) {
 				_stage = i + 1;
 				setNextScene( SCENE_GAME );
 			}
-			_button[ i ]->resetState( );
+			_stage_button[ i ]->resetState( );
 		}
+	}
+
+	// return button
+	if ( mouse_click ) {
+		_return_button->click( _mouse->getPoint( ) );
+	} else {
+		if ( _return_button->isPush( ) ) {
+			setNextScene( SCENE_TITLE );
+		}
+		_return_button->resetState( );
 	}
 
 	draw( );
@@ -68,16 +88,17 @@ void SceneStageSelect::draw( ) const {
 	float lx = WIDTH / 4.0f;
 	float ly = HEIGHT / 5.0f - log_height / 2.0f;
 	float rx = WIDTH / 4.0f * 3.0f;
-	float ry = HEIGHT / 5.0f + log_height / 2.0f;
+	float ry = ly + LOG_PITCH;
 	_drawer->drawExtendGraph( lx, ly, rx, ry, log, true );
 
+	// stage button
 	const int FRAME_GAP = 20;
-	for ( int i = 0; i < _button.size( ); i++ ) {
-		_button[ i ]->draw( );
+	for ( int i = 0; i < _stage_button.size( ); i++ ) {
+		_stage_button[ i ]->draw( );
 
 		// frame
-		Vector left = _button[ i ]->getColliderLeft( );
-		Vector right = _button[ i ]->getColliderRight( );
+		Vector left  = _stage_button[ i ]->getColliderLeft( );
+		Vector right = _stage_button[ i ]->getColliderRight( );
 		_drawer->drawExtendGraph( 
 			( float )left.x  - FRAME_GAP, ( float )left.y  - FRAME_GAP, 
 			( float )right.x + FRAME_GAP, ( float )right.y + FRAME_GAP, 
@@ -87,9 +108,13 @@ void SceneStageSelect::draw( ) const {
 		int handle = _drawer->getImage( STAGE_STRING_IMAGE[ i ] );
 		_drawer->drawExtendGraph(
 			( float )left.x , STAGE_STRING_Y,
-			( float )right.x, STAGE_STRING_Y + STAGE_STRING_HEIGHT,
+			( float )right.x, STAGE_STRING_Y + STAGE_STRING_PITCH,
 			handle, true );
 	}
+
+	// return button
+	_return_button->draw( false );
+
 	_drawer->flip( );
 }
 
@@ -98,20 +123,32 @@ int SceneStageSelect::getStage( ) const {
 }
 
 void SceneStageSelect::createButton( ) {
+	// stage button
 	for ( int i = 0; i < STAGE_MAX; i++ ) {
 		ButtonPtr button( new Button( ) );
 
 		button->setPos(
-			( float )BUTTON_PITCH * ( i + 1 ) - BUTTON_WIDTH / 2, ( float )BUTTON_Y - BUTTON_HEIGHT / 2,
-			( float )BUTTON_PITCH * ( i + 1 ) + BUTTON_WIDTH / 2, ( float )BUTTON_Y + BUTTON_HEIGHT / 2 );
+			( float )BUTTON_STAGE_PITCH * ( i + 1 ) - BUTTON_STAGE_WIDTH / 2, ( float )BUTTON_STAGE_Y - BUTTON_STAGE_HEIGHT / 2,
+			( float )BUTTON_STAGE_PITCH * ( i + 1 ) + BUTTON_STAGE_WIDTH / 2, ( float )BUTTON_STAGE_Y + BUTTON_STAGE_HEIGHT / 2 );
 
 		button->setCollider(
-			( float )BUTTON_PITCH * ( i + 1 ) - BUTTON_WIDTH / 2, ( float )BUTTON_Y - BUTTON_HEIGHT / 2, 
-			( float )BUTTON_PITCH * ( i + 1 ) + BUTTON_WIDTH / 2, ( float )BUTTON_Y + BUTTON_HEIGHT / 2 );
+			( float )BUTTON_STAGE_PITCH * ( i + 1 ) - BUTTON_STAGE_WIDTH / 2, ( float )BUTTON_STAGE_Y - BUTTON_STAGE_HEIGHT / 2, 
+			( float )BUTTON_STAGE_PITCH * ( i + 1 ) + BUTTON_STAGE_WIDTH / 2, ( float )BUTTON_STAGE_Y + BUTTON_STAGE_HEIGHT / 2 );
 
 		button->setImage    ( BUTTON_IMAGE[ i ] );
 		button->setPushImage( BUTTON_IMAGE[ i ] );
 
-		_button.push_back( button );
+		_stage_button.push_back( button );
 	}
+
+	// return button
+	_return_button = ButtonPtr( new Button( ) );
+	_return_button->setImage( BUTTON_RETURN_IMAGE );
+	_return_button->setPushImage( BUTTON_RETURNCLICK_IMAGE );
+	_return_button->setPos(
+		BUTTON_RETURN_X - BUTTON_RETURN_WIDTH / 2, BUTTON_RETURN_Y - BUTTON_RETURN_HEIGHT / 2,
+		BUTTON_RETURN_X + BUTTON_RETURN_WIDTH / 2, BUTTON_RETURN_Y + BUTTON_RETURN_HEIGHT / 2 );
+	_return_button->setCollider(
+		BUTTON_RETURN_X - BUTTON_RETURN_WIDTH / 2, BUTTON_RETURN_Y - BUTTON_RETURN_HEIGHT / 2,
+		BUTTON_RETURN_X + BUTTON_RETURN_WIDTH / 2, BUTTON_RETURN_Y + BUTTON_RETURN_HEIGHT / 2 );
 }

@@ -31,9 +31,8 @@ void Debug::initialize( ) {
 void Debug::update( ) {
 	clearLog( );
 
-	if ( _keyboard->getKeyDown( "D" ) &&
-		 _keyboard->getKeyDown( "B" ) &&
-		 _keyboard->getKeyDown( "G" ) ) {
+	if ( _keyboard->getKeyDown( "B" ) &&
+		 _keyboard->getKeyDown( "SPACE" ) ) {
 		_debug = !_debug;
 	}
 }

@@ -15,12 +15,15 @@ public:
 	virtual ~SceneManual( );
 
 public:
+	void initialize( );
 	void update( );
 	void draw( ) const;
 
+private:
 	//ƒNƒ‰ƒX
 	DrawerPtr _drawer;
 	MousePtr _mouse;
 	KeyboardPtr _keyboard;
 	ButtonPtr _button;
+	ButtonPtr _back_button;
 };
