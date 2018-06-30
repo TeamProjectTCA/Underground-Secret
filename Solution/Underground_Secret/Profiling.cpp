@@ -73,7 +73,7 @@ void Profiling::drawActiveButton( ) const {
 void Profiling::drawBoard( ) const {
 	const int BOARD_WIDTH = 700;
 	const int BOARD_HEIGHT = 1000;
-	const int BOARD_X = ( WIDTH_F - BOARD_WIDTH ) / 2;
+	const float BOARD_X = ( WIDTH_F - BOARD_WIDTH ) / 2;
 	_drawer->drawExtendGraph( BOARD_X, _board_y, BOARD_X + BOARD_WIDTH, _board_y + BOARD_HEIGHT, _board_handle, true );
 }
 

@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Vector.h"
 #include "Mouse.h"
+#include "Sound.h"
 
 const float LOG_PITCH = 230;
 
@@ -59,6 +60,8 @@ void SceneStageSelect::update( ) {
 		} else {
 			if ( _stage_button[ i ]->isPush( ) ) {
 				_stage = i + 1;
+				SoundPtr sound = Sound::getTask( );
+				sound->play( sound->load( "SoundEffect/button.ogg" ), false, true );
 				setNextScene( SCENE_GAME );
 			}
 			_stage_button[ i ]->resetState( );
@@ -71,6 +74,8 @@ void SceneStageSelect::update( ) {
 	} else {
 		if ( _return_button->isPush( ) ) {
 			setNextScene( SCENE_TITLE );
+			SoundPtr sound = Sound::getTask( );
+			sound->play( sound->load( "SoundEffect/button.ogg" ), false, true );
 		}
 		_return_button->resetState( );
 	}

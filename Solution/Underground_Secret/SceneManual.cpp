@@ -5,6 +5,7 @@
 #include "Button.h"
 #include "Vector.h"
 #include "Mouse.h"
+#include "Sound.h"
 
 const char MANUAL_STRING_IMAGE     [ ] = "manual";
 const char BACK_BUTTON_IMAGE       [ ] = "BackButton";
@@ -48,6 +49,8 @@ void SceneManual::update( ) {
 		_back_button->click( _mouse->getPoint( ) );
 	} else {
 		if ( _back_button->isPush( ) ) {
+			SoundPtr sound = Sound::getTask( );
+			sound->play( sound->load( "SoundEffect/button.ogg" ), false, true );
 			setNextScene( SCENE_TITLE );
 		}
 		_back_button->resetState( );

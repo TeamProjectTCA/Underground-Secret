@@ -75,7 +75,7 @@ void SceneTitle::update( ) {
 	} else {
 		if ( _start_button->isPush( ) ) {
 			_sound->stop( _sound_handle[ TITLE_BGM ] );
-			_sound->play( _sound_handle[ BUTTON_SE ] );
+			_sound->play( _sound_handle[ BUTTON_SE ], false, true );
 			setNextScene( SCENE_STAGESELECT );
 		}
 		_start_button->resetState( );
