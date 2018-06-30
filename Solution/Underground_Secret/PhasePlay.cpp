@@ -63,7 +63,6 @@ void PhasePlay::update( ) {
 
 	_time_count--;
 
-	_sound->stop( _sound_handle[ GAME_BGM ] );
 
 	if ( _spy->getMapData( _spy->getPos( ) ) == IDENTIFICATION_ENDPOINT && !_countdown ) {
 		_countdown = true;
@@ -78,11 +77,13 @@ void PhasePlay::update( ) {
 	if ( isInvasion( ) ) {
 		setResult( LOSE );
 		setPhase( PHASE_END );
+		_sound->stop( _sound_handle[ GAME_BGM ] );
 	}
 
 	if ( isClear( ) ) {
 		setResult( WIN );
 		setPhase( PHASE_END );
+		_sound->stop( _sound_handle[ GAME_BGM ] );
 	}
 }
 
@@ -128,7 +129,7 @@ void PhasePlay::drawTime( ) const {
 		tmp /= 10;
 	}
 
-	_drawer->drawGraph( TIME_BOX_X, TIME_BOX_Y, _time_board_handle, true );
+	_drawer->drawGraph( TIME_BOX_X, TIME_BOX_Y, _time_board_handle, false );
 	for ( int i = 0; i < length; i++ ) {
 		if ( length == 3 ) {
 			_drawer->drawExtendGraph( NUM_X3 + i * NUM_MARGIN, NUM_Y, NUM_X3 + i * NUM_MARGIN + NUM_WIDTH, NUM_Y + NUM_HEIGHT, number[ length - i - 1 ], true );

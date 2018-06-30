@@ -84,7 +84,7 @@ void SceneTitle::update( ) {
 		_manual_button->click( mouse_pos );
 	} else {
 		if ( _manual_button->isPush( ) ) {
-			_sound->play( _sound_handle[ BUTTON_SE ] );
+			_sound->play( _sound_handle[ BUTTON_SE ], false, true );
 			setNextScene( SCENE_MANUAL );
 		}
 		_manual_button->resetState( );
