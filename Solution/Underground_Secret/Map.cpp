@@ -27,7 +27,14 @@ const char ELEVATOR_BETA_IMAGE [ ] = "elevator_goal";
 
 Map::Map( int stage, ScrollConstPtr scroll ) :
 _stage( stage ),
-_scroll( scroll ) {
+_scroll( scroll ),
+_endpoint( -1 ),
+_fixedpoint_alpha_start( Vector( ) ),
+_fixedpoint_alpha_play ( Vector( ) ),
+_fixedpoint_alpha_end  ( Vector( ) ),
+_fixedpoint_beta_start ( Vector( ) ),
+_fixedpoint_beta_play  ( Vector( ) ),
+_fixedpoint_beta_end   ( Vector( ) ) {
 	_debug = Debug::getTask( );
 	_drawer = Drawer::getTask( );
 	_keyboard = Keyboard::getTask( );
@@ -40,18 +47,14 @@ _scroll( scroll ) {
 	_row = 0;
 	_data = "";
 	_debug_mode = false;
-	_fixedpoint_alpha_start = Vector( );
-	_fixedpoint_alpha_play  = Vector( );
-	_fixedpoint_alpha_end   = Vector( );
-	_fixedpoint_beta_start = Vector( );
-	_fixedpoint_beta_play  = Vector( );
-	_fixedpoint_beta_end   = Vector( );
+
 
 	// .colƒtƒ@ƒCƒ‹‚©‚ç“Ç‚Ýž‚Ý
 	loadMap( );
 	setFixedpoint( );
 	setShutter( );
 	setElevator( );
+	setEndpoint( );
 
 	_shutter->setCol( _col );
 
@@ -60,7 +63,7 @@ _scroll( scroll ) {
 	_special_elevator_alpha->setImage( ELEVATOR_ALPHA_IMAGE );
 	_special_elevator_beta ->setImage( ELEVATOR_BETA_IMAGE  );
 	_special_elevator_alpha->setElevator( getFixedpointBeta( PHASE_START ), getFixedpointAlpha( PHASE_PLAY ) );
-	_special_elevator_beta ->setElevator( getFixedpointAlpha( PHASE_END  ), getFixedpointBeta( PHASE_END   ) );
+	_special_elevator_beta ->setElevator( Vector( _endpoint % _col * BLOCK_SIZE, _endpoint / _col * BLOCK_SIZE ), getFixedpointBeta( PHASE_END   ) );
 
 }
 
@@ -364,6 +367,15 @@ void Map::setElevator( ) {
 			_elevator[ id ] = ElevatorPtr( new Elevator( _col, id ) );
 		}
 		_elevator[ id ]->add( i );
+	}
+}
+
+void Map::setEndpoint( ) {
+	for ( int i = 0; i < _data.length( ); i++ ) {
+		if ( _data[ i ] == ENDPOINT_ASCIICODE ) {
+			_endpoint = i;
+			return;
+		}
 	}
 }
 

@@ -49,6 +49,7 @@ private:
 	void setFixedpoint( );
 	void setShutter( );
 	void setElevator( );
+	void setEndpoint( );
 	void inputShutter( std::vector< int > &shutter, int idx );
 
 private:
@@ -60,6 +61,7 @@ private:
 	int _stage;
 	int _row;
 	int _col;
+	int _endpoint;
 	bool _debug_mode;
 	std::string _data;
 	Vector _fixedpoint_alpha_start;
