@@ -10,8 +10,9 @@
 
 void main( ) {
 	ManagerPtr manager = Manager::getInstance( );
+	//manager->changeWindowMode( false );
 	manager->setScreenSize( WIDTH, HEIGHT );
-	manager->setWindowSize( 1280, 720 );
+	manager->setWindowSize( WINDOW_WIDTH, WINDOW_HEIGHT );
 
 	DrawerPtr drawer( new Drawer( "Resources/image" ) );
 	SoundPtr soundplayer( new Sound( "Resources/sound" ) );
