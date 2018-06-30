@@ -56,7 +56,7 @@ void SpecialElevator::draw( ) const {
 
 void SpecialElevator::drawAlpha( ) const {
 	float draw_x = ( float )_alpha.pos.x;
-	float draw_y = ( float )_alpha.pos.y - _height + GAP_Y;
+	float draw_y = ( float )_alpha.pos.y - _height;
 
 	Vector scroll = _scroll->getScroll( );
 	draw_x += ( float )scroll.x;
@@ -71,7 +71,7 @@ void SpecialElevator::drawAlpha( ) const {
 
 void SpecialElevator::drawBeta( ) const {
 	float draw_x = ( float )_beta.pos.x;
-	float draw_y = ( float )_beta.pos.y - _height + GAP_Y;
+	float draw_y = ( float )_beta.pos.y - _height;
 
 	Vector scroll = _scroll->getScroll( );
 	draw_x += ( float )scroll.x;

@@ -63,7 +63,7 @@ _fixedpoint_beta_end   ( Vector( ) ) {
 	_special_elevator_alpha->setImage( ELEVATOR_ALPHA_IMAGE );
 	_special_elevator_beta ->setImage( ELEVATOR_BETA_IMAGE  );
 	_special_elevator_alpha->setElevator( getFixedpointBeta( PHASE_START ), getFixedpointAlpha( PHASE_PLAY ) );
-	_special_elevator_beta ->setElevator( Vector( _endpoint % _col * BLOCK_SIZE, _endpoint / _col * BLOCK_SIZE ), getFixedpointBeta( PHASE_END   ) );
+	_special_elevator_beta ->setElevator( Vector( _endpoint % _col * BLOCK_SIZE, _endpoint / _col * BLOCK_SIZE + BLOCK_SIZE ), getFixedpointBeta( PHASE_END   ) );
 
 }
 
@@ -100,6 +100,8 @@ Vector Map::getFixedpointAlpha( PHASE phase ) const {
 	default: break;
 	}
 
+	point.y += BLOCK_SIZE;
+
 	return point;
 }
 
@@ -112,6 +114,8 @@ Vector Map::getFixedpointBeta( PHASE phase ) const {
 	case PHASE_END  : point = _fixedpoint_beta_end  ; break;
 	default: break;
 	}
+
+	point.y += BLOCK_SIZE;
 
 	return point;
 }
