@@ -7,7 +7,7 @@
 
 const int ACTIVE_BUTTON_X = 1024;
 const int ACTIVE_BUTTON_Y = 0;
-const float INITIAL_VELOCITY = -22; // 初速度
+const float INITIAL_VELOCITY = -23; // 初速度
 const float ACCELERATION = 0.4f;
 const float TOTAL_TIME = 1.1f; //ボードが出現から止まるまでの時間（秒）
 const float NONACTIVE_BOARD_Y = HEIGHT;
@@ -71,18 +71,22 @@ void Profiling::drawActiveButton( ) const {
 }
 
 void Profiling::drawBoard( ) const {
-	_drawer->drawGraph( ( float )( WIDTH_F - _board_width) / 2, _board_y, _board_handle, true);
+	const int BOARD_WIDTH = 700;
+	const int BOARD_HEIGHT = 1000;
+	const int BOARD_X = ( WIDTH_F - BOARD_WIDTH ) / 2;
+	_drawer->drawExtendGraph( BOARD_X, _board_y, BOARD_X + BOARD_WIDTH, _board_y + BOARD_HEIGHT, _board_handle, true );
 }
 
 void Profiling::drawProfiling( ) const {
 	int size = ( int )_profiling.size( );
 	const float PROFILING_X = WIDTH / 2;
 	const float PITCH = ( float )( _board_height / ( size + 2 ) );
+	const float ADJUST_Y = 100;
 
 	for ( int i = 0; i < size; i++ ) {
 		// 余白 + i * ピッチ
-		float y = PITCH + _board_y + PITCH * i;
-		_drawer->drawFormatStringCenter( PROFILING_X, y, WHITE, _profiling[ i ].c_str( ) );
+		float y = PITCH + _board_y + PITCH * i + ADJUST_Y;
+		_drawer->drawFormatStringCenter( PROFILING_X, y, BLUE, _profiling[ i ].c_str( ) );
 	}
 }
 
